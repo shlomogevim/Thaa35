@@ -44,9 +44,9 @@ class AnimationInAction(val context: Context) {
     private var god4: TextView = godView.godSpeaking4
     private var god5: TextView = godView.godSpeaking5
 
-    private var listOfTextview = arrayListOf<TextView?>()
-    private var listOfTextviewMul = arrayListOf<TextView?>()
-    private var listOfTextviewMul2 = arrayListOf<TextView?>()
+    var listOfTextview = arrayListOf<TextView?>()
+    var listOfTextviewMul = arrayListOf<TextView?>()
+    var listOfTextviewMul2 = arrayListOf<TextView?>()
 
         fun executeTalker(talker: Talker) {
             if (talker.whoSpeake == "man") {
@@ -82,7 +82,7 @@ class AnimationInAction(val context: Context) {
             listOfTextviewM: ArrayList<TextView?>,
             listOfTextviewM2: ArrayList<TextView?>
         ) {
-            operateBackgroundColor(talker)
+         //   operateBackgroundColor(talker)
 
             when (talker.animNum) {
                 10 -> Utile.move_swing(10, talker, listOfTextview)
@@ -133,11 +133,11 @@ class AnimationInAction(val context: Context) {
             }
         }
 
-        private fun operateBackgroundColor(talker: Talker) {
+        /*private fun operateBackgroundColor(talker: Talker) {
             if (talker.whoSpeake == "man") {
                 var layout = R.layout.man_layout
             }
-        }
+        }*/
 
         private fun styleTextViewTalk(tv: TextView, st: String, talker: Talker): TextView {
             val shape = GradientDrawable()

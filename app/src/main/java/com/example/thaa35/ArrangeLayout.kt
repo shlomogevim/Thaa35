@@ -17,11 +17,13 @@ import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.helper_view_layout.view.*
 
 
-class ArrangeLayout(val context: Context) {
+class ArrangeLayout(val helperView: View,val showPosition:Boolean) {
 
-    private var inflater= LayoutInflater.from(context)
-    private val helperView=inflater.inflate(com.example.thaa35.R.layout.helper_view_layout,null)
+    val context=helperView.context
 
+   /* private var inflater = LayoutInflater.from(context)
+    private val helperView = inflater.inflate(com.example.thaa35.R.layout.helper_view_layout, null)
+*/
     private var styleList = arrayListOf<String>()
     private var paraList = arrayListOf<String>()
     private var ttParaList = arrayListOf<String>()
@@ -34,7 +36,6 @@ class ArrangeLayout(val context: Context) {
     private var interval = 0
     private var currentColor = "#stam"
 
-    var showPosition = 3
 
     fun talkC() = talkList[currentPage()]
 
@@ -540,12 +541,9 @@ class ArrangeLayout(val context: Context) {
         helperView.action_ListView.setSelection(15)
     }
 
-
-    @SuppressLint("RestrictedApi")
     fun setLayoutShowMode() {
-        showPosition = getAndStoreData.getShowPosition()
         with(helperView) {
-            if (showPosition == 1) {
+            if (!showPosition ) {
                 plusAndMinusBtn.text = "+"
                 lastTalker_button.text = "Last"
                 saveButton.text = "Save"
@@ -555,23 +553,11 @@ class ArrangeLayout(val context: Context) {
                 ttPara_listView.visibility = VISIBLE
                 action_ListView.visibility = VISIBLE
                 tvAnimatinKind.visibility = VISIBLE
-                fab.visibility = INVISIBLE
-                fab1.visibility = INVISIBLE
+               /* fab.visibility = INVISIBLE
+                fab1.visibility = INVISIBLE*/
 
             }
-            if (showPosition == 2) {
-                plusAndMinusBtn.text = "Start"
-                lastTalker_button.text = "Test"
-                saveButton.text = "PUB"
-                upper_layout.visibility = INVISIBLE
-                style_ListView.visibility = INVISIBLE
-                para_ListView.visibility = INVISIBLE
-                ttPara_listView.visibility = INVISIBLE
-                action_ListView.visibility = INVISIBLE
-                tvAnimatinKind.visibility = INVISIBLE
-            }
-            if (showPosition == 3) {
-
+            if (showPosition) {
                 down_layout.visibility = INVISIBLE
                 upper_layout.visibility = INVISIBLE
                 style_ListView.visibility = INVISIBLE
@@ -579,8 +565,7 @@ class ArrangeLayout(val context: Context) {
                 ttPara_listView.visibility = INVISIBLE
                 action_ListView.visibility = INVISIBLE
                 tvAnimatinKind.visibility = INVISIBLE
-                /*fab.visibility = VISIBLE
-                fab1.visibility = VISIBLE*/
+
             }
         }
     }

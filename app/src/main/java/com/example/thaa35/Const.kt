@@ -10,5 +10,6 @@ class Const {
         const val LAST_PAGE = "last_talker"
         const val LASTTALKER = "lasttalker"
         const val SHOWPOSITION="show_position"
+
     }
 }

@@ -2,6 +2,7 @@ package com.example.thaa35
 
 import android.content.res.Resources
 import android.graphics.Color
+import android.view.View
 import android.widget.TextView
 import com.github.florent37.viewanimator.ViewAnimator
 
@@ -79,7 +80,17 @@ object Utile {
 
 
         fun item_move_swing(ind: Int, textView: TextView, dur: Long, rep: Int) {
+
+
+
+            textView.visibility=View.VISIBLE
+           textView.setBackgroundColor(Color.GREEN)
+            textView.scaleX=1f
+            textView.scaleY=1f
+
+
             var arr = getCordinateAndSpine(ind)
+           textView.visibility=View.VISIBLE
             if (rep == 0) {
                 ViewAnimator
                     .animate(textView)
@@ -169,7 +180,8 @@ object Utile {
 
 
         fun move_swing(selector: Int, talker: Talker, arr: ArrayList<TextView?>) {
-            start = System.currentTimeMillis()
+        //   start = System.currentTimeMillis()
+
             with(talker) {
                 val linesNum = takingArray.size
                 if (selector == 10) {

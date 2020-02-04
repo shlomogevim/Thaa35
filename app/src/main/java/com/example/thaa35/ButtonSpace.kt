@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
@@ -14,22 +15,20 @@ import android.widget.Toast
 import com.github.florent37.viewanimator.ViewAnimator
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.helper_view_layout.view.*
+import java.util.concurrent.TimeUnit
 
-class ButtonSpace(val context: Context) : View.OnClickListener {
-    private var inflater = LayoutInflater.from(context)
-    private val helperView = inflater.inflate(R.layout.helper_view_layout, null)
+class ButtonSpace(val helperView :View, val showPosition: Boolean) : View.OnClickListener {
+    private val context=helperView.context
     private val contex = helperView.context
     private val getAndStoreData = GetAndStoreData(context)
     private var talkList = getAndStoreData.getTalkingListFromPref(1)
-    private var showPosition = getAndStoreData.getShowPosition()
     private val animationInAction = AnimationInAction(context)
     private var statrTime: Long = 0
     private var endTime = System.nanoTime()
 
-
     fun talkC() = talkList[currentPage()]
     fun drawAnim() {
-        if (showPosition != 3) {
+        if (!showPosition) {
             updateTitleTalkerSituation()
         }
         // view.tvAnimatinKind.text = text
@@ -43,7 +42,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
     fun letsPlay(v: View) {
 
         time("let play 1")
-        if (showPosition == 1) {
+        if (!showPosition) {
             when (v.id) {
                 R.id.textRevBtn -> readAgainTextFile()
                 R.id.newPageBtn -> enterNewPage()
@@ -61,18 +60,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
             }
             return
         }
-        if (showPosition == 2) {
-            when (v.id) {
-//                R.id.plusAndMinusBtn -> initIt()
-//                R.id.lastTalker_button -> setPosition(1)
-//                R.id.saveButton -> setPosition(3)
-//                R.id.nextButton -> nextIt()
-//                R.id.tvAnimatinKind -> tvAnimatinKind.visibility = View.INVISIBLE
-//                else -> moveTheAnimation()
-            }
-            return
-        }
-        if (showPosition == 3) {
+        if (showPosition) {
             when (v.id) {
 
                 R.id.fab -> nextIt()
@@ -83,12 +71,9 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
         time("let play 2")
     }
 
-    @SuppressLint("RestrictedApi")
-    private fun setShowPositionMode() {
-        time("setShowPosition")
-
+     fun setShowPositionMode() {
         with(helperView) {
-            if (showPosition == 1) {
+            if (!showPosition ) {
                 plusAndMinusBtn.text = "+"
                 lastTalker_button.text = "Last"
                 saveButton.text = "Save"
@@ -99,24 +84,11 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
                 action_ListView.visibility = VISIBLE
                 tvAnimatinKind.visibility = VISIBLE
                 tvPage.visibility = VISIBLE
-                fab.visibility = INVISIBLE
-                fab1.visibility = INVISIBLE
+                /*fab.visibility = INVISIBLE
+                fab1.visibility = INVISIBLE*/
                 tvPage.visibility = VISIBLE
             }
-            if (showPosition == 2) {
-                plusAndMinusBtn.text = "Start"
-                lastTalker_button.text = "Test"
-                saveButton.text = "PUB"
-                upper_layout.visibility = INVISIBLE
-                style_ListView.visibility = INVISIBLE
-                para_ListView.visibility = INVISIBLE
-                ttPara_listView.visibility = INVISIBLE
-                action_ListView.visibility = INVISIBLE
-                tvAnimatinKind.visibility = INVISIBLE
-                tvPage.visibility = VISIBLE
-            }
-            if (showPosition == 3) {
-
+            if (showPosition) {
                 down_layout.visibility = INVISIBLE
                 upper_layout.visibility = INVISIBLE
                 style_ListView.visibility = INVISIBLE
@@ -127,10 +99,8 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
                 tvPage.visibility = VISIBLE
                 fab.visibility = VISIBLE
                 fab1.visibility = VISIBLE
-
             }
         }
-
     }
 
     private fun readAgainTextFile() {
@@ -219,12 +189,12 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
     }
 
     fun updateTitleTalkerSituation() {
-        with(talkC()) {
+        /*with(talkC()) {
             val text =
                 "l=${takingArray.size}sty=$styleNum anim=$animNum size=${textSize.toInt()}" +
                         " bord=$borderWidth dur=$dur sw=$swingRepeat"
 
-        }
+        }*/
 
     }
 
@@ -251,15 +221,15 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
 
     private fun time(st: String) {
         endTime = System.nanoTime()
-//        val interval = TimeUnit.MILLISECONDS.convert(endTime - statrTime, TimeUnit.NANOSECONDS)
-//        Log.d("clima", st + " --> $interval ms")
+        val interval = TimeUnit.MILLISECONDS.convert(endTime - statrTime, TimeUnit.NANOSECONDS)
+        Log.d("clima", st + " --> $interval ms")
 
     }
 
     override fun onClick(view: View) {
         statrTime = System.nanoTime()
         time("onClick 0")
-        if (showPosition != 3) {
+        if (!showPosition) {
             onClickOther()
             return
         }
@@ -306,7 +276,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
 
     private fun onClickOther() {
         var counterStep = currentPage()
-        if (showPosition == 3) {
+        if (!showPosition) {
             when (helperView.id) {
                 R.id.fab -> counterStep++
                 R.id.fab1 -> counterStep--
@@ -316,7 +286,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
         if (counterStep == talkList.size) counterStep = 1
         getAndStoreData.saveCurrentPage(counterStep)
 
-        if (showPosition == 3) {
+        if (showPosition) {
             time("onClickA113")
             buttonActivation(0)
 
@@ -390,7 +360,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
 
         with(helperView) {
             if (ind == 0) {
-                if (showPosition == 3) {
+                if (showPosition) {
                     fab.isClickable = false
                     fab1.isClickable = false
                     fabAnimation(0)
@@ -408,7 +378,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
                 }
             }
             if (ind == 1) {
-                if (showPosition == 3) {
+                if (showPosition) {
                     fab.isClickable = true
                     fab1.isClickable = true
                     fabAnimation(1)

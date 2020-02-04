@@ -1,24 +1,29 @@
 package com.example.thaa35
 
+import android.annotation.SuppressLint
+import android.graphics.drawable.AnimationDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import com.github.florent37.viewanimator.ViewAnimator
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.god_layout.*
 import kotlinx.android.synthetic.main.god_layout.godLayout
+import kotlinx.android.synthetic.main.helper_view_layout.*
+import kotlinx.android.synthetic.main.helper_view_layout.view.*
 
 //import kotlinx.android.synthetic.main.layout.man_layout.view.*
 
 class MainActivity : AppCompatActivity() {
 
     var conv: Convers? = null
-    lateinit var getStoreData: GetAndStoreData
     lateinit var animationInAction: AnimationInAction
     lateinit var getAndStoreData: GetAndStoreData
     lateinit var arrangeLayout: ArrangeLayout
     lateinit var buttonSpace: ButtonSpace
     lateinit var talkList: ArrayList<Talker>
 
-    var showPosition = 3
+    var showPosition = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,10 +33,33 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun mainProgram() {
-
-        getStoreData = GetAndStoreData(this)
-      //  animationInAction = AnimationInAction(godLayout,manLayout)
+        getAndStoreData = GetAndStoreData(this)
+        arrangeLayout = ArrangeLayout(include,showPosition)
+        buttonSpace = ButtonSpace(include,showPosition)
+        arrangeLayout.setLayoutShowMode()
+        buttonSpace.setShowPositionMode()
         animationInAction = AnimationInAction(this)
+        getTalkList()
+    //    backGroundConfigration()
+        buttonSpace.initButton()
+      //  waitToAnnimateEnded()
+     //  animationInAction.executeTalker(talkC())
+        animationInAction.executeTalker(talkList[1])
+
+
+     /*   getStoreData = GetAndStoreData(this)
+        arrangeLayout = ArrangeLayout(this,showPosition)
+        buttonSpace = ButtonSpace(this,showPosition)
+
+        arrangeLayout.drawListView()
+        arrangeLayout.operateListView()
+        arrangeLayout.setLayoutShowMode()
+
+      buttonSpace.setShowPositionMode()*/
+
+      //  animationInAction = AnimationInAction(this)
+
+      //  animationInAction = AnimationInAction(godLayout,manLayout)
 
         /*  getAndStoreData = GetAndStoreData(view)
           getAndStoreData.saveCurrentFile(20)
@@ -56,13 +84,49 @@ class MainActivity : AppCompatActivity() {
           animationInAction.executeTalker(talkC())*/
     }
 
+    @SuppressLint("RestrictedApi")
+    private fun waitToAnnimateEnded() {
+        Utile.listener1 = { _, _ ->
+            fab.visibility = View.VISIBLE
+            fab1.visibility = View.VISIBLE
+            ViewAnimator
+                .animate(fab)
+                .alpha(0f, 1f)
+                .andAnimate(fab1)
+                .alpha(0f, 1f)
+                .duration(3500)
+                .start()
+        }
+    }
+
+    fun backGroundConfigration() {
+        val animationDrawable = imageView.background as? AnimationDrawable
+        animationDrawable?.setEnterFadeDuration(2000)
+        animationDrawable?.setExitFadeDuration(4000)
+        animationDrawable?.start()
+    }
+
     fun talkC() = talkList[getAndStoreData.getCurrentPage()]
+    private fun getTalkList() {
+        talkList = getAndStoreData.createNewList()
 
+        if (talkList.size == 0) {
+           // createTalkingListFromFirestore()  //open tool->firebase->firestore see if all depen. ok
+            //rebuilt project
+            // run and wait for result
+        }
+        if (talkList.size == 0) {
+            // !! must be in remarked becaseus it inteferring to the firebase
+            talkList=getAndStoreData.createTalkListFromTheStart()
 
+        }
+        getAndStoreData.saveTalkingListInPref(talkList)
+    }
 }
 
-/*
 
+
+/*
     @SuppressLint("RestrictedApi")
     private fun waitToAnnimateEnded() {
         Utile.listener1 = { it1, _ ->

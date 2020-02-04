@@ -1,5 +1,6 @@
 package com.example.thaa35
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
@@ -18,20 +19,17 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.ByteArrayOutputStream
 
-class GetAndStoreData(view:View) : AppCompatActivity() {
+class GetAndStoreData(val context: Context) : AppCompatActivity() {
 
-    val contex=view.context
 
-    var myPref = contex.getSharedPreferences(PREFS_NAME, 0)
+
+    var myPref = context.getSharedPreferences(PREFS_NAME, 0)
 
 
     fun saveCurrentPage(index: Int) {myPref.edit().putInt(CURRENT_PAGE, index).apply()}
     fun saveLastPage(index: Int) {myPref.edit().putInt(LAST_PAGE, index).apply()}
     fun saveCurrentFile(index: Int) {myPref.edit().putInt(FILE_NUM, index).apply()}
    fun saveShowPosition(index: Int) {myPref.edit().putInt(SHOWPOSITION, index).apply()}
-
-
-
 
     fun getCurrentPage(): Int = myPref.getInt(CURRENT_PAGE, 1)
     fun getLastPage(): Int = myPref.getInt(LAST_PAGE, 1)
@@ -44,8 +42,6 @@ class GetAndStoreData(view:View) : AppCompatActivity() {
         val bit=BitmapFactory.decodeByteArray(decodeByte,0,decodeByte.size)
         return bit
     }
-
-
 
     private fun encodeToBase64(image:Bitmap):String{
         val immage=image
@@ -138,9 +134,6 @@ class GetAndStoreData(view:View) : AppCompatActivity() {
     }
 
 
-
-
-
     fun getTalkingListFromPref(ind: Int): ArrayList<Talker> {
         val talkList1: ArrayList<Talker>
         val gson = Gson()
@@ -164,7 +157,7 @@ class GetAndStoreData(view:View) : AppCompatActivity() {
         val currenteFile = "text/text" + ASSEETS_FILE.toString() + ".txt"
 
         var countItem = 0
-        var text = contex.assets.open(currenteFile).bufferedReader().use {
+        var text = context.assets.open(currenteFile).bufferedReader().use {
             it.readText()
         }
         text = text.replace("\r", "")

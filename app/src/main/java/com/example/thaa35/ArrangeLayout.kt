@@ -3,8 +3,10 @@ package com.example.thaa35
 import android.R
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
+import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -15,24 +17,24 @@ import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.helper_view_layout.view.*
 
 
-class ArrangeLayout(val view: View) {
+class ArrangeLayout(val context: Context) {
 
-    val contex = view.context
+    private var inflater= LayoutInflater.from(context)
+    private val helperView=inflater.inflate(com.example.thaa35.R.layout.helper_view_layout,null)
 
-    var styleList = arrayListOf<String>()
-    var paraList = arrayListOf<String>()
-    var ttParaList = arrayListOf<String>()
-    var actionList = arrayListOf<String>()
+    private var styleList = arrayListOf<String>()
+    private var paraList = arrayListOf<String>()
+    private var ttParaList = arrayListOf<String>()
+    private var actionList = arrayListOf<String>()
 
-    val getAndStoreData = GetAndStoreData(view)
-    val talkList = getAndStoreData.getTalkingListFromPref(1)
-    val helper = Helper(contex)
-    val animationInAction = AnimationInAction(view)
+    private val getAndStoreData = GetAndStoreData(context)
+    private val talkList = getAndStoreData.getTalkingListFromPref(1)
+    private val animationInAction = AnimationInAction(context)
 
     private var interval = 0
     private var currentColor = "#stam"
 
-    var showPosition = 1
+    var showPosition = 3
 
     fun talkC() = talkList[currentPage()]
 
@@ -52,14 +54,14 @@ class ArrangeLayout(val view: View) {
 
     private fun animationMovmentListView() {  // list view in the right side
         createAnimLV()
-        view.action_ListView.setOnItemClickListener { _, _, position, _ ->
+        helperView.action_ListView.setOnItemClickListener { _, _, position, _ ->
             talkC().animNum = actionList[position].toInt()
             moveTheAnimation()
         }
     }
 
     private fun patamListView() {
-        view.para_ListView.setOnItemClickListener { _, _, position, _ ->
+        helperView.para_ListView.setOnItemClickListener { _, _, position, _ ->
             //tranferTalkItem(0)
             translaePara(position)
         }
@@ -68,7 +70,7 @@ class ArrangeLayout(val view: View) {
     private fun translaePara(position: Int) {
 
         val talker = talkC()
-        val s = view.plusAndMinusBtn.text
+        val s = helperView.plusAndMinusBtn.text
         var intv = if (s == "+") interval else -interval
 
         when (position) {
@@ -128,9 +130,8 @@ class ArrangeLayout(val view: View) {
 
     private fun enterNewPage() {
 
-        var myDialog = AlertDialog.Builder(contex)
-
-        val input = EditText(contex)
+        var myDialog = AlertDialog.Builder(context)
+        val input = EditText(context)
         myDialog.setView(input)
         myDialog.setTitle("Enter new page")
         myDialog.setPositiveButton("OK", object : DialogInterface.OnClickListener {
@@ -185,7 +186,7 @@ class ArrangeLayout(val view: View) {
         try {
             Color.parseColor(currentColor)
         } catch (iae: IllegalArgumentException) {
-            Toast.makeText(contex, "IIIigal color entery , try again", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "IIIigal color entery , try again", Toast.LENGTH_LONG).show()
             return
         }
 
@@ -202,7 +203,7 @@ class ArrangeLayout(val view: View) {
         try {
             Color.parseColor(currentColor)
         } catch (iae: IllegalArgumentException) {
-            Toast.makeText(contex, "IIIigal color entery , try again", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "IIIigal color entery , try again", Toast.LENGTH_LONG).show()
             return
         }
 
@@ -214,7 +215,7 @@ class ArrangeLayout(val view: View) {
         try {
             Color.parseColor(currentColor)
         } catch (iae: IllegalArgumentException) {
-            Toast.makeText(contex, "IIIigal color entery , try again", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "IIIigal color entery , try again", Toast.LENGTH_LONG).show()
             return
         }
         talker.colorText = currentColor
@@ -222,10 +223,10 @@ class ArrangeLayout(val view: View) {
     }
 
     private fun ttParaListView() {
-        view.ttPara_listView.setOnItemClickListener { _, _, position, _ ->
+        helperView.ttPara_listView.setOnItemClickListener { _, _, position, _ ->
             translaeTtPara(position)
             Toast.makeText(
-                contex,
+                context,
                 //  "Don't forget to select Para ListView to excute the operation",
                 "Don't forget to select Para ", Toast.LENGTH_SHORT
             ).show()
@@ -236,7 +237,7 @@ class ArrangeLayout(val view: View) {
     private fun translaeTtPara(position: Int) {
         when (position) {
             //14 -> selectColor()
-            15 -> view.colorNam_ET.visibility = VISIBLE
+            15 -> helperView.colorNam_ET.visibility = VISIBLE
             16 -> interval = 0
             17 -> interval = 1
             18 -> interval = 2
@@ -286,7 +287,7 @@ class ArrangeLayout(val view: View) {
     }
 
     private fun operateStyleLV() {
-        view.style_ListView.setOnItemClickListener { _, _, position, _ ->
+        helperView.style_ListView.setOnItemClickListener { _, _, position, _ ->
             // tranferTalkItem(0)
             val currentTalker = talkC()
             if (position == 16) {     // ther is NB
@@ -305,12 +306,12 @@ class ArrangeLayout(val view: View) {
         var bo = true
         if (talker.textSize < 3) {
             talker.textSize = 3f
-            Toast.makeText(contex, "Text Size too small", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Text Size too small", Toast.LENGTH_SHORT).show()
             bo = false
         }
         if (talker.dur < 100) {
             talker.textSize = 100f
-            Toast.makeText(contex, "Duration too small", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Duration too small", Toast.LENGTH_SHORT).show()
             bo = false
         }
         if (bo) {
@@ -322,22 +323,8 @@ class ArrangeLayout(val view: View) {
     }
 
     private fun moveTheAnimation() {
-        /* if (counterStep > 84) counterStep = 84
-         if ((counterStep == 84 && SHOW_POSITION) || (counterStep == 84 && PUBLISH_POSITION)) {
-             counterStep = 1
-             // finish()
-         }*/
-        //    updateTitleTalkerSituation()
-        // if (counterStep < 1) counterStep = 1
-
-        //  counterStep = 1           //*********************
-
-        //  manMode = counterStep % 2 != 0
-
-
         val talker = talkC()
         animationInAction.executeTalker(talker)
-        // getAndStoreData.savePage(counterStep)
     }
 
 
@@ -357,10 +344,10 @@ class ArrangeLayout(val view: View) {
                 "l=${takingArray.size}sty=$styleNum anim=$animNum size=${textSize.toInt()}" +
                         " bord=$borderWidth dur=$dur sw=$swingRepeat"
             val cu = currentPage()
-            view.tvPage.text = cu.toString()
+            helperView.tvPage.text = cu.toString()
             numTalker = cu
 
-            view.tvAnimatinKind.text = text
+            helperView.tvAnimatinKind.text = text
         }
 
     }
@@ -426,9 +413,9 @@ class ArrangeLayout(val view: View) {
         for (i in 0..15) {
             styleList.add("-")
         }
-        val adapter0 = ArrayAdapter<String>(contex, R.layout.simple_list_item_1, styleList)
-        view.style_ListView.adapter = adapter0
-        view.style_ListView.setSelection(15)
+        val adapter0 = ArrayAdapter<String>(context, R.layout.simple_list_item_1, styleList)
+        helperView.style_ListView.adapter = adapter0
+        helperView.style_ListView.setSelection(15)
     }
 
     private fun createParaList() {
@@ -463,9 +450,9 @@ class ArrangeLayout(val view: View) {
             paraList.add("-")
         }
 
-        val adapter10 = ArrayAdapter<String>(contex, android.R.layout.simple_list_item_1, paraList)
-        view.para_ListView.adapter = adapter10
-        view.para_ListView.setSelection(15)
+        val adapter10 = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, paraList)
+        helperView.para_ListView.adapter = adapter10
+        helperView.para_ListView.setSelection(15)
     }
 
     private fun createTtParaTV() {
@@ -478,9 +465,9 @@ class ArrangeLayout(val view: View) {
             ttParaList.add("-")
         }
         val adapter11 =
-            ArrayAdapter<String>(contex, android.R.layout.simple_list_item_1, ttParaList)
-        view.ttPara_listView.adapter = adapter11
-        view.ttPara_listView.setSelection(15)
+            ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, ttParaList)
+        helperView.ttPara_listView.adapter = adapter11
+        helperView.ttPara_listView.setSelection(15)
     }
 
     private fun getTtParaList(): List<String> = arrayListOf(
@@ -548,16 +535,16 @@ class ArrangeLayout(val view: View) {
             actionList.add("-")
         }
         val adapter1 =
-            ArrayAdapter<String>(contex, android.R.layout.simple_list_item_1, actionList)
-        view.action_ListView.adapter = adapter1
-        view.action_ListView.setSelection(15)
+            ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, actionList)
+        helperView.action_ListView.adapter = adapter1
+        helperView.action_ListView.setSelection(15)
     }
 
 
     @SuppressLint("RestrictedApi")
     fun setLayoutShowMode() {
         showPosition = getAndStoreData.getShowPosition()
-        with(view) {
+        with(helperView) {
             if (showPosition == 1) {
                 plusAndMinusBtn.text = "+"
                 lastTalker_button.text = "Last"

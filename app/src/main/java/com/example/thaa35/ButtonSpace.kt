@@ -2,8 +2,10 @@ package com.example.thaa35
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
+import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -13,17 +15,16 @@ import com.github.florent37.viewanimator.ViewAnimator
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.helper_view_layout.view.*
 
-class ButtonSpace(val view: View) : View.OnClickListener {
-    val contex = view.context
-    val getAndStoreData = GetAndStoreData(view)
-
-    var talkList = getAndStoreData.getTalkingListFromPref(1)
-    var showPosition =getAndStoreData.getShowPosition()
-
-    val animationInAction = AnimationInAction(view)
-    var statrTime:Long =0
-    var endTime = System.nanoTime()
-
+class ButtonSpace(val context: Context) : View.OnClickListener {
+    private var inflater = LayoutInflater.from(context)
+    private val helperView = inflater.inflate(R.layout.helper_view_layout, null)
+    private val contex = helperView.context
+    private val getAndStoreData = GetAndStoreData(context)
+    private var talkList = getAndStoreData.getTalkingListFromPref(1)
+    private var showPosition = getAndStoreData.getShowPosition()
+    private val animationInAction = AnimationInAction(context)
+    private var statrTime: Long = 0
+    private var endTime = System.nanoTime()
 
 
     fun talkC() = talkList[currentPage()]
@@ -33,7 +34,7 @@ class ButtonSpace(val view: View) : View.OnClickListener {
         }
         // view.tvAnimatinKind.text = text
         val cu = currentPage()
-        view.tvPage.text = cu.toString()
+        helperView.tvPage.text = cu.toString()
         talkC().numTalker = cu
         animationInAction.executeTalker(talkC())
     }
@@ -86,7 +87,7 @@ class ButtonSpace(val view: View) : View.OnClickListener {
     private fun setShowPositionMode() {
         time("setShowPosition")
 
-        with(view) {
+        with(helperView) {
             if (showPosition == 1) {
                 plusAndMinusBtn.text = "+"
                 lastTalker_button.text = "Last"
@@ -97,10 +98,10 @@ class ButtonSpace(val view: View) : View.OnClickListener {
                 ttPara_listView.visibility = VISIBLE
                 action_ListView.visibility = VISIBLE
                 tvAnimatinKind.visibility = VISIBLE
-                tvPage.visibility= VISIBLE
+                tvPage.visibility = VISIBLE
                 fab.visibility = INVISIBLE
                 fab1.visibility = INVISIBLE
-                tvPage.visibility= VISIBLE
+                tvPage.visibility = VISIBLE
             }
             if (showPosition == 2) {
                 plusAndMinusBtn.text = "Start"
@@ -112,7 +113,7 @@ class ButtonSpace(val view: View) : View.OnClickListener {
                 ttPara_listView.visibility = INVISIBLE
                 action_ListView.visibility = INVISIBLE
                 tvAnimatinKind.visibility = INVISIBLE
-                tvPage.visibility= VISIBLE
+                tvPage.visibility = VISIBLE
             }
             if (showPosition == 3) {
 
@@ -123,7 +124,7 @@ class ButtonSpace(val view: View) : View.OnClickListener {
                 ttPara_listView.visibility = INVISIBLE
                 action_ListView.visibility = INVISIBLE
                 tvAnimatinKind.visibility = INVISIBLE
-                tvPage.visibility= VISIBLE
+                tvPage.visibility = VISIBLE
                 fab.visibility = VISIBLE
                 fab1.visibility = VISIBLE
 
@@ -243,7 +244,7 @@ class ButtonSpace(val view: View) : View.OnClickListener {
     }
 
     private fun changePlusMinusMode() {
-        with(view.plusAndMinusBtn) {
+        with(helperView.plusAndMinusBtn) {
             text = (if (text == "+") "-" else "-")
         }
     }
@@ -263,7 +264,7 @@ class ButtonSpace(val view: View) : View.OnClickListener {
             return
         }
         time("onClick 1")
-        var def=0
+        var def = 0
 
         when (view.id) {
             R.id.fab -> def++
@@ -271,7 +272,7 @@ class ButtonSpace(val view: View) : View.OnClickListener {
         }
         buttonActivation(0)
 
-        var counterStep = currentPage()+def
+        var counterStep = currentPage() + def
         time("onClick 2")
 
         if (counterStep < 1) counterStep = 1
@@ -306,7 +307,7 @@ class ButtonSpace(val view: View) : View.OnClickListener {
     private fun onClickOther() {
         var counterStep = currentPage()
         if (showPosition == 3) {
-            when (view.id) {
+            when (helperView.id) {
                 R.id.fab -> counterStep++
                 R.id.fab1 -> counterStep--
             }
@@ -323,7 +324,7 @@ class ButtonSpace(val view: View) : View.OnClickListener {
 
         chageBackgroundColor(1, 1000)
 
-        letsPlay(view)
+        letsPlay(helperView)
 
         val size = talkC().takingArray.size
 
@@ -349,14 +350,14 @@ class ButtonSpace(val view: View) : View.OnClickListener {
     fun chageBackgroundColor(ind: Int, dur: Long) {
         if (ind == 0) {
             ViewAnimator
-                .animate(view.tvPage)
+                .animate(helperView.tvPage)
                 .backgroundColor(Color.RED, Color.GREEN)
                 .duration(dur)
                 .start()
 
         } else {
             ViewAnimator
-                .animate(view.tvPage)
+                .animate(helperView.tvPage)
                 .backgroundColor(Color.GREEN, Color.RED)
                 .duration(dur)
                 .start()
@@ -366,17 +367,17 @@ class ButtonSpace(val view: View) : View.OnClickListener {
     fun fabAnimation(ind: Int) {
         if (ind == 0) {
             ViewAnimator
-                .animate(view.fab)
-                .alpha( 0f)
-                .andAnimate(view.fab1)
-                .alpha( 0f)
+                .animate(helperView.fab)
+                .alpha(0f)
+                .andAnimate(helperView.fab1)
+                .alpha(0f)
                 .duration(2000)
                 .start()
         } else {
             ViewAnimator
-                .animate(view.fab)
+                .animate(helperView.fab)
                 .alpha(0f, 1f)
-                .andAnimate(view.fab1)
+                .andAnimate(helperView.fab1)
                 .alpha(0f, 1f)
                 .duration(2000)
                 .start()
@@ -387,7 +388,7 @@ class ButtonSpace(val view: View) : View.OnClickListener {
     fun buttonActivation(ind: Int) {
         time("buttonActivation 1 ind=$ind")
 
-        with(view) {
+        with(helperView) {
             if (ind == 0) {
                 if (showPosition == 3) {
                     fab.isClickable = false
@@ -429,7 +430,7 @@ class ButtonSpace(val view: View) : View.OnClickListener {
     }
 
     fun initButton() {
-        with(view) {
+        with(helperView) {
             displayAgainBtn.setOnClickListener { onClick(displayAgainBtn) }
             textRevBtn.setOnClickListener { onClick(textRevBtn) }
             newPageBtn.setOnClickListener { onClick(newPageBtn) }

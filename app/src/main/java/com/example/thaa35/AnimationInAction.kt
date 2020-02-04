@@ -1,7 +1,9 @@
 package com.example.thaa35
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -11,12 +13,42 @@ import kotlinx.android.synthetic.main.god_layout.view.*
 import kotlinx.android.synthetic.main.man_layout.view.*
 import java.util.*
 
-class AnimationInAction(val view: View) {
-    val context = view.context
+class AnimationInAction(val context: Context) {
 
+    private val helper = Helper(context)
+    private var tv0: TextView? = null
+    private var tv0A: TextView? = null
+    private var tv2A: TextView? = null
+    private var tv1: TextView? = null
+    private var tv2: TextView? = null
+    private var tv3: TextView? = null
+    private var tv4: TextView? = null
+    private var tv5: TextView? = null
+
+    private var inflater=LayoutInflater.from(context)
+    private val manView=inflater.inflate(R.layout.man_layout,null)
+    private val godView=inflater.inflate(R.layout.god_layout,null)
+
+    private var man0: TextView = manView.manSpeaking0
+    private var man1: TextView = manView.manSpeaking1
+    private var man2: TextView = manView.manSpeaking2
+    private var man3: TextView = manView.manSpeaking3
+    private var man4: TextView = manView.manSpeaking4
+    private var man5: TextView = manView.manSpeaking5
+    private var god0: TextView = godView.godSpeaking0
+    private var god0A: TextView = godView.godSpeaking0A
+    private var god2A: TextView = godView.godSpeaking2A
+    private var god1: TextView = godView.godSpeaking1
+    private var god2: TextView = godView.godSpeaking2
+    private var god3: TextView = godView.godSpeaking3
+    private var god4: TextView = godView.godSpeaking4
+    private var god5: TextView = godView.godSpeaking5
+
+    private var listOfTextview = arrayListOf<TextView?>()
+    private var listOfTextviewMul = arrayListOf<TextView?>()
+    private var listOfTextviewMul2 = arrayListOf<TextView?>()
 
         fun executeTalker(talker: Talker) {
-
             if (talker.whoSpeake == "man") {
                 configManTextView(talker)
                 listOfTextview.clear()
@@ -98,24 +130,18 @@ class AnimationInAction(val view: View) {
                     Utile.godAppearFromTwoPlaces(1, talker, listOfTextview, listOfTextviewM, listOfTextviewM2)
                 }
                 else -> Utile.move_swing(0, talker, listOfTextview)
-
             }
-
         }
 
         private fun operateBackgroundColor(talker: Talker) {
             if (talker.whoSpeake == "man") {
                 var layout = R.layout.man_layout
-
-
             }
         }
 
         private fun styleTextViewTalk(tv: TextView, st: String, talker: Talker): TextView {
-
             val shape = GradientDrawable()
             shape.setCornerRadius(talker.radius)
-
             shape.setStroke(20, Color.parseColor(talker.borderColor))
 
             with(talker) {
@@ -231,41 +257,7 @@ class AnimationInAction(val view: View) {
         }
 
 
-//-------------------------------------------------------------------
-
-
-        val helper = Helper(context)
-        var tv0: TextView? = null
-        var tv0A: TextView? = null
-        var tv2A: TextView? = null
-        var tv1: TextView? = null
-        var tv2: TextView? = null
-        var tv3: TextView? = null
-        var tv4: TextView? = null
-        var tv5: TextView? = null
-
-        var man0: TextView = view.manSpeaking0
-        var man1: TextView = view.manSpeaking1
-        var man2: TextView = view.manSpeaking2
-        var man3: TextView = view.manSpeaking3
-        var man4: TextView = view.manSpeaking4
-        var man5: TextView = view.manSpeaking5
-        var god0: TextView = view.godSpeaking0
-        var god0A: TextView = view.godSpeaking0A
-        var god2A: TextView = view.godSpeaking2A
-        var god1: TextView = view.godSpeaking1
-        var god2: TextView = view.godSpeaking2
-        var god3: TextView = view.godSpeaking3
-        var god4: TextView = view.godSpeaking4
-        var god5: TextView = view.godSpeaking5
-
-        var listOfTextview = arrayListOf<TextView?>()
-        var listOfTextviewMul = arrayListOf<TextView?>()
-        var listOfTextviewMul2 = arrayListOf<TextView?>()
-
-
         private fun initTextview() {
-
             tv0 = null
             tv0A = null
             tv2A=null
@@ -275,8 +267,6 @@ class AnimationInAction(val view: View) {
             tv4 = null
             tv5 = null
         }
-        //------------------------------------------
-
 
         fun initAllTextview(dur: Long) {
             ViewAnimator
@@ -306,8 +296,6 @@ class AnimationInAction(val view: View) {
             if (bo) style1 = Helper.Page.styleArray[10]
             return style1
         }
-
-
 
         fun fadeDownAllMan(dur: Long) {
 

@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.god_layout.view.*
 import kotlinx.android.synthetic.main.man_layout.view.*
 import java.util.*
 
-class AnimationInAction(val context: Context) {
+class AnimationInAction(val context: Context,manView: View,godView: View) {
 
     private val helper = Helper(context)
     private var tv0: TextView? = null
@@ -24,10 +24,6 @@ class AnimationInAction(val context: Context) {
     private var tv3: TextView? = null
     private var tv4: TextView? = null
     private var tv5: TextView? = null
-
-    private var inflater=LayoutInflater.from(context)
-    private val manView=inflater.inflate(R.layout.man_layout,null)
-    private val godView=inflater.inflate(R.layout.god_layout,null)
 
     private var man0: TextView = manView.manSpeaking0
     private var man1: TextView = manView.manSpeaking1
@@ -48,7 +44,10 @@ class AnimationInAction(val context: Context) {
     var listOfTextviewMul = arrayListOf<TextView?>()
     var listOfTextviewMul2 = arrayListOf<TextView?>()
 
+
+
         fun executeTalker(talker: Talker) {
+
             if (talker.whoSpeake == "man") {
                 configManTextView(talker)
                 listOfTextview.clear()

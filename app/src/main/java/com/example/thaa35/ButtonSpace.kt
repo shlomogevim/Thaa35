@@ -17,12 +17,12 @@ import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.helper_view_layout.view.*
 import java.util.concurrent.TimeUnit
 
-class ButtonSpace(val helperView :View, val showPosition: Boolean) : View.OnClickListener {
+class ButtonSpace(val helperView :View, val showPosition: Boolean,manL:View,godL:View) : View.OnClickListener {
     private val context=helperView.context
     private val contex = helperView.context
     private val getAndStoreData = GetAndStoreData(context)
     private var talkList = getAndStoreData.getTalkingListFromPref(1)
-    private val animationInAction = AnimationInAction(context)
+    private val animationInAction = AnimationInAction(context,manL,godL)
     private var statrTime: Long = 0
     private var endTime = System.nanoTime()
 

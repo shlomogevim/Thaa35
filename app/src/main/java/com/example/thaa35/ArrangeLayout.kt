@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.helper_view_layout.view.*
 
 
-class ArrangeLayout(val helperView: View,val showPosition:Boolean) {
+class ArrangeLayout(val helperView: View,val showPosition:Boolean,manL:View,godL:View) {
 
     val context=helperView.context
 
@@ -31,7 +31,7 @@ class ArrangeLayout(val helperView: View,val showPosition:Boolean) {
 
     private val getAndStoreData = GetAndStoreData(context)
     private val talkList = getAndStoreData.getTalkingListFromPref(1)
-    private val animationInAction = AnimationInAction(context)
+    private val animationInAction = AnimationInAction(context,manL,godL)
 
     private var interval = 0
     private var currentColor = "#stam"

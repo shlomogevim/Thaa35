@@ -1,6 +1,7 @@
 package com.example.thaa35
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,6 +12,7 @@ import kotlinx.android.synthetic.main.god_layout.*
 import kotlinx.android.synthetic.main.god_layout.godLayout
 import kotlinx.android.synthetic.main.helper_view_layout.*
 import kotlinx.android.synthetic.main.helper_view_layout.view.*
+import kotlinx.android.synthetic.main.man_layout.view.*
 
 //import kotlinx.android.synthetic.main.layout.man_layout.view.*
 
@@ -29,22 +31,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mainProgram()
+      mainProgram()
     }
 
     private fun mainProgram() {
         getAndStoreData = GetAndStoreData(this)
-        arrangeLayout = ArrangeLayout(include,showPosition)
-        buttonSpace = ButtonSpace(include,showPosition)
+        arrangeLayout = ArrangeLayout(include,showPosition,manLayout,godLayout)
+        buttonSpace = ButtonSpace(include,showPosition,manLayout,godLayout)
         arrangeLayout.setLayoutShowMode()
         buttonSpace.setShowPositionMode()
-        animationInAction = AnimationInAction(this)
+        animationInAction = AnimationInAction(this,manLayout,godLayout)
         getTalkList()
     //    backGroundConfigration()
         buttonSpace.initButton()
       //  waitToAnnimateEnded()
      //  animationInAction.executeTalker(talkC())
-        animationInAction.executeTalker(talkList[1])
+
+       animationInAction.executeTalker(talkList[1])
+
 
 
      /*   getStoreData = GetAndStoreData(this)

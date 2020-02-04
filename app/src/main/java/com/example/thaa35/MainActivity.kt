@@ -1,18 +1,14 @@
 package com.example.thaa35
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.github.florent37.viewanimator.ViewAnimator
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.god_layout.*
 import kotlinx.android.synthetic.main.god_layout.godLayout
 import kotlinx.android.synthetic.main.helper_view_layout.*
-import kotlinx.android.synthetic.main.helper_view_layout.view.*
-import kotlinx.android.synthetic.main.man_layout.view.*
 
 //import kotlinx.android.synthetic.main.layout.man_layout.view.*
 
@@ -31,62 +27,29 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-      mainProgram()
+        mainProgram()
     }
 
     private fun mainProgram() {
         getAndStoreData = GetAndStoreData(this)
-        arrangeLayout = ArrangeLayout(include,showPosition,manLayout,godLayout)
-        buttonSpace = ButtonSpace(include,showPosition,manLayout,godLayout)
+        arrangeLayout = ArrangeLayout(include, showPosition, manLayout, godLayout)
+        buttonSpace = ButtonSpace(include, showPosition, manLayout, godLayout)
         arrangeLayout.setLayoutShowMode()
         buttonSpace.setShowPositionMode()
-        animationInAction = AnimationInAction(this,manLayout,godLayout)
+        animationInAction = AnimationInAction(this, manLayout, godLayout)
         getTalkList()
-    //    backGroundConfigration()
+        backGroundConfigration()
         buttonSpace.initButton()
-      //  waitToAnnimateEnded()
-     //  animationInAction.executeTalker(talkC())
-
-       animationInAction.executeTalker(talkList[1])
+        waitToAnnimateEnded()
 
 
+        getAndStoreData.saveCurrentPage(1)
+        arrangeLayout.updateTitleTalkerSituation()
+        animationInAction.executeTalker(talkList[1])
 
-     /*   getStoreData = GetAndStoreData(this)
-        arrangeLayout = ArrangeLayout(this,showPosition)
-        buttonSpace = ButtonSpace(this,showPosition)
-
-        arrangeLayout.drawListView()
-        arrangeLayout.operateListView()
-        arrangeLayout.setLayoutShowMode()
-
-      buttonSpace.setShowPositionMode()*/
-
-      //  animationInAction = AnimationInAction(this)
-
-      //  animationInAction = AnimationInAction(godLayout,manLayout)
-
-        /*  getAndStoreData = GetAndStoreData(view)
-          getAndStoreData.saveCurrentFile(20)
-          getAndStoreData.saveShowPosition(showPosition)
-
-          getTalkList()
-
-          arrangeLayout = ArrangeLayout(view)
-          buttonSpace = ButtonSpace(view)
-
-          backGroundConfigration()
-
-          arrangeLayout.drawListView()
-
-          arrangeLayout.operateListView()
-
-          buttonSpace.initButton()
-
-          arrangeLayout.setLayoutShowMode()
-          waitToAnnimateEnded()
-
-          animationInAction.executeTalker(talkC())*/
+      //  oldVersion()
     }
+
 
     @SuppressLint("RestrictedApi")
     private fun waitToAnnimateEnded() {
@@ -115,20 +78,58 @@ class MainActivity : AppCompatActivity() {
         talkList = getAndStoreData.createNewList()
 
         if (talkList.size == 0) {
-           // createTalkingListFromFirestore()  //open tool->firebase->firestore see if all depen. ok
+            // createTalkingListFromFirestore()  //open tool->firebase->firestore see if all depen. ok
             //rebuilt project
             // run and wait for result
         }
         if (talkList.size == 0) {
             // !! must be in remarked becaseus it inteferring to the firebase
-            talkList=getAndStoreData.createTalkListFromTheStart()
+            talkList = getAndStoreData.createTalkListFromTheStart()
 
         }
         getAndStoreData.saveTalkingListInPref(talkList)
     }
 }
 
+fun oldVersion(){
+    //  animationInAction.executeTalker(talkC())
 
+    /*   getStoreData = GetAndStoreData(this)
+       arrangeLayout = ArrangeLayout(this,showPosition)
+       buttonSpace = ButtonSpace(this,showPosition)
+
+       arrangeLayout.drawListView()
+       arrangeLayout.operateListView()
+       arrangeLayout.setLayoutShowMode()
+
+     buttonSpace.setShowPositionMode()*/
+
+    //  animationInAction = AnimationInAction(this)
+
+    //  animationInAction = AnimationInAction(godLayout,manLayout)
+
+    /*  getAndStoreData = GetAndStoreData(view)
+      getAndStoreData.saveCurrentFile(20)
+      getAndStoreData.saveShowPosition(showPosition)
+
+      getTalkList()
+
+      arrangeLayout = ArrangeLayout(view)
+      buttonSpace = ButtonSpace(view)
+
+      backGroundConfigration()
+
+      arrangeLayout.drawListView()
+
+      arrangeLayout.operateListView()
+
+      buttonSpace.initButton()
+
+      arrangeLayout.setLayoutShowMode()
+      waitToAnnimateEnded()
+
+      animationInAction.executeTalker(talkC())*/
+}
 
 /*
     @SuppressLint("RestrictedApi")

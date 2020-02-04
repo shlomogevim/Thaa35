@@ -148,7 +148,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="+"
-            android:textSize="8sp" />
+            android:textSize="10sp" />
 
         <Button
             android:id="@+id/saveButton"
@@ -242,5 +242,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_media_previous" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

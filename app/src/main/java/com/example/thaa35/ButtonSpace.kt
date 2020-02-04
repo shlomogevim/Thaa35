@@ -2,27 +2,25 @@ package com.example.thaa35
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.EditText
 import android.widget.Toast
 import com.github.florent37.viewanimator.ViewAnimator
-import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.helper_view_layout.view.*
 import java.util.concurrent.TimeUnit
 
-class ButtonSpace(val helperView :View, val showPosition: Boolean,manL:View,godL:View) : View.OnClickListener {
-    private val context=helperView.context
+class ButtonSpace(val helperView: View, val showPosition: Boolean, manL: View, godL: View) :
+    View.OnClickListener {
+    private val context = helperView.context
     private val contex = helperView.context
     private val getAndStoreData = GetAndStoreData(context)
     private var talkList = getAndStoreData.getTalkingListFromPref(1)
-    private val animationInAction = AnimationInAction(context,manL,godL)
+    private val animationInAction = AnimationInAction(context, manL, godL)
     private var statrTime: Long = 0
     private var endTime = System.nanoTime()
 
@@ -60,8 +58,10 @@ class ButtonSpace(val helperView :View, val showPosition: Boolean,manL:View,godL
             }
             return
         }
+        var cu = getAndStoreData.getCurrentPage()
         if (showPosition) {
             when (v.id) {
+
 
                 R.id.fab -> nextIt()
                 R.id.fab1 -> previousIt()
@@ -71,9 +71,10 @@ class ButtonSpace(val helperView :View, val showPosition: Boolean,manL:View,godL
         time("let play 2")
     }
 
-     fun setShowPositionMode() {
+    @SuppressLint("RestrictedApi")
+    fun setShowPositionMode() {
         with(helperView) {
-            if (!showPosition ) {
+            if (!showPosition) {
                 plusAndMinusBtn.text = "+"
                 lastTalker_button.text = "Last"
                 saveButton.text = "Save"
@@ -176,6 +177,7 @@ class ButtonSpace(val helperView :View, val showPosition: Boolean,manL:View,godL
     private fun updateLastTalker(ind: Int) {
         with(getAndStoreData) {
             if (ind == 0) {
+                val sa = talkC()
                 saveLastTalker(talkC())
             } else {
                 talkList[currentPage()] = getLastTalker().copy()
@@ -206,10 +208,11 @@ class ButtonSpace(val helperView :View, val showPosition: Boolean,manL:View,godL
     }
 
     fun nextIt() {
+        var cu1 = getAndStoreData.getCurrentPage()
         updateLastTalker(0)
-        var cu = currentPage()
+        /*var cu = currentPage()
         cu++
-        getAndStoreData.saveCurrentPage(cu)
+        getAndStoreData.saveCurrentPage(cu)*/
         drawAnim()
     }
 
@@ -227,15 +230,11 @@ class ButtonSpace(val helperView :View, val showPosition: Boolean,manL:View,godL
     }
 
     override fun onClick(view: View) {
-        statrTime = System.nanoTime()
-        time("onClick 0")
         if (!showPosition) {
             onClickOther()
             return
         }
-        time("onClick 1")
         var def = 0
-
         when (view.id) {
             R.id.fab -> def++
             R.id.fab1 -> def--
@@ -243,35 +242,24 @@ class ButtonSpace(val helperView :View, val showPosition: Boolean,manL:View,godL
         buttonActivation(0)
 
         var counterStep = currentPage() + def
-        time("onClick 2")
 
         if (counterStep < 1) counterStep = 1
         if (counterStep == talkList.size) counterStep = 1
         getAndStoreData.saveCurrentPage(counterStep)
 
-        time("onClick 3")
-
-
-
         chageBackgroundColor(1, 1000)
 
-        time("onClick 4")
-
         letsPlay(view)
-
-        time("onClick 5")
 
         val size = talkC().takingArray.size
 
         Utile.listener1 = { it1, _ ->
             // Log.d("clima", "Hii num->$it1 and time->$it2 and size=$size")
             if (size == 1 || it1 == size) {
-                time("onClick 6")
                 buttonActivation(1)
                 chageBackgroundColor(0, 1000)
             }
         }
-        time("onClick 7")
     }
 
     private fun onClickOther() {

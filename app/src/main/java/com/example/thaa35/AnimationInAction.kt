@@ -1,5 +1,6 @@
 package com.example.thaa35
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -9,11 +10,14 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.thaa35.R
 import com.github.florent37.viewanimator.ViewAnimator
+import kotlinx.android.synthetic.main.god_layout.*
 import kotlinx.android.synthetic.main.god_layout.view.*
+import kotlinx.android.synthetic.main.man_layout.*
 import kotlinx.android.synthetic.main.man_layout.view.*
 import java.util.*
 
-class AnimationInAction(val context: Context,manView: View,godView: View) {
+class AnimationInAction(val context: Context) {
+    val activity=context as Activity
 
     private val helper = Helper(context)
     private var tv0: TextView? = null
@@ -25,20 +29,20 @@ class AnimationInAction(val context: Context,manView: View,godView: View) {
     private var tv4: TextView? = null
     private var tv5: TextView? = null
 
-    private var man0: TextView = manView.manSpeaking0
-    private var man1: TextView = manView.manSpeaking1
-    private var man2: TextView = manView.manSpeaking2
-    private var man3: TextView = manView.manSpeaking3
-    private var man4: TextView = manView.manSpeaking4
-    private var man5: TextView = manView.manSpeaking5
-    private var god0: TextView = godView.godSpeaking0
-    private var god0A: TextView = godView.godSpeaking0A
-    private var god2A: TextView = godView.godSpeaking2A
-    private var god1: TextView = godView.godSpeaking1
-    private var god2: TextView = godView.godSpeaking2
-    private var god3: TextView = godView.godSpeaking3
-    private var god4: TextView = godView.godSpeaking4
-    private var god5: TextView = godView.godSpeaking5
+    private var man0: TextView = activity.manSpeaking0
+    private var man1: TextView = activity.manSpeaking1
+    private var man2: TextView = activity.manSpeaking2
+    private var man3: TextView = activity.manSpeaking3
+    private var man4: TextView = activity.manSpeaking4
+    private var man5: TextView = activity.manSpeaking5
+    private var god0: TextView = activity.godSpeaking0
+    private var god0A: TextView = activity.godSpeaking0A
+    private var god2A: TextView = activity.godSpeaking2A
+    private var god1: TextView = activity.godSpeaking1
+    private var god2: TextView = activity.godSpeaking2
+    private var god3: TextView = activity.godSpeaking3
+    private var god4: TextView = activity.godSpeaking4
+    private var god5: TextView = activity.godSpeaking5
 
     var listOfTextview = arrayListOf<TextView?>()
     var listOfTextviewMul = arrayListOf<TextView?>()

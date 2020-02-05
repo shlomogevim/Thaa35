@@ -1,6 +1,5 @@
 package com.example.thaa35
 
-import android.R
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
@@ -8,30 +7,22 @@ import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
-import android.text.Layout
-import android.view.LayoutInflater
-import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
-import kotlinx.android.synthetic.main.helper_view_layout.view.*
 import kotlinx.android.synthetic.main.helper_view_layout.*
 
+class ArrangeScreen(val context: Context, val showPosition: Boolean) {
 
-class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition:Boolean,manL:View,godL:View) {
+    //val context=helperView.context
+    val activity = context as Activity
 
-    val context=helperView.context
 
-  //  val helperView1=activity.findViewById<ConstraintLayout>(R.layout.)
+    //  val helperView1=activity.findViewById<ConstraintLayout>(R.layout.)
 
-   /* private var inflater = LayoutInflater.from(context)
-    private val helperView = inflater.inflate(com.example.thaa35.R.layout.helper_view_layout, null)
-*/
     private var styleList = arrayListOf<String>()
     private var paraList = arrayListOf<String>()
     private var ttParaList = arrayListOf<String>()
@@ -39,7 +30,7 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
 
     private val getAndStoreData = GetAndStoreData(context)
     private val talkList = getAndStoreData.getTalkingListFromPref(1)
-    private val animationInAction = AnimationInAction(context,manL,godL)
+    private val animationInAction1 = AnimationInAction(context)
 
     private var interval = 0
     private var currentColor = "#stam"
@@ -49,7 +40,15 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
 
     fun drawAnim() {
         updateTitleTalkerSituation()
-        animationInAction.executeTalker(talkC())
+        animationInAction1.executeTalker(talkC())
+    }
+
+    fun backGroundConfigaration() {
+        val imageV = activity.findViewById<ImageView>(com.example.thaa35.R.id.imageView)
+        val animationDrawable = imageV.background as? AnimationDrawable
+        animationDrawable?.setEnterFadeDuration(2000)
+        animationDrawable?.setExitFadeDuration(4000)
+        animationDrawable?.start()
     }
 
     fun operateListView() {
@@ -68,11 +67,6 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
             talkC().animNum = actionList[position].toInt()
             moveTheAnimation()
         }
-
-      /*  helperView.action_ListView.setOnItemClickListener { _, _, position, _ ->
-            talkC().animNum = actionList[position].toInt()
-            moveTheAnimation()
-        }*/
     }
 
     private fun patamListView() {
@@ -80,16 +74,11 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
             //tranferTalkItem(0)
             translaePara(position)
         }
-       /* helperView.para_ListView.setOnItemClickListener { _, _, position, _ ->
-            //tranferTalkItem(0)
-            translaePara(position)
-        }*/
     }
 
     private fun translaePara(position: Int) {
 
         val talker = talkC()
-       // val s = helperView.plusAndMinusBtn.text
         val s = activity.plusAndMinusBtn.text
         var intv = if (s == "+") interval else -interval
 
@@ -243,7 +232,6 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
     }
 
     private fun ttParaListView() {
-       // helperView.ttPara_listView.setOnItemClickListener { _, _, position, _ ->
         activity.ttPara_listView.setOnItemClickListener { _, _, position, _ ->
             translaeTtPara(position)
             Toast.makeText(
@@ -258,7 +246,6 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
     private fun translaeTtPara(position: Int) {
         when (position) {
             //14 -> selectColor()
-         //   15 -> helperView.colorNam_ET.visibility = VISIBLE
             15 -> activity.colorNam_ET.visibility = VISIBLE
             16 -> interval = 0
             17 -> interval = 1
@@ -309,7 +296,6 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
     }
 
     private fun operateStyleLV() {
-       // helperView.style_ListView.setOnItemClickListener { _, _, position, _ ->
         activity.style_ListView.setOnItemClickListener { _, _, position, _ ->
             // tranferTalkItem(0)
             val currentTalker = talkC()
@@ -347,7 +333,7 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
 
     private fun moveTheAnimation() {
         val talker = talkC()
-        animationInAction.executeTalker(talker)
+        animationInAction1.executeTalker(talker)
     }
 
 
@@ -367,11 +353,8 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
                 "l=${takingArray.size}sty=$styleNum anim=$animNum size=${textSize.toInt()}" +
                         " bord=$borderWidth dur=$dur sw=$swingRepeat"
             val cu = currentPage()
-          //  helperView.tvPage.text = cu.toString()
             activity.tvPage.text = cu.toString()
             numTalker = cu
-
-           // helperView.tvAnimatinKind.text = text
             activity.tvAnimatinKind.text = text
         }
 
@@ -438,10 +421,8 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
         for (i in 0..15) {
             styleList.add("-")
         }
-        val adapter0 = ArrayAdapter<String>(context, R.layout.simple_list_item_1, styleList)
-       // helperView.style_ListView.adapter = adapter0
-        activity.style_ListView.adapter = adapter0
-       // helperView.style_ListView.setSelection(15)
+        val adapter10 = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, paraList)
+        activity.style_ListView.adapter = adapter10
         activity.style_ListView.setSelection(15)
     }
 
@@ -478,8 +459,8 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
         }
 
         val adapter10 = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, paraList)
-        helperView.para_ListView.adapter = adapter10
-        helperView.para_ListView.setSelection(15)
+        activity.para_ListView.adapter = adapter10
+        activity.para_ListView.setSelection(15)
     }
 
     private fun createTtParaTV() {
@@ -493,8 +474,8 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
         }
         val adapter11 =
             ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, ttParaList)
-        helperView.ttPara_listView.adapter = adapter11
-        helperView.ttPara_listView.setSelection(15)
+        activity.ttPara_listView.adapter = adapter11
+        activity.ttPara_listView.setSelection(15)
     }
 
     private fun getTtParaList(): List<String> = arrayListOf(
@@ -563,13 +544,16 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
         }
         val adapter1 =
             ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, actionList)
-        helperView.action_ListView.adapter = adapter1
-        helperView.action_ListView.setSelection(15)
+        activity.action_ListView.adapter = adapter1
+        activity.action_ListView.setSelection(15)
     }
 
+    @SuppressLint("RestrictedApi")
     fun setLayoutShowMode() {
-        with(helperView) {
-            if (!showPosition ) {
+        // backGroundConfigaration()
+        with(activity) {
+            if (!showPosition) {
+                drawListView()
                 plusAndMinusBtn.text = "+"
                 lastTalker_button.text = "Last"
                 saveButton.text = "Save"
@@ -579,11 +563,12 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
                 ttPara_listView.visibility = VISIBLE
                 action_ListView.visibility = VISIBLE
                 tvAnimatinKind.visibility = VISIBLE
-               /* fab.visibility = INVISIBLE
-                fab1.visibility = INVISIBLE*/
+                fab.visibility = INVISIBLE
+                fab1.visibility = INVISIBLE
 
             }
             if (showPosition) {
+                backGroundConfigaration()
                 down_layout.visibility = INVISIBLE
                 upper_layout.visibility = INVISIBLE
                 style_ListView.visibility = INVISIBLE
@@ -591,7 +576,8 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
                 ttPara_listView.visibility = INVISIBLE
                 action_ListView.visibility = INVISIBLE
                 tvAnimatinKind.visibility = INVISIBLE
-
+                fab.visibility = VISIBLE
+                fab1.visibility = VISIBLE
             }
         }
     }
@@ -618,367 +604,5 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(windowToken, 0)
     }*/
-}
-
-
-/* fun operateListView() {
-        operateStyleList()
-
-
-    }*/
-
-/* private fun operateStyleList() {
-     view.style_ListView.setOnItemClickListener { _, _, position, _ ->
-         tranferTalkItem(0)
-        *//* if (position == 16) {     // ther is NB
-                talker.backExist = false
-            } else {
-                talker.backExist = true
-                talker.styleNum = styleList[position].toInt()
-            }
-            upgradeTalker()*//*
-        }
-    }*/
-
-private fun updateLastTalker(ind: Int) {
-    if (ind == 0) {
-        // lastTalker = talker.copy()
-    } else {
-        // talker = lastTalker.copy()
-    }
-}
-
-fun prepareAllTheListViewParam1() {
-
-    // styleListView()   //list view in the left side
-    //createStyleLV()
-
-    // patamListView()   //second list view from the left
-    // createParaList()
-
-
-    //     ttParaListView() // third list viee from the left
-    //createTtParaTV()
-
-
-    //    animationMovmentListView()  // list view in the right side
-    // createAnimLV()
-
-    /*       initButton()
-         lastTalker = Talker()
-         tranferTalkItem(0)
-         backGroundConfigration()*/
-}
-
-
-/*private fun styleListView() {// list view in the left side
-      createStyleLV()
-      view.style_ListView.setOnItemClickListener { _, _, position, _ ->
-          tranferTalkItem(0)
-          if (position == 16) {     // ther is NB
-              talker.backExist = false
-          } else {
-              talker.backExist = true
-              talker.styleNum = styleList[position].toInt()
-          }
-          upgradeTalker()
-      }
-  }
-
-
-
-
-private fun moveTheAnimation() {
-    if (counterStep > 84) counterStep = 84
-    if ((counterStep == 84 && SHOW_POSITION) || (counterStep == 84 && PUBLISH_POSITION)) {
-        counterStep = 1
-        // finish()
-    }
-    updateTitleTalkerSituation()
-    if (counterStep < 1) counterStep = 1
-
-    //  counterStep = 1           //*********************
-
-    manMode = counterStep % 2 != 0
-
-
-
-    animationInAction.excuteTalker(talker)
-    getAndStoreData.savePage(counterStep)
-}*/
-
-//----------------
-
-
-/*
-
-
-
-
-
-
-
-
-//------------------------
-
-
-//------------------------
-
-
-
-
-//------------------
-
-
-private fun retriveLastTalker() {
-    tranferTalkItem(1)
-    moveTheAnimation()
-}
-
-private fun minTextSize() {
-    tranferTalkItem(0)
-    talkList[counterStep].textSize = 12f  // for accsident of bigest text
-    moveTheAnimation()
-}
-
-private fun readAgainTextFile() {
-    val textTalkList = sharData.createTalkListFromTheStart()
-    talkList = activatApp.textReRead(talkList, textTalkList)
-    /*Handler().postDelayed(
-        {*/
-    moveTheAnimation()
-    Toast.makeText(this, "Read all text From the start", Toast.LENGTH_SHORT).show()
-
-    /*          },
-              2000 // value in milliseconds
-          )*/
-}
-
-private fun selectColor() {
-    val intent = Intent(this, SelectColor::class.java)
-    startActivityForResult(intent, 12)
-}
-
-override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    super.onActivityResult(requestCode, resultCode, data)
-    if (resultCode == Activity.RESULT_OK) {
-        currentColor = data?.getStringExtra("color")!!
-
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-private fun changePlusMinusMode() {
-    if (plusMode) {
-        plusMode = false
-        plusAndMinusBtn.setText("-")
-    } else {
-        plusMode = true
-        plusAndMinusBtn.setText("+")
-    }
-}
-
-
-private fun findStyleObject(index: Int): StyleObject {
-    var style1 = StyleObject()
-    var bo = true
-    var i = 0
-    while (bo && i < Page.styleArray.size) {
-
-        if (Page.styleArray[i].numStyleObject == index) {
-            style1 = Page.styleArray[i]
-            bo = false
-        }
-        i++
-    }
-    if (bo) style1 = Page.styleArray[10]
-    return style1
-}
-
-
-private fun updateTitleTalkerSituation() {
-    with(talkList[counterStep]) {
-        val text =
-            "l=${takingArray.size}sty=$styleNum anim=$animNum size=${textSize.toInt()}" +
-                    " bord=$borderWidth dur=$dur sw=$swingRepeat"
-        tvAnimatinKind.text = text
-        tvPage.text = counterStep.toString()
-    }
 
 }
-
-private fun trasferStyle() {
-
-    var item = talkList[counterStep]
-    val style = findStyleObject(item.styleNum)
-    item.colorBack = style.colorBack
-    item.colorText = style.colorText
-}
-
-private fun upgradeTalker() {
-
-    var bo = true
-    if (talkList[counterStep].textSize < 3) {
-        talkList[counterStep].textSize = 3f
-        Toast.makeText(this, "Text Size too small", Toast.LENGTH_SHORT).show()
-        bo = false
-    }
-    if (talkList[counterStep].dur < 100) {
-        talkList[counterStep].textSize = 100f
-        Toast.makeText(this, "Duration too small", Toast.LENGTH_SHORT).show()
-        bo = false
-    }
-    if (bo) {
-        trasferStyle()
-        updateTitleTalkerSituation()
-        moveTheAnimation()
-    }
-
-}
-
-fun saveIt() {
-    sharData.savePage(counterStep)
-    sharData.saveTalkingListInPref(talkList)
-    Toast.makeText(this, "It's save Mr", Toast.LENGTH_SHORT).show()
-    updateTitleTalkerSituation()
-}
-
-fun nextIt() {
-    counterStep++
-    val max = talkList.size - 1
-    if (counterStep > max) counterStep = max
-    sharData.savePage(counterStep)
-    moveTheAnimation()
-}
-
-fun previousIt() {
-    counterStep--
-    if (counterStep < 1) counterStep = 1
-    sharData.savePage(counterStep)
-    moveTheAnimation()
-}
-
-
-
-
-
-
-private fun tranferValue(ind: Int) {
-    with(talkList[counterStep]) {
-        if (ind == 0) {
-            current_styleNum = styleNum
-            current_animNum = animNum
-            current_dur = dur
-            current_textSize = textSize
-        } else {
-            styleNum = current_styleNum
-            trasferStyle()
-            animNum = current_animNum
-            if (current_dur > 100) {
-                dur = current_dur
-            } else {
-                current_dur = 100
-            }
-            if (current_textSize > 10) {
-                textSize = current_textSize
-            } else {
-                current_textSize = 10f
-            }
-        }
-    }
-    updateTitleTalkerSituation()
-}
-
-private fun addStyleValueToTalkingList() {
-    for (item in talkList) {
-        val numStyle = item.styleNum
-        val style = findStyleObject(numStyle)
-        item.colorBack = style.colorBack
-        item.colorText = style.colorText
-    }
-
-}
-*/
-
-
-
-
-private fun tranferTalkItem(ind: Int) {
-    if (ind == 0) {
-        lastTalker = talker.copy()
-    } else {
-        talker = lastTalker.copy()
-    }
-}
-
-
-
-
-private fun upgradeTalker() {
-
-    var bo = true
-    if (talker.textSize < 3) {
-        talker.textSize = 3f
-        helper.showToast("Text Size too small")
-     //   Toast.makeText(this, "Text Size too small", Toast.LENGTH_SHORT).show()
-        bo = false
-    }
-    if (talker.dur < 100) {
-        talker.textSize = 100f
-       // Toast.makeText(this, "Duration too small", Toast.LENGTH_SHORT).show()
-        helper.showToast("Duration too small")
-        bo = false
-    }
-    if (bo) {
-        trasferStyle()
-        updateTitleTalkerSituation()
-        moveTheAnimation()
-    }
-}
-private fun updateTitleTalkerSituation() {
-    with(talker) {
-        val text =
-            "l=${takingArray.size}sty=$styleNum anim=$animNum size=${textSize.toInt()}" +
-                    " bord=$borderWidth dur=$dur sw=$swingRepeat"
-        view.tvAnimatinKind.text = text
-        view.tvPage.text = numTalker.toString()
-    }
-}
-private fun trasferStyle() {
-
-    var item = talker
-    val style = findStyleObject(item.styleNum)
-    item.colorBack = style.colorBack
-    item.colorText = style.colorText
-}
-private fun findStyleObject(index: Int): StyleObject {
-    var style1 = StyleObject()
-    var bo = true
-    var i = 0
-    while (bo && i < Helper.Page.styleArray.size) {
-
-        if (Helper.Page.styleArray[i].numStyleObject == index) {
-            style1 = Helper.Page.styleArray[i]
-            bo = false
-        }
-        i++
-    }
-    if (bo) style1 = Helper.Page.styleArray[10]
-    return style1
-}
-*/
-
-
-

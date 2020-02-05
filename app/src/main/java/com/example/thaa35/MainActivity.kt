@@ -10,16 +10,15 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.god_layout.godLayout
 import kotlinx.android.synthetic.main.helper_view_layout.*
 
-//import kotlinx.android.synthetic.main.layout.man_layout.view.*
-
 class MainActivity : AppCompatActivity() {
 
-    var conv: Convers? = null
-    lateinit var animationInAction: AnimationInAction
+    lateinit var animationInAction1: AnimationInAction1
     lateinit var getAndStoreData: GetAndStoreData
-    lateinit var arrangeLayout: ArrangeLayout
-    lateinit var buttonSpace: ButtonSpace
+    lateinit var arrangeLayout1: ArrangeLayout1
+    lateinit var buttonSpace1: ButtonSpace1
     lateinit var talkList: ArrayList<Talker>
+
+    lateinit var newLayoutPreparation:NewLayoutPreparation
 
     var showPosition = true
 
@@ -31,21 +30,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun mainProgram() {
+        arrangeLayout1 = ArrangeLayout1(this, showPosition)
+        buttonSpace1 = ButtonSpace1(this, showPosition)
+        animationInAction1 = AnimationInAction1(this)
+        buttonSpace1.initButton()
         getAndStoreData = GetAndStoreData(this)
-        arrangeLayout = ArrangeLayout(include, showPosition, manLayout, godLayout)
-        buttonSpace = ButtonSpace(include, showPosition, manLayout, godLayout)
-        arrangeLayout.setLayoutShowMode()
-        buttonSpace.setShowPositionMode()
-        animationInAction = AnimationInAction(this, manLayout, godLayout)
+
+        arrangeLayout1.setLayoutShowMode()
+        buttonSpace1.setShowPositionMode()
         getTalkList()
-        backGroundConfigration()
-        buttonSpace.initButton()
         waitToAnnimateEnded()
-
-
-        getAndStoreData.saveCurrentPage(1)
-        arrangeLayout.updateTitleTalkerSituation()
-        animationInAction.executeTalker(talkList[1])
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         getAndStoreData.saveCurrentPage(1)
+        arrangeLayout1.updateTitleTalkerSituation()
+        animationInAction1.executeTalker(talkList[1])
 
       //  oldVersion()
     }
@@ -66,14 +63,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun backGroundConfigration() {
-        val animationDrawable = imageView.background as? AnimationDrawable
-        animationDrawable?.setEnterFadeDuration(2000)
-        animationDrawable?.setExitFadeDuration(4000)
-        animationDrawable?.start()
-    }
-
-    fun talkC() = talkList[getAndStoreData.getCurrentPage()]
     private fun getTalkList() {
         talkList = getAndStoreData.createNewList()
 
@@ -90,6 +79,13 @@ class MainActivity : AppCompatActivity() {
         getAndStoreData.saveTalkingListInPref(talkList)
     }
 }
+
+/*fun backGroundConfigration() {
+    val animationDrawable = imageView.background as? AnimationDrawable
+    animationDrawable?.setEnterFadeDuration(2000)
+    animationDrawable?.setExitFadeDuration(4000)
+    animationDrawable?.start()
+}*/
 
 fun oldVersion(){
     //  animationInAction.executeTalker(talkC())

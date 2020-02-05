@@ -15,6 +15,7 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,15 +24,14 @@ import kotlinx.android.synthetic.main.helper_view_layout.view.*
 import kotlinx.android.synthetic.main.helper_view_layout.*
 
 
-class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition:Boolean,manL:View,godL:View) {
+class ArrangeLayout1(val context: Context,val showPosition:Boolean) {
 
-    val context=helperView.context
+   //val context=helperView.context
+    val activity=context as Activity
+
 
   //  val helperView1=activity.findViewById<ConstraintLayout>(R.layout.)
 
-   /* private var inflater = LayoutInflater.from(context)
-    private val helperView = inflater.inflate(com.example.thaa35.R.layout.helper_view_layout, null)
-*/
     private var styleList = arrayListOf<String>()
     private var paraList = arrayListOf<String>()
     private var ttParaList = arrayListOf<String>()
@@ -39,7 +39,7 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
 
     private val getAndStoreData = GetAndStoreData(context)
     private val talkList = getAndStoreData.getTalkingListFromPref(1)
-    private val animationInAction = AnimationInAction(context,manL,godL)
+    private val animationInAction1 = AnimationInAction1(context)
 
     private var interval = 0
     private var currentColor = "#stam"
@@ -49,9 +49,16 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
 
     fun drawAnim() {
         updateTitleTalkerSituation()
-        animationInAction.executeTalker(talkC())
+        animationInAction1.executeTalker(talkC())
     }
 
+    fun backGroundConfigaration() {
+        val imageV=activity.findViewById<ImageView>(com.example.thaa35.R.id.imageView)
+        val animationDrawable = imageV.background as? AnimationDrawable
+        animationDrawable?.setEnterFadeDuration(2000)
+        animationDrawable?.setExitFadeDuration(4000)
+        animationDrawable?.start()
+    }
     fun operateListView() {
         operateStyleLV()
         patamListView()
@@ -68,11 +75,6 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
             talkC().animNum = actionList[position].toInt()
             moveTheAnimation()
         }
-
-      /*  helperView.action_ListView.setOnItemClickListener { _, _, position, _ ->
-            talkC().animNum = actionList[position].toInt()
-            moveTheAnimation()
-        }*/
     }
 
     private fun patamListView() {
@@ -80,16 +82,11 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
             //tranferTalkItem(0)
             translaePara(position)
         }
-       /* helperView.para_ListView.setOnItemClickListener { _, _, position, _ ->
-            //tranferTalkItem(0)
-            translaePara(position)
-        }*/
     }
 
     private fun translaePara(position: Int) {
 
         val talker = talkC()
-       // val s = helperView.plusAndMinusBtn.text
         val s = activity.plusAndMinusBtn.text
         var intv = if (s == "+") interval else -interval
 
@@ -243,7 +240,6 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
     }
 
     private fun ttParaListView() {
-       // helperView.ttPara_listView.setOnItemClickListener { _, _, position, _ ->
         activity.ttPara_listView.setOnItemClickListener { _, _, position, _ ->
             translaeTtPara(position)
             Toast.makeText(
@@ -258,7 +254,6 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
     private fun translaeTtPara(position: Int) {
         when (position) {
             //14 -> selectColor()
-         //   15 -> helperView.colorNam_ET.visibility = VISIBLE
             15 -> activity.colorNam_ET.visibility = VISIBLE
             16 -> interval = 0
             17 -> interval = 1
@@ -309,7 +304,6 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
     }
 
     private fun operateStyleLV() {
-       // helperView.style_ListView.setOnItemClickListener { _, _, position, _ ->
         activity.style_ListView.setOnItemClickListener { _, _, position, _ ->
             // tranferTalkItem(0)
             val currentTalker = talkC()
@@ -347,7 +341,7 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
 
     private fun moveTheAnimation() {
         val talker = talkC()
-        animationInAction.executeTalker(talker)
+        animationInAction1.executeTalker(talker)
     }
 
 
@@ -367,11 +361,8 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
                 "l=${takingArray.size}sty=$styleNum anim=$animNum size=${textSize.toInt()}" +
                         " bord=$borderWidth dur=$dur sw=$swingRepeat"
             val cu = currentPage()
-          //  helperView.tvPage.text = cu.toString()
             activity.tvPage.text = cu.toString()
             numTalker = cu
-
-           // helperView.tvAnimatinKind.text = text
             activity.tvAnimatinKind.text = text
         }
 
@@ -439,9 +430,7 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
             styleList.add("-")
         }
         val adapter0 = ArrayAdapter<String>(context, R.layout.simple_list_item_1, styleList)
-       // helperView.style_ListView.adapter = adapter0
         activity.style_ListView.adapter = adapter0
-       // helperView.style_ListView.setSelection(15)
         activity.style_ListView.setSelection(15)
     }
 
@@ -478,8 +467,8 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
         }
 
         val adapter10 = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, paraList)
-        helperView.para_ListView.adapter = adapter10
-        helperView.para_ListView.setSelection(15)
+        activity.para_ListView.adapter = adapter10
+        activity.para_ListView.setSelection(15)
     }
 
     private fun createTtParaTV() {
@@ -493,8 +482,8 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
         }
         val adapter11 =
             ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, ttParaList)
-        helperView.ttPara_listView.adapter = adapter11
-        helperView.ttPara_listView.setSelection(15)
+        activity.ttPara_listView.adapter = adapter11
+        activity.ttPara_listView.setSelection(15)
     }
 
     private fun getTtParaList(): List<String> = arrayListOf(
@@ -563,12 +552,13 @@ class ArrangeLayout(val activity: Activity,val helperView: View,val showPosition
         }
         val adapter1 =
             ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, actionList)
-        helperView.action_ListView.adapter = adapter1
-        helperView.action_ListView.setSelection(15)
+        activity.action_ListView.adapter = adapter1
+        activity.action_ListView.setSelection(15)
     }
 
     fun setLayoutShowMode() {
-        with(helperView) {
+        backGroundConfigaration()
+        with(activity) {
             if (!showPosition ) {
                 plusAndMinusBtn.text = "+"
                 lastTalker_button.text = "Last"
@@ -648,7 +638,7 @@ private fun updateLastTalker(ind: Int) {
     }
 }
 
-fun prepareAllTheListViewParam1() {
+fun prepareAllTheListViewParam() {
 
     // styleListView()   //list view in the left side
     //createStyleLV()

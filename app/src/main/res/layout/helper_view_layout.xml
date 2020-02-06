@@ -15,7 +15,7 @@
         android:background="@color/colorPrimaryDark"
         android:text="Talk parameter"
         android:textColor="@android:color/white"
-        android:textSize="12sp"
+        android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -32,30 +32,6 @@
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ListView
-        android:id="@+id/style_ListView"
-        android:layout_width="60dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:elevation="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/down_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upper_layout"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <ListView
-        android:id="@+id/action_ListView"
-        android:layout_width="60dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:elevation="30dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/down_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upper_layout">
-
-    </ListView>
 
     <TextView
         android:id="@+id/currentParameterTv"
@@ -149,7 +125,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="+"
-            android:textSize="10sp" />
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/saveButton"
@@ -185,10 +161,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <ListView
+        android:id="@+id/style_ListView"
+        android:layout_width="80dp"
+        android:layout_height="0dp"
+
+        android:layout_marginBottom="8dp"
+        android:elevation="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/down_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/upper_layout"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ListView
         android:id="@+id/para_ListView"
-        android:layout_width="110dp"
+        android:layout_width="100dp"
         android:layout_height="0dp"
         android:layout_marginStart="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/style_ListView"
@@ -198,13 +185,24 @@
 
     <ListView
         android:id="@+id/ttPara_listView"
-        android:layout_width="110dp"
+        android:layout_width="100dp"
         android:layout_height="0dp"
         android:layout_marginEnd="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/style_ListView"
         app:layout_constraintEnd_toStartOf="@+id/action_ListView"
         app:layout_constraintTop_toTopOf="@+id/style_ListView" />
+    <ListView
+        android:id="@+id/action_ListView"
+        android:layout_width="60dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:elevation="30dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/down_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/upper_layout">
 
+    </ListView>
     <EditText
         android:id="@+id/colorNam_ET"
         android:layout_width="wrap_content"

@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         buttonSpace.initButton()
         getAndStoreData = GetAndStoreData(this)
         arrangeScreen.setLayoutShowMode()
+        arrangeScreen.operateListView()
         buttonSpace.setShowPositionMode()
         getTalkList()
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          getAndStoreData.saveCurrentPage(1)

@@ -220,7 +220,11 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
 
     private fun changePlusMinusMode() {
         with(activity.plusAndMinusBtn) {
-            text = (if (text == "+") "-" else "-")
+           if (text == "+"){
+                text="-"
+            } else {
+               text="+"
+           }
         }
     }
 

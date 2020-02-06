@@ -84,7 +84,7 @@ object Utile {
 
 
             textView.visibility=View.VISIBLE
-           textView.setBackgroundColor(Color.GREEN)
+          // textView.setBackgroundColor(Color.GREEN)
             textView.scaleX=1f
             textView.scaleY=1f
 

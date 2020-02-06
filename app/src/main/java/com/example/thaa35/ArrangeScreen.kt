@@ -400,12 +400,12 @@ class ArrangeScreen(val context: Context, val showPosition: Boolean) {
         }
     }
 
-    fun drawListView() {
+    private fun drawListView() {
 
-        createStyleLV()
+       createStyleLV()
         createParaList()
         createTtParaTV()
-        createAnimLV()
+       createAnimLV()
     }
 
     private fun createStyleLV() {
@@ -421,9 +421,10 @@ class ArrangeScreen(val context: Context, val showPosition: Boolean) {
         for (i in 0..15) {
             styleList.add("-")
         }
-        val adapter10 = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, paraList)
+        val adapter10 = ArrayAdapter<String>(context, R.layout.mytext, styleList)
         activity.style_ListView.adapter = adapter10
         activity.style_ListView.setSelection(15)
+
     }
 
     private fun createParaList() {
@@ -458,7 +459,7 @@ class ArrangeScreen(val context: Context, val showPosition: Boolean) {
             paraList.add("-")
         }
 
-        val adapter10 = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, paraList)
+        val adapter10 = ArrayAdapter<String>(context, R.layout.mytext, paraList)
         activity.para_ListView.adapter = adapter10
         activity.para_ListView.setSelection(15)
     }
@@ -473,7 +474,7 @@ class ArrangeScreen(val context: Context, val showPosition: Boolean) {
             ttParaList.add("-")
         }
         val adapter11 =
-            ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, ttParaList)
+            ArrayAdapter<String>(context, R.layout.mytext, ttParaList)
         activity.ttPara_listView.adapter = adapter11
         activity.ttPara_listView.setSelection(15)
     }
@@ -543,7 +544,7 @@ class ArrangeScreen(val context: Context, val showPosition: Boolean) {
             actionList.add("-")
         }
         val adapter1 =
-            ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, actionList)
+            ArrayAdapter<String>(context, R.layout.mytext, actionList)
         activity.action_ListView.adapter = adapter1
         activity.action_ListView.setSelection(15)
     }

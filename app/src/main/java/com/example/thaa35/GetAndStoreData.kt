@@ -57,7 +57,8 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
         val gson = Gson()
         val tagNum=getCurrentFile()
         val jsonString = gson.toJson(talkingList)
-        myPref.edit().putString(TALKLIST+tagNum.toString(), jsonString).apply()
+       // myPref.edit().putString(TALKLIST+tagNum.toString(), jsonString).apply()
+        myPref.edit().putString(TALKLIST, jsonString).apply()
     }
     fun saveLastTalker(lastTalker: Talker) {
         val gson = Gson()
@@ -81,7 +82,8 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
         var talkList1 = ArrayList<Talker>()
         val tagNum=getCurrentFile()
 
-        var jsonS =  myPref.getString(TALKLIST+tagNum.toString(), null)
+       // var jsonS =  myPref.getString(TALKLIST+tagNum.toString(), null)
+        var jsonS =  myPref.getString(TALKLIST, null)
         if (jsonS != null) {
             val gson = Gson()
             val type = object : TypeToken<ArrayList<Talker>>() {}.type

@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var buttonSpace: ButtonSpace
     lateinit var talkList: ArrayList<Talker>
 
-    var showPosition = false
+    var showPosition = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,15 +21,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun mainProgram() {
 
+        getAndStoreData = GetAndStoreData(this)
+        getTalkList()
         arrangeScreen = ArrangeScreen(this, showPosition)
         buttonSpace = ButtonSpace(this, showPosition)
         animationInAction = AnimationInAction(this)
         buttonSpace.initButton()
-        getAndStoreData = GetAndStoreData(this)
         arrangeScreen.setLayoutShowMode()
         arrangeScreen.operateListView()
         buttonSpace.setShowPositionMode()
-        getTalkList()
+
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          getAndStoreData.saveCurrentPage(1)
         arrangeScreen.updateTitleTalkerSituation()
         animationInAction.executeTalker(talkList[1])

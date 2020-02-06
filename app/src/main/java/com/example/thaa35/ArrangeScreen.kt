@@ -333,6 +333,7 @@ class ArrangeScreen(val context: Context, val showPosition: Boolean) {
 
     private fun moveTheAnimation() {
         val talker = talkC()
+        getAndStoreData.saveTalkingListInPref(talkList)
         animationInAction1.executeTalker(talker)
     }
 

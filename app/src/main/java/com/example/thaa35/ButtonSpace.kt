@@ -63,9 +63,7 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
         var cu = getAndStoreData.getCurrentPage()
         if (showPosition) {
             when (v.id) {
-
-
-                R.id.fab -> nextIt()
+                R.id.fab -> nextItFab()
                 R.id.fab1 -> previousIt()
                 else -> drawAnim()
             }
@@ -209,7 +207,7 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
         drawAnim()
     }
 
-    fun nextIt() {
+    fun nextItFab() {
         var cu1 = getAndStoreData.getCurrentPage()
         updateLastTalker(0)
         /*var cu = currentPage()
@@ -217,7 +215,14 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
         getAndStoreData.saveCurrentPage(cu)*/
         drawAnim()
     }
-
+    fun nextIt() {
+        var cu1 = getAndStoreData.getCurrentPage()
+        updateLastTalker(0)
+        var cu = currentPage()
+        cu++
+        getAndStoreData.saveCurrentPage(cu)
+        drawAnim()
+    }
     private fun changePlusMinusMode() {
         with(activity.plusAndMinusBtn) {
            if (text == "+"){

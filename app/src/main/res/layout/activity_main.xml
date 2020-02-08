@@ -9,8 +9,6 @@
     android:keepScreenOn="true"
 
     tools:context=".MainActivity">
-
-
     <include
         android:id="@+id/include"
         layout="@layout/helper_view_layout" />
@@ -38,27 +36,27 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
-    <!-- <com.google.android.material.floatingactionbutton.FloatingActionButton
-         android:id="@+id/fab"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_gravity="bottom|end"
-         android:layout_marginEnd="30dp"
-         android:layout_marginBottom="4dp"
-         android:visibility="invisible"
-         app:layout_constraintBottom_toBottomOf="parent"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:srcCompat="@android:drawable/ic_media_play" />
+    <ImageView
+        android:id="@+id/god_speaking_iv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitStart"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/god_speaking_sign" />
 
-     <com.google.android.material.floatingactionbutton.FloatingActionButton
-         android:id="@+id/fab1"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_gravity="bottom|end"
-         android:layout_marginStart="30dp"
-         android:layout_marginBottom="4dp"
-         android:visibility="invisible"
-         app:layout_constraintBottom_toBottomOf="parent"
-         app:layout_constraintStart_toStartOf="parent"
-         app:srcCompat="@android:drawable/ic_media_previous" />-->
+    <ImageView
+        android:id="@+id/man_speaking_iv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitEnd"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/man_speaking_sign" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,37 +21,18 @@ import java.io.ByteArrayOutputStream
 
 class GetAndStoreData(val context: Context) : AppCompatActivity() {
 
-
-
     var myPref = context.getSharedPreferences(PREFS_NAME, 0)
+    private var talkList = getTalkingListFromPref(1)
 
 
     fun saveCurrentPage(index: Int) {myPref.edit().putInt(CURRENT_PAGE, index).apply()}
     fun saveLastPage(index: Int) {myPref.edit().putInt(LAST_PAGE, index).apply()}
-    fun saveCurrentFile(index: Int) {myPref.edit().putInt(FILE_NUM, index).apply()}
-   fun saveShowPosition(index: Int) {myPref.edit().putInt(SHOWPOSITION, index).apply()}
 
     fun getCurrentPage(): Int = myPref.getInt(CURRENT_PAGE, 1)
     fun getLastPage(): Int = myPref.getInt(LAST_PAGE, 1)
     fun getCurrentFile(): Int = myPref.getInt(FILE_NUM, 1)
-    fun getShowPosition(): Int = myPref.getInt(SHOWPOSITION, 1)
 
-
-    private fun decodebase64(input:String):Bitmap{
-        val decodeByte=Base64.decode(input,0)
-        val bit=BitmapFactory.decodeByteArray(decodeByte,0,decodeByte.size)
-        return bit
-    }
-
-    private fun encodeToBase64(image:Bitmap):String{
-        val immage=image
-        val baos=ByteArrayOutputStream()
-        immage.compress(Bitmap.CompressFormat.PNG,100,baos)
-        val b=baos.toByteArray()
-        val imageEncoded=Base64.encodeToString(b,Base64.DEFAULT)
-        Log.d("clima","imageEncode->$imageEncoded")
-        return imageEncoded
-    }
+    fun currenteTalk() = talkList[getCurrentPage()]
 
     fun saveTalkingListInPref(talkingList: ArrayList<Talker>) {
         val gson = Gson()
@@ -77,65 +58,6 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
         return talker
     }
 
-
-    fun createNewList(): ArrayList<Talker> {
-        var talkList1 = ArrayList<Talker>()
-        val tagNum=getCurrentFile()
-
-       // var jsonS =  myPref.getString(TALKLIST+tagNum.toString(), null)
-        var jsonS =  myPref.getString(TALKLIST, null)
-        if (jsonS != null) {
-            val gson = Gson()
-            val type = object : TypeToken<ArrayList<Talker>>() {}.type
-            talkList1 = gson.fromJson(jsonS, type)
-            //saveTalkingListInPref(talkList1)
-        }
-        return talkList1
-    }
-
-
-
-
-
-
-
-    fun saveJsonString(jsonS: String?) {
-        myPref.edit().putString(TALKLIST, jsonS).apply()
-    }
-
-    fun getJsonArryFromPref( ): ArrayList<Talker> {
-        var list= ArrayList<Talker>()
-        var jsonS: String?
-        jsonS = myPref.getString(TALKLIST, null)
-        if (!jsonS.isNullOrEmpty()){
-            val gson = Gson()
-            val type = object : TypeToken<ArrayList<Talker>>() {}.type
-            list = gson.fromJson(jsonS, type)
-        }
-        return list
-    }
-
-
-    fun createTalkList(): ArrayList<Talker> {
-        var talkList: ArrayList<Talker>
-        val jsonString = myPref.getString(TALKLIST, null)
-
-        // val jsonString = intent.getStringExtra(JSONSTRING)
-        // val jsonString = intent.getStringExtra(JSONSTRING)
-        if (jsonString == "none" || jsonString == "") {
-            talkList = getTalkingListFromPref(0)
-            saveTalkingListInPref(talkList)
-
-        } else {
-            val gson = Gson()
-            val type = object : TypeToken<ArrayList<Talker>>() {}.type
-            talkList = gson.fromJson(jsonString, type)
-            saveTalkingListInPref(talkList)
-        }
-        return talkList
-    }
-
-
     fun getTalkingListFromPref(ind: Int): ArrayList<Talker> {
         val talkList1: ArrayList<Talker>
         val gson = Gson()
@@ -156,7 +78,7 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
         var talkList1 = arrayListOf<Talker>()
         val ADAM = "-אדם-"
         val GOD = "-אלוהים-"
-        val currenteFile = "text/text" + ASSEETS_FILE.toString() + ".txt"
+        val currenteFile = "text/text" + ASSEETS_FILE + ".txt"
 
         var countItem = 0
         var text = context.assets.open(currenteFile).bufferedReader().use {
@@ -223,6 +145,9 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
 
     private fun improveString(st: String) = st.substring(1, st.length - 1)
 
+    fun getShowPosition(): Int = myPref.getInt(SHOWPOSITION, 1)
+    fun saveCurrentFile(index: Int) {myPref.edit().putInt(FILE_NUM, index).apply()}
+    fun saveShowPosition(index: Int) {myPref.edit().putInt(SHOWPOSITION, index).apply()}
     private fun createTalkArray(jsonString: String?) {
         var talkList: ArrayList<Talker>
         //  Log.d("clima",jsonString)
@@ -232,4 +157,70 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
         Log.d("clima", "${talkList[19].taking}")
     }
 
+    fun createNewList(): ArrayList<Talker> {
+        var talkList1 = ArrayList<Talker>()
+        val tagNum=getCurrentFile()
+
+        // var jsonS =  myPref.getString(TALKLIST+tagNum.toString(), null)
+        var jsonS =  myPref.getString(TALKLIST, null)
+        if (jsonS != null) {
+            val gson = Gson()
+            val type = object : TypeToken<ArrayList<Talker>>() {}.type
+            talkList1 = gson.fromJson(jsonS, type)
+            //saveTalkingListInPref(talkList1)
+        }
+        return talkList1
+    }
+
+    fun saveJsonString(jsonS: String?) {
+        myPref.edit().putString(TALKLIST, jsonS).apply()
+    }
+
+    fun getJsonArryFromPref( ): ArrayList<Talker> {
+        var list= ArrayList<Talker>()
+        var jsonS: String?
+        jsonS = myPref.getString(TALKLIST, null)
+        if (!jsonS.isNullOrEmpty()){
+            val gson = Gson()
+            val type = object : TypeToken<ArrayList<Talker>>() {}.type
+            list = gson.fromJson(jsonS, type)
+        }
+        return list
+    }
+
+
+    fun createTalkList(): ArrayList<Talker> {
+        var talkList: ArrayList<Talker>
+        val jsonString = myPref.getString(TALKLIST, null)
+
+        // val jsonString = intent.getStringExtra(JSONSTRING)
+        // val jsonString = intent.getStringExtra(JSONSTRING)
+        if (jsonString == "none" || jsonString == "") {
+            talkList = getTalkingListFromPref(0)
+            saveTalkingListInPref(talkList)
+
+        } else {
+            val gson = Gson()
+            val type = object : TypeToken<ArrayList<Talker>>() {}.type
+            talkList = gson.fromJson(jsonString, type)
+            saveTalkingListInPref(talkList)
+        }
+        return talkList
+    }
+
+    private fun decodebase64(input:String):Bitmap{
+        val decodeByte=Base64.decode(input,0)
+        val bit=BitmapFactory.decodeByteArray(decodeByte,0,decodeByte.size)
+        return bit
+    }
+
+    private fun encodeToBase64(image:Bitmap):String{
+        val immage=image
+        val baos=ByteArrayOutputStream()
+        immage.compress(Bitmap.CompressFormat.PNG,100,baos)
+        val b=baos.toByteArray()
+        val imageEncoded=Base64.encodeToString(b,Base64.DEFAULT)
+        Log.d("clima","imageEncode->$imageEncoded")
+        return imageEncoded
+    }
 }

@@ -19,25 +19,37 @@ import java.util.concurrent.TimeUnit
 class ButtonSpace(val context: Context, val showPosition: Boolean) :
     View.OnClickListener {
 
-    private val activity=context as Activity
+    private val activity = context as Activity
     private val getAndStoreData = GetAndStoreData(context)
     private var talkList = getAndStoreData.getTalkingListFromPref(1)
-    private val animationInAction1 = AnimationInAction(context)
+    private val animationInAction = AnimationInAction(context, showPosition)
     private var statrTime: Long = 0
     private var endTime = System.nanoTime()
 
-    fun talkC() = talkList[currentPage()]
+   fun talkC() = talkList[currentPage()]
+
+
+
+    fun currentPage(): Int {
+        var cu = getAndStoreData.getCurrentPage()
+        if (cu < 1 || cu >= talkList.size) {
+            cu = 1
+            getAndStoreData.saveCurrentPage(cu)
+        }
+        return cu
+    }
+    //  fun talkC() = talkList[currentPage()]
     fun drawAnim() {
         if (!showPosition) {
             updateTitleTalkerSituation()
         }
         // view.tvAnimatinKind.text = text
-        val cu = currentPage()
+        val cu = getCurrentPage()
         activity.tvPage.text = cu.toString()
         talkC().numTalker = cu
-        animationInAction1.executeTalker(talkC())
+        updateTitleTalkerSituation()
+        animationInAction.executeTalker(talkC())
     }
-
 
     fun letsPlay(v: View) {
 
@@ -60,7 +72,7 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
             }
             return
         }
-        var cu = getAndStoreData.getCurrentPage()
+        // var cu = getAndStoreData.getCurrentPage()
         if (showPosition) {
             when (v.id) {
                 R.id.fab -> nextItFab()
@@ -177,10 +189,10 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
     private fun updateLastTalker(ind: Int) {
         with(getAndStoreData) {
             if (ind == 0) {
-                val sa = talkC()
-                saveLastTalker(talkC())
+                // val sa = talkC()
+                saveLastTalker(currenteTalk())
             } else {
-                talkList[currentPage()] = getLastTalker().copy()
+                talkList[this@ButtonSpace.getCurrentPage()] = getLastTalker().copy()
             }
         }
     }
@@ -201,35 +213,37 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
     }
 
     fun previousIt() {
-        var cu = currentPage()
+        var cu = getCurrentPage()
         cu--
         getAndStoreData.saveCurrentPage(cu)
         drawAnim()
     }
 
     fun nextItFab() {
-        var cu1 = getAndStoreData.getCurrentPage()
+        //  var cu1 = getAndStoreData.getCurrentPage()
         updateLastTalker(0)
         /*var cu = currentPage()
         cu++
         getAndStoreData.saveCurrentPage(cu)*/
         drawAnim()
     }
+
     fun nextIt() {
-        var cu1 = getAndStoreData.getCurrentPage()
+        // var cu1 = getAndStoreData.getCurrentPage()
         updateLastTalker(0)
-        var cu = currentPage()
+        var cu = getCurrentPage()
         cu++
         getAndStoreData.saveCurrentPage(cu)
         drawAnim()
     }
+
     private fun changePlusMinusMode() {
         with(activity.plusAndMinusBtn) {
-           if (text == "+"){
-                text="-"
+            if (text == "+") {
+                text = "-"
             } else {
-               text="+"
-           }
+                text = "+"
+            }
         }
     }
 
@@ -246,15 +260,15 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
             return
         }
         var def = 0
-        if (view==activity.fab){
+        if (view == activity.fab) {
             def++
         }
-        if (view==activity.fab1){
+        if (view == activity.fab1) {
             def--
         }
         buttonActivation(0)
 
-        var counterStep = currentPage() + def
+        var counterStep = getCurrentPage() + def
 
         if (counterStep < 1) counterStep = 1
         if (counterStep == talkList.size) counterStep = 1
@@ -277,14 +291,14 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
 
     private fun onClickOther(view: View) {
         var def = 0
-        if (view==activity.fab){
+        if (view == activity.fab) {
             def++
         }
-        if (view==activity.fab1){
+        if (view == activity.fab1) {
             def--
         }
 
-        var counterStep = currentPage()+def
+        var counterStep = getCurrentPage() + def
 
         if (counterStep < 1) counterStep = 1
         if (counterStep == talkList.size) counterStep = 1
@@ -312,7 +326,7 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
         }
     }
 
-    fun currentPage(): Int {
+    fun getCurrentPage(): Int {
         var cu = getAndStoreData.getCurrentPage()
         if (cu < 1 || cu >= talkList.size) {
             cu = 1

@@ -1,18 +1,25 @@
 package com.example.thaa35
 
+import android.animation.AnimatorInflater
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.github.florent37.viewanimator.ViewAnimator
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.god_layout.*
 import kotlinx.android.synthetic.main.man_layout.*
 import java.util.*
 
-class AnimationInAction(val context: Context) {
+class AnimationInAction(val context: Context, val showPosition: Boolean) {
     val activity = context as Activity
+    private val pref = GetAndStoreData(context)
+    val getAndStoreData = GetAndStoreData(context)
+    val talkList = getAndStoreData.getTalkingListFromPref(1)
+
 
     private val helper = Helper(context)
     private var tv0: TextView? = null
@@ -42,6 +49,8 @@ class AnimationInAction(val context: Context) {
     var listOfTextview = arrayListOf<TextView?>()
     var listOfTextviewMul = arrayListOf<TextView?>()
     var listOfTextviewMul2 = arrayListOf<TextView?>()
+
+    fun talkC() = talkList[currentPage()]
 
 
     private fun styleTextViewTalk(tv: TextView, st: String, talker: Talker): TextView {
@@ -76,41 +85,15 @@ class AnimationInAction(val context: Context) {
         return tv
     }
 
-    /* private fun styleTextViewTalk(tv: TextView, st: String, talker: Talker): TextView {
-         val shape = GradientDrawable()
-         shape.setCornerRadius(talker.radius)
-         shape.setStroke(20, Color.parseColor(talker.borderColor))
 
-         with(talker) {
-             if (colorBack == "none" || !backExist) {
-                 shape.setColor(Color.TRANSPARENT)
-                 shape.setStroke(20, Color.TRANSPARENT)
-             } else {
-                 try {
-                     shape.setColor(Color.parseColor(colorBack))
-                     shape.setStroke(borderWidth, Color.parseColor(talker.borderColor))
-                 } catch (e: Exception) {
-                     shape.setColor(Color.parseColor("#000000"))
-                 }
-             }
-             tv.background = shape
+    fun executeTalker( talker:Talker) {
 
-             try {
-                 tv.setTextColor(Color.parseColor(colorText))
-             } catch (e: Exception) {
-                 tv.setTextColor(Color.parseColor("#ffffff"))
-             }
+       // lastTalker = talkList[counterStep].copy()
 
-             tv.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, textSize)
-             tv.typeface = helper.getTypeFace(1)
-             tv.setPadding(padding[0], padding[1], padding[2], padding[3])
-             tv.setPadding(40, 40, 40, 40)
-             tv.text = st.trim()
-         }
-         return tv
-     }*/
-    fun executeTalker(talker: Talker) {
+        talkList[currentPage()]=talker.copy()
+        getAndStoreData.saveTalkingListInPref(talkList)
 
+        activateHowSpeaking(talker)
         if (talker.whoSpeake == "man") {
             configManTextView(talker)
             listOfTextview.clear()
@@ -138,15 +121,49 @@ class AnimationInAction(val context: Context) {
 
     }
 
+    private fun activateHowSpeaking(talker: Talker) {
+        val anim = AnimatorInflater.loadAnimator(context, R.animator.alpha)
+
+        if (showPosition) {
+            if (talker.whoSpeake == "man") {
+                activity.man_speaking_iv.visibility = View.VISIBLE
+                activity.god_speaking_iv.visibility = View.INVISIBLE
+                anim?.apply {
+                    setTarget(activity.man_speaking_iv)
+                    start()
+                }
+            } else {
+                activity.god_speaking_iv.visibility = View.VISIBLE
+                activity.man_speaking_iv.visibility = View.INVISIBLE
+                anim?.apply {
+                    setTarget(activity.god_speaking_iv)
+                    start()
+                }
+            }
+        } else {
+            activity.god_speaking_iv.visibility = View.INVISIBLE
+            activity.man_speaking_iv.visibility = View.INVISIBLE
+        }
+    }
+    fun currentPage(): Int {
+        var cu = getAndStoreData.getCurrentPage()
+        if (cu < 1 || cu >= talkList.size) {
+            cu = 1
+            getAndStoreData.saveCurrentPage(cu)
+        }
+        return cu
+    }
+
     private fun letsMove(
-        talker: Talker,
-        listOfTextview: ArrayList<TextView?>,
-        listOfTextviewM: ArrayList<TextView?>,
+        talker: Talker, listOfTextview: ArrayList<TextView?>, listOfTextviewM: ArrayList<TextView?>,
         listOfTextviewM2: ArrayList<TextView?>
     ) {
-        //   operateBackgroundColor(talker)
 
         when (talker.animNum) {
+
+            1000 -> Utile.moveScale1000(talker, listOfTextview)
+            //  2000 -> Utile.moveScale2000( talker, listOfTextview)
+
             10 -> Utile.move_swing(10, talker, listOfTextview)
             11 -> Utile.move_swing(11, talker, listOfTextview)
             12 -> Utile.move_swing(12, talker, listOfTextview)

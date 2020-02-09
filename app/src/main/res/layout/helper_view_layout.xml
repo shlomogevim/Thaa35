@@ -81,20 +81,20 @@
             android:textSize="10sp" />
 
         <Button
-            android:id="@+id/showPositionBtn"
-            android:layout_height="wrap_content"
+            android:id="@+id/showPositionBtnOld"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Test"
             android:textAllCaps="false"
-            android:textSize="10sp"/>
+            android:textSize="10sp" />
+
         <Button
-            android:id="@+id/toShowModeBtn"
-            android:layout_height="wrap_content"
+            android:id="@+id/showPositionBtn"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Show"
-            android:textSize="10sp"/>
+            android:textAllCaps="false"
+            android:textSize="10sp" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/down_layout"

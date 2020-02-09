@@ -27,13 +27,15 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
 
     fun saveCurrentPage(index: Int) {myPref.edit().putInt(CURRENT_PAGE, index).apply()}
     fun saveLastPage(index: Int) {myPref.edit().putInt(LAST_PAGE, index).apply()}
-    fun saveShowPosition(index: Int) {myPref.edit().putInt(SHOWPOSITION, index).apply()}
+    fun saveShowPosition(bo: Boolean) {myPref.edit().putBoolean(SHOWPOSITION, bo).apply()}
+  //  fun saveShowPosition(index: Int) {myPref.edit().putInt(SHOWPOSITION, index).apply()}
 
 
     fun getCurrentPage(): Int = myPref.getInt(CURRENT_PAGE, 1)
     fun getLastPage(): Int = myPref.getInt(LAST_PAGE, 1)
     fun getCurrentFile(): Int = myPref.getInt(FILE_NUM, 1)
-    fun getShowPosition(): Int = myPref.getInt(SHOWPOSITION, 0)
+    fun getShowPosition(): Boolean = myPref.getBoolean(SHOWPOSITION, false)
+  //  fun getShowPosition(): Int = myPref.getInt(SHOWPOSITION, 0)
 
 
     fun currenteTalk() = talkList[getCurrentPage()]

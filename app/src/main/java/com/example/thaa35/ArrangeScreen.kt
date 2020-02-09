@@ -15,7 +15,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.helper_view_layout.*
 
-class ArrangeScreen(val context: Context, val showPosition: Boolean) {
+class ArrangeScreen(val context: Context) {
 
     val activity = context as Activity
 
@@ -24,10 +24,11 @@ class ArrangeScreen(val context: Context, val showPosition: Boolean) {
     private var ttParaList = arrayListOf<String>()
     private var actionList = arrayListOf<String>()
 
-    private val getAndStoreData = GetAndStoreData(context)
-    private val animationInAction = AnimationInAction(context,showPosition)
-    val talkList = getAndStoreData.getTalkingListFromPref(1)
+    private val pref = GetAndStoreData(context)
+    val talkList = pref.getTalkingListFromPref(1)
+    val showPosition=pref.getShowPosition()
 
+    private val animationInAction = AnimationInAction(context)
 
     private var interval = 0
     private var currentColor = "#stam"
@@ -41,10 +42,10 @@ class ArrangeScreen(val context: Context, val showPosition: Boolean) {
     }
 
     fun currentPage(): Int {
-        var cu = getAndStoreData.getCurrentPage()
+        var cu = pref.getCurrentPage()
         if (cu < 1 || cu >= talkList.size) {
             cu = 1
-            getAndStoreData.saveCurrentPage(cu)
+            pref.saveCurrentPage(cu)
         }
         return cu
     }
@@ -138,7 +139,7 @@ class ArrangeScreen(val context: Context, val showPosition: Boolean) {
     }
 
     fun initIt() {
-        getAndStoreData.saveCurrentPage(1)
+        pref.saveCurrentPage(1)
         moveTheAnimation()
     }
 
@@ -152,7 +153,7 @@ class ArrangeScreen(val context: Context, val showPosition: Boolean) {
         myDialog.setPositiveButton("OK", object : DialogInterface.OnClickListener {
             override fun onClick(p0: DialogInterface?, p1: Int) {
                 val num = input.text.toString().toInt()
-                getAndStoreData.saveCurrentPage(num)
+                pref.saveCurrentPage(num)
                 drawAnim()
                 return
             }
@@ -188,8 +189,8 @@ class ArrangeScreen(val context: Context, val showPosition: Boolean) {
     }
 
     private fun updateLastTalker(ind: Int) {
-        var talker=getAndStoreData.currenteTalk()
-        with(getAndStoreData) {
+        var talker=pref.currenteTalk()
+        with(pref) {
             if (ind == 0) saveLastTalker(talker)
             else {
                 talker = getLastTalker().copy()
@@ -351,7 +352,7 @@ class ArrangeScreen(val context: Context, val showPosition: Boolean) {
             val text =
                 "l=${takingArray.size}sty=$styleNum anim=$animNum size=${textSize.toInt()}" +
                         " bord=$borderWidth dur=$dur sw=$swingRepeat"
-            val cu = getAndStoreData.getCurrentPage()
+            val cu = pref.getCurrentPage()
             activity.tvPage.text = cu.toString()
             numTalker = cu
             activity.tvAnimatinKind.text = text
@@ -383,17 +384,17 @@ class ArrangeScreen(val context: Context, val showPosition: Boolean) {
 
     private fun updatePage(ind: Int) {
         val cu = currentPage()
-        val la = getAndStoreData.getLastPage()
+        val la = pref.getLastPage()
         if (ind == 0) {
             //lastTalker = talkList[counterStep].copy()
-            getAndStoreData.saveLastPage(cu)
+            pref.saveLastPage(cu)
         } else {
             //talkList[counterStep] = lastTalker.copy()
             if (la > 1) {
-                getAndStoreData.saveLastPage(la - 1)
+                pref.saveLastPage(la - 1)
             }
             if (cu > 1) {
-                getAndStoreData.saveCurrentPage(cu - 1)
+                pref.saveCurrentPage(cu - 1)
             }
         }
     }

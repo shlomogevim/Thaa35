@@ -16,28 +16,28 @@ import com.github.florent37.viewanimator.ViewAnimator
 import kotlinx.android.synthetic.main.helper_view_layout.*
 import java.util.concurrent.TimeUnit
 
-class ButtonSpace(val context: Context, val showPosition: Boolean) :
+class ButtonSpace(val context: Context) :
     View.OnClickListener {
 
     private val activity = context as Activity
-    private val getAndStoreData = GetAndStoreData(context)
-    private var talkList = getAndStoreData.getTalkingListFromPref(1)
-    private val animationInAction = AnimationInAction(context, showPosition)
+    private val pref = GetAndStoreData(context)
+    private var talkList = pref.getTalkingListFromPref(1)
+    private var showPosition = pref.getShowPosition()
+    private val animationInAction = AnimationInAction(context)
     private var statrTime: Long = 0
     private var endTime = System.nanoTime()
 
-   fun talkC() = talkList[currentPage()]
-
-
+    fun talkC() = talkList[currentPage()]
 
     fun currentPage(): Int {
-        var cu = getAndStoreData.getCurrentPage()
+        var cu = pref.getCurrentPage()
         if (cu < 1 || cu >= talkList.size) {
             cu = 1
-            getAndStoreData.saveCurrentPage(cu)
+            pref.saveCurrentPage(cu)
         }
         return cu
     }
+
     //  fun talkC() = talkList[currentPage()]
     fun drawAnim() {
         if (!showPosition) {
@@ -59,15 +59,13 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
                 R.id.textRevBtn -> readAgainTextFile()
                 R.id.newPageBtn -> enterNewPage()
                 R.id.showPositionBtn -> changeShowPosition()
-                R.id.toShowModeBtn -> animationInAction.executeTalker(talkC())
+              //  R.id.showPositionBtn -> animationInAction.executeTalker(talkC())
                 R.id.plusAndMinusBtn -> changePlusMinusMode()
-                R.id.showPositionBtn -> drawAnim()
                 R.id.saveButton -> saveIt()
                 R.id.nextButton -> nextIt()
                 R.id.previousButton -> previousIt()
                 R.id.lastTalker_button -> retriveLastTalker()
                 R.id.reSizeTextBtn -> minTextSize()
-//                R.id.tvAnimatinKind -> tvAnimatinKind.visibility = View.VISIBLE
                 else -> drawAnim()
 
             }
@@ -85,13 +83,18 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
     }
 
     private fun changeShowPosition() {
-            if (activity.showPositionBtn.text=="Test"){
-                activity.showPositionBtn.text="Show"
-        }else{
-                activity.showPositionBtn.text="Test"
-            }
+        showPosition=!showPosition
+        if (showPosition) {
+            activity.showPositionBtn.text = "toShow"
+            showPosition = false
+        } else {
+            activity.showPositionBtn.text = "toTest"
+            showPosition = true
+        }
 
-       // setShowPositionMode()
+        pref.saveShowPosition(showPosition)
+       setShowPositionMode()
+
     }
 
     @SuppressLint("RestrictedApi")
@@ -107,6 +110,13 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
                 ttPara_listView.visibility = VISIBLE
                 action_ListView.visibility = VISIBLE
                 tvAnimatinKind.visibility = VISIBLE
+
+                textRevBtn.visibility = VISIBLE
+                reSizeTextBtn.visibility = VISIBLE
+                newPageBtn.visibility = VISIBLE
+                showPositionBtn.visibility = VISIBLE
+
+
                 tvPage.visibility = VISIBLE
                 /*fab.visibility = INVISIBLE
                 fab1.visibility = INVISIBLE*/
@@ -114,7 +124,14 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
             }
             if (showPosition) {
                 down_layout.visibility = INVISIBLE
-                upper_layout.visibility = INVISIBLE
+                // upper_layout.visibility = INVISIBLE
+
+                textRevBtn.visibility = INVISIBLE
+                reSizeTextBtn.visibility = INVISIBLE
+                newPageBtn.visibility = INVISIBLE
+
+                showPositionBtn.visibility = VISIBLE
+
                 style_ListView.visibility = INVISIBLE
                 para_ListView.visibility = INVISIBLE
                 ttPara_listView.visibility = INVISIBLE
@@ -128,9 +145,9 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
     }
 
     private fun readAgainTextFile() {
-        val textTalkList = getAndStoreData.createTalkListFromTheStart()
+        val textTalkList = pref.createTalkListFromTheStart()
         talkList = textReRead(talkList, textTalkList)
-        getAndStoreData.saveTalkingListInPref(talkList)
+        pref.saveTalkingListInPref(talkList)
     }
 
     fun textReRead(
@@ -182,7 +199,7 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
         myDialog.setPositiveButton("OK", object : DialogInterface.OnClickListener {
             override fun onClick(p0: DialogInterface?, p1: Int) {
                 val num = input.text.toString().toInt()
-                getAndStoreData.saveCurrentPage(num)
+                pref.saveCurrentPage(num)
                 drawAnim()
                 return
             }
@@ -198,7 +215,7 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
     }
 
     private fun updateLastTalker(ind: Int) {
-        with(getAndStoreData) {
+        with(pref) {
             if (ind == 0) {
                 // val sa = talkC()
                 saveLastTalker(currenteTalk())
@@ -209,7 +226,7 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
     }
 
     fun saveIt() {
-        getAndStoreData.saveTalkingListInPref(talkList)
+        pref.saveTalkingListInPref(talkList)
         Toast.makeText(context, "It's save Mr", Toast.LENGTH_SHORT).show()
     }
 
@@ -226,7 +243,7 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
     fun previousIt() {
         var cu = getCurrentPage()
         cu--
-        getAndStoreData.saveCurrentPage(cu)
+        pref.saveCurrentPage(cu)
         drawAnim()
     }
 
@@ -244,7 +261,7 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
         updateLastTalker(0)
         var cu = getCurrentPage()
         cu++
-        getAndStoreData.saveCurrentPage(cu)
+        pref.saveCurrentPage(cu)
         drawAnim()
     }
 
@@ -266,24 +283,21 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
     }
 
     override fun onClick(view: View) {
-        if (!showPosition) {
-            onClickOther(view)
-            return
+        if (showPosition) {
+            onClickShow(view)
+        } else {
+            onClickTest(view)
         }
+    }
+    private fun onClickShow(view: View) {
         var def = 0
-        if (view == activity.fab) {
-            def++
-        }
-        if (view == activity.fab1) {
-            def--
-        }
-        buttonActivation(0)
-
+        if (view == activity.fab) def++
+        if (view == activity.fab1)  def--
+      //  buttonActivation(0)
         var counterStep = getCurrentPage() + def
-
         if (counterStep < 1) counterStep = 1
         if (counterStep == talkList.size) counterStep = 1
-        getAndStoreData.saveCurrentPage(counterStep)
+        pref.saveCurrentPage(counterStep)
 
         chageBackgroundColor(1, 1000)
 
@@ -300,32 +314,26 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
         }
     }
 
-    private fun onClickOther(view: View) {
-        var def = 0
-        if (view == activity.fab) {
-            def++
-        }
-        if (view == activity.fab1) {
-            def--
-        }
+    private fun onClickTest(view: View) {
+
+        showButtons()
+
+
+
+       /* var def = 0
+        if (view == activity.fab)  def++
+        if (view == activity.fab1)  def--
 
         var counterStep = getCurrentPage() + def
-
         if (counterStep < 1) counterStep = 1
         if (counterStep == talkList.size) counterStep = 1
-        getAndStoreData.saveCurrentPage(counterStep)
+        pref.saveCurrentPage(counterStep)*/
 
-        if (showPosition) {
-            time("onClickA113")
-            buttonActivation(0)
+   //     chageBackgroundColor(1, 1000)
 
-        }
+        //letsPlay(view)
 
-        chageBackgroundColor(1, 1000)
-
-        letsPlay(view)
-
-        val size = talkC().takingArray.size
+      /*  val size = talkC().takingArray.size
 
         Utile.listener1 = { it1, _ ->
             // Log.d("clima", "Hii num->$it1 and time->$it2 and size=$size")
@@ -334,14 +342,14 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
                 buttonActivation(1)
                 chageBackgroundColor(0, 1000)
             }
-        }
+        }*/
     }
 
     fun getCurrentPage(): Int {
-        var cu = getAndStoreData.getCurrentPage()
+        var cu = pref.getCurrentPage()
         if (cu < 1 || cu >= talkList.size) {
             cu = 1
-            getAndStoreData.saveCurrentPage(cu)
+            pref.saveCurrentPage(cu)
         }
         return cu
     }
@@ -382,12 +390,48 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
                 .start()
         }
     }
+    fun showButtons() {
+        with(activity) {
+            if (showPosition) {
+                fab.show()
+                fab1.show()
+                showPositionBtn.visibility = VISIBLE
+
+                textRevBtn.visibility = INVISIBLE
+                newPageBtn.visibility = INVISIBLE
+                plusAndMinusBtn.visibility = INVISIBLE
+                //  showPositionBtnOld.visibility = VISIBLE
+                saveButton.visibility = INVISIBLE
+                nextButton.visibility = INVISIBLE
+                previousButton.visibility = INVISIBLE
+                lastTalker_button.visibility = INVISIBLE
+                reSizeTextBtn.visibility = INVISIBLE
+
+            } else {
+                fab.hide()
+                fab1.hide()
+                showPositionBtn.visibility = VISIBLE
+
+                textRevBtn.visibility = VISIBLE
+                newPageBtn.visibility = VISIBLE
+                showPositionBtn.visibility = VISIBLE
+                plusAndMinusBtn.visibility = VISIBLE
+                saveButton.visibility = VISIBLE
+                nextButton.visibility = VISIBLE
+                previousButton.visibility = VISIBLE
+                lastTalker_button.visibility = VISIBLE
+                reSizeTextBtn.visibility = VISIBLE
+            }
+        }
+    }
 
     @SuppressLint("RestrictedApi")
     fun buttonActivation(ind: Int) {
+
         time("buttonActivation 1 ind=$ind")
 
         with(activity) {
+
             if (ind == 0) {
                 if (showPosition) {
                     fab.isClickable = false
@@ -396,9 +440,10 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
                 } else {
                     textRevBtn.visibility = INVISIBLE
                     newPageBtn.visibility = INVISIBLE
-                    toShowModeBtn.visibility = INVISIBLE
+
+                    showPositionBtn.visibility = VISIBLE
                     plusAndMinusBtn.visibility = INVISIBLE
-                    showPositionBtn.visibility = INVISIBLE
+                  //  showPositionBtnOld.visibility = VISIBLE
                     saveButton.visibility = INVISIBLE
                     nextButton.visibility = INVISIBLE
                     previousButton.visibility = INVISIBLE
@@ -414,9 +459,9 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
                 } else {
                     textRevBtn.visibility = VISIBLE
                     newPageBtn.visibility = VISIBLE
-                    toShowModeBtn.visibility = VISIBLE
-                    plusAndMinusBtn.visibility = VISIBLE
                     showPositionBtn.visibility = VISIBLE
+                    plusAndMinusBtn.visibility = VISIBLE
+                  //  showPositionBtnOld.visibility = VISIBLE
                     saveButton.visibility = VISIBLE
                     nextButton.visibility = VISIBLE
                     previousButton.visibility = VISIBLE
@@ -430,7 +475,7 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
 
     fun initButton() {
         with(activity) {
-            showPositionBtn.setOnClickListener { onClick(showPositionBtn) }
+          //  showPositionBtnOld.setOnClickListener { onClick(showPositionBtnOld) }
             textRevBtn.setOnClickListener { onClick(textRevBtn) }
             newPageBtn.setOnClickListener { onClick(newPageBtn) }
             plusAndMinusBtn.setOnClickListener { onClick(plusAndMinusBtn) }
@@ -439,7 +484,7 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
             previousButton.setOnClickListener { onClick(previousButton) }
             lastTalker_button.setOnClickListener { onClick(lastTalker_button) }
             reSizeTextBtn.setOnClickListener { onClick(reSizeTextBtn) }
-            toShowModeBtn.setOnClickListener { onClick(toShowModeBtn) }
+            showPositionBtn.setOnClickListener { onClick(showPositionBtn) }
             fab.setOnClickListener { onClick(fab) }
             fab1.setOnClickListener { onClick(fab1) }
         }

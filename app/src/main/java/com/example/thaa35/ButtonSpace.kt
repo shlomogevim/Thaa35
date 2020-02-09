@@ -58,9 +58,10 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
             when (v.id) {
                 R.id.textRevBtn -> readAgainTextFile()
                 R.id.newPageBtn -> enterNewPage()
-                R.id.toShowModeBtn -> setShowPositionMode()
+                R.id.showPositionBtn -> changeShowPosition()
+                R.id.toShowModeBtn -> animationInAction.executeTalker(talkC())
                 R.id.plusAndMinusBtn -> changePlusMinusMode()
-                R.id.displayAgainBtn -> drawAnim()
+                R.id.showPositionBtn -> drawAnim()
                 R.id.saveButton -> saveIt()
                 R.id.nextButton -> nextIt()
                 R.id.previousButton -> previousIt()
@@ -81,6 +82,16 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
             }
         }
         time("let play 2")
+    }
+
+    private fun changeShowPosition() {
+            if (activity.showPositionBtn.text=="Test"){
+                activity.showPositionBtn.text="Show"
+        }else{
+                activity.showPositionBtn.text="Test"
+            }
+
+       // setShowPositionMode()
     }
 
     @SuppressLint("RestrictedApi")
@@ -387,7 +398,7 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
                     newPageBtn.visibility = INVISIBLE
                     toShowModeBtn.visibility = INVISIBLE
                     plusAndMinusBtn.visibility = INVISIBLE
-                    displayAgainBtn.visibility = INVISIBLE
+                    showPositionBtn.visibility = INVISIBLE
                     saveButton.visibility = INVISIBLE
                     nextButton.visibility = INVISIBLE
                     previousButton.visibility = INVISIBLE
@@ -405,7 +416,7 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
                     newPageBtn.visibility = VISIBLE
                     toShowModeBtn.visibility = VISIBLE
                     plusAndMinusBtn.visibility = VISIBLE
-                    displayAgainBtn.visibility = VISIBLE
+                    showPositionBtn.visibility = VISIBLE
                     saveButton.visibility = VISIBLE
                     nextButton.visibility = VISIBLE
                     previousButton.visibility = VISIBLE
@@ -419,7 +430,7 @@ class ButtonSpace(val context: Context, val showPosition: Boolean) :
 
     fun initButton() {
         with(activity) {
-            displayAgainBtn.setOnClickListener { onClick(displayAgainBtn) }
+            showPositionBtn.setOnClickListener { onClick(showPositionBtn) }
             textRevBtn.setOnClickListener { onClick(textRevBtn) }
             newPageBtn.setOnClickListener { onClick(newPageBtn) }
             plusAndMinusBtn.setOnClickListener { onClick(plusAndMinusBtn) }

@@ -27,10 +27,14 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
 
     fun saveCurrentPage(index: Int) {myPref.edit().putInt(CURRENT_PAGE, index).apply()}
     fun saveLastPage(index: Int) {myPref.edit().putInt(LAST_PAGE, index).apply()}
+    fun saveShowPosition(index: Int) {myPref.edit().putInt(SHOWPOSITION, index).apply()}
+
 
     fun getCurrentPage(): Int = myPref.getInt(CURRENT_PAGE, 1)
     fun getLastPage(): Int = myPref.getInt(LAST_PAGE, 1)
     fun getCurrentFile(): Int = myPref.getInt(FILE_NUM, 1)
+    fun getShowPosition(): Int = myPref.getInt(SHOWPOSITION, 0)
+
 
     fun currenteTalk() = talkList[getCurrentPage()]
 
@@ -145,9 +149,7 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
 
     private fun improveString(st: String) = st.substring(1, st.length - 1)
 
-    fun getShowPosition(): Int = myPref.getInt(SHOWPOSITION, 1)
     fun saveCurrentFile(index: Int) {myPref.edit().putInt(FILE_NUM, index).apply()}
-    fun saveShowPosition(index: Int) {myPref.edit().putInt(SHOWPOSITION, index).apply()}
     private fun createTalkArray(jsonString: String?) {
         var talkList: ArrayList<Talker>
         //  Log.d("clima",jsonString)

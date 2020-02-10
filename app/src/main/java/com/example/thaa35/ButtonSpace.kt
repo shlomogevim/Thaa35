@@ -65,6 +65,8 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
             R.id.previousButton -> previousIt()
             R.id.lastTalker_button -> retriveLastTalker()
             R.id.reSizeTextBtn -> minTextSize()
+            R.id.fab -> nextIt()
+            R.id.fab1 -> previousIt()
             else -> drawAnim()
 
         }
@@ -119,6 +121,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
                 lastTalker_button.text = "Last"
                 saveButton.text = "Save"
                 upper_layout.visibility = VISIBLE
+                down_layout.visibility = VISIBLE
 
                 textRevBtn.visibility= VISIBLE
                 reSizeTextBtn.visibility= VISIBLE
@@ -142,8 +145,6 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
                 newPageBtn.visibility= INVISIBLE
                 toShowModeBtn.visibility= INVISIBLE
 
-
-
                 style_ListView.visibility = INVISIBLE
                 para_ListView.visibility = INVISIBLE
                 ttPara_listView.visibility = INVISIBLE
@@ -160,6 +161,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
         val textTalkList = pref.createTalkListFromTheStart()
         talkList = textReRead(talkList, textTalkList)
         pref.saveTalkingListInPref(talkList)
+        drawAnim()
     }
 
     fun textReRead(

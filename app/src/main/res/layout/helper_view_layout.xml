@@ -15,7 +15,7 @@
         android:background="@color/colorPrimaryDark"
         android:text="Talk parameter"
         android:textColor="@android:color/white"
-        android:textSize="10sp"
+        android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -54,14 +54,14 @@
         app:layout_constraintStart_toEndOf="@+id/tvPage"
         app:layout_constraintTop_toTopOf="parent">
 
+
         <Button
             android:id="@+id/textRevBtn"
-            android:layout_height="wrap_content"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Read T."
             android:textSize="10sp" />
-
 
         <Button
             android:id="@+id/reSizeTextBtn"
@@ -93,7 +93,8 @@
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:text="Show"
+            android:textAllCaps="false"
+            android:text="ShowAg"
             android:textSize="10sp"/>
     </LinearLayout>
     <LinearLayout

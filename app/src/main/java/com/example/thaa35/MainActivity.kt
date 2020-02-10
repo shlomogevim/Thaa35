@@ -2,6 +2,7 @@ package com.example.thaa35
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.helper_view_layout.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,7 +13,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var talkList: ArrayList<Talker>
 
 
-    var showPosition = false
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,24 +42,27 @@ class MainActivity : AppCompatActivity() {
 
     private fun initAll() {
         pref = GetAndStoreData(this)
+
+        var showPosition = false
+        pref.saveShowPosition(showPosition)
+
+        if (showPosition){
+            showPositionBtn.text="toTest"
+        }else{
+            showPositionBtn.text="toShow"
+
+        }
         talkList = pref.getTalkingListFromPref(1)
-        arrangeScreen = ArrangeScreen(this, showPosition)
-        buttonSpace = ButtonSpace(this, showPosition)
-        animationInAction = AnimationInAction(this, showPosition)
+        arrangeScreen = ArrangeScreen(this)
+        buttonSpace = ButtonSpace(this)
+        animationInAction = AnimationInAction(this)
         buttonSpace.initButton()
         arrangeScreen.setLayoutShowMode()
         arrangeScreen.operateListView()
         buttonSpace.setShowPositionMode()
     }
 
-    private fun mainProgram() {
 
-
-
-
-
-
-    }
 }
 
 

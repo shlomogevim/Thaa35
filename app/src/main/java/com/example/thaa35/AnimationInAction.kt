@@ -14,11 +14,11 @@ import kotlinx.android.synthetic.main.god_layout.*
 import kotlinx.android.synthetic.main.man_layout.*
 import java.util.*
 
-class AnimationInAction(val context: Context, val showPosition: Boolean) {
+class AnimationInAction(val context: Context) {
     val activity = context as Activity
-    private val pref = GetAndStoreData(context)
-    val getAndStoreData = GetAndStoreData(context)
-    val talkList = getAndStoreData.getTalkingListFromPref(1)
+    val pref = GetAndStoreData(context)
+    val showPosition=pref.getShowPosition()
+    val talkList = pref.getTalkingListFromPref(1)
 
 
     private val helper = Helper(context)
@@ -91,7 +91,7 @@ class AnimationInAction(val context: Context, val showPosition: Boolean) {
        // lastTalker = talkList[counterStep].copy()
 
         talkList[currentPage()]=talker.copy()
-        getAndStoreData.saveTalkingListInPref(talkList)
+        pref.saveTalkingListInPref(talkList)
 
         activateHowSpeaking(talker)
         if (talker.whoSpeake == "man") {
@@ -146,10 +146,10 @@ class AnimationInAction(val context: Context, val showPosition: Boolean) {
         }
     }
     fun currentPage(): Int {
-        var cu = getAndStoreData.getCurrentPage()
+        var cu = pref.getCurrentPage()
         if (cu < 1 || cu >= talkList.size) {
             cu = 1
-            getAndStoreData.saveCurrentPage(cu)
+            pref.saveCurrentPage(cu)
         }
         return cu
     }

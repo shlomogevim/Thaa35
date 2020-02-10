@@ -50,7 +50,12 @@ class AnimationInAction(val context: Context) {
     var listOfTextviewMul = arrayListOf<TextView?>()
     var listOfTextviewMul2 = arrayListOf<TextView?>()
 
-    fun talkC() = talkList[currentPage()]
+   // fun talkC() = talkList[currentPage()]
+   fun talkC():Talker{
+       val list=pref.getTalkingListFromPref(1)
+       val index=currentPage()
+       return list[index]
+   }
 
 
     private fun styleTextViewTalk(tv: TextView, st: String, talker: Talker): TextView {
@@ -161,8 +166,7 @@ class AnimationInAction(val context: Context) {
 
         when (talker.animNum) {
 
-            1000 -> Utile.moveScale1000(talker, listOfTextview)
-            //  2000 -> Utile.moveScale2000( talker, listOfTextview)
+            100 -> Utile.moveScale100(talker, listOfTextview)
 
             10 -> Utile.move_swing(10, talker, listOfTextview)
             11 -> Utile.move_swing(11, talker, listOfTextview)
@@ -197,7 +201,7 @@ class AnimationInAction(val context: Context) {
             50 -> Utile.apeareOneAfterAnother(listOfTextview, talker)
             51 -> Utile.apeareOneAfterAnotherAndSwing(listOfTextview, talker)
 
-            4, 60 -> if (talker.whoSpeake == "god") {
+             60 -> if (talker.whoSpeake == "god") {
                 // Utile.godAppearFromTwoPlaces(0, listOfTextview, listOfTextviewM,talker.colorBack, dur)
                 Utile.godAppearFromTwoPlaces(
                     0, talker, listOfTextview, listOfTextviewM, listOfTextviewM2

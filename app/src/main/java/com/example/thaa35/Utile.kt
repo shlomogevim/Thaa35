@@ -18,7 +18,7 @@ object Utile {
     var pointRightUp=Point((wi / 2).toInt(), -hi.toInt())
     var listener1: ((item: Int, myTime: Long) -> Unit)? = null
 
-    fun moveScale1000( talker: Talker, arr: ArrayList<TextView?>) {
+    fun moveScale100( talker: Talker, arr: ArrayList<TextView?>) {
         if (talker.whoSpeake=="man") {
             val linesNum = talker.takingArray.size
             for (index in 1..linesNum) {

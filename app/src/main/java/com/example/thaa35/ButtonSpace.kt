@@ -21,7 +21,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
     private val activity = context as Activity
     private val pref = GetAndStoreData(context)
     private var showPosition=pref.getShowPosition()
-    private var talkList = pref.getTalkingListFromPref(1)
+    //private var talkList = pref.getTalkingListFromPref(1)
     private val animationInAction = AnimationInAction(context)
     private var statrTime: Long = 0
     private var endTime = System.nanoTime()
@@ -35,6 +35,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
 
 
     fun currentPage(): Int {
+        val talkList = pref.getTalkingListFromPref(1)
         var cu = pref.getCurrentPage()
         if (cu < 1 || cu >= talkList.size) {
             cu = 1
@@ -162,6 +163,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
     }
 
     private fun readAgainTextFile() {
+        var talkList = pref.getTalkingListFromPref(1)
         val textTalkList = pref.createTalkListFromTheStart()
         talkList = textReRead(talkList, textTalkList)
         pref.saveTalkingListInPref(talkList)
@@ -236,6 +238,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
     }
 
     private fun updateLastTalker(ind: Int) {
+        val talkList = pref.getTalkingListFromPref(1)
         with(pref) {
             if (ind == 0) {
                 // val sa = talkC()
@@ -247,6 +250,8 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
     }
 
     fun saveIt() {
+        val talkList = pref.getTalkingListFromPref(1)
+
         pref.saveTalkingListInPref(talkList)
         Toast.makeText(context, "It's save Mr", Toast.LENGTH_SHORT).show()
     }
@@ -343,6 +348,8 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
     }
 
     private fun onClickOther(view: View) {
+        val talkList = pref.getTalkingListFromPref(1)
+
         var def = 0
         if (view == activity.fab) {
             def++
@@ -380,6 +387,8 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
     }
 
     fun getCurrentPage(): Int {
+        val talkList = pref.getTalkingListFromPref(1)
+
         var cu = pref.getCurrentPage()
         if (cu < 1 || cu >= talkList.size) {
             cu = 1

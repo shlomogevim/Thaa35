@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun enterData(){
-       pref.saveCurrentPage(1)
+   //    pref.saveCurrentPage(1)
 //        val currentPage=pref.getCurrentPage()
 //        talkList[currentPage].animNum=1000
 //        pref.saveTalkingListInPref(talkList)

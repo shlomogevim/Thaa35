@@ -345,7 +345,7 @@ class ArrangeScreen(val context: Context) {
 
 
     fun updateTitleTalkerSituation() {
-      // getAndStoreData.saveTalkingListInPref(talkList)
+       pref.saveTalkingListInPref(talkList)
         val talker = talkC()
 
         with(talker) {

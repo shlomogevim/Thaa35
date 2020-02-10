@@ -26,8 +26,12 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
     private var statrTime: Long = 0
     private var endTime = System.nanoTime()
 
-   fun talkC() = talkList[currentPage()]
-
+   //fun talkC() = talkList[currentPage()]
+   fun talkC():Talker{
+      val list=pref.getTalkingListFromPref(1)
+       val index=currentPage()
+       return list[index]
+   }
 
 
     fun currentPage(): Int {
@@ -47,7 +51,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
         val cu = getCurrentPage()
         activity.tvPage.text = cu.toString()
         talkC().numTalker = cu
-        updateTitleTalkerSituation()
+     //   updateTitleTalkerSituation()
         animationInAction.executeTalker(talkC())
     }
 
@@ -199,7 +203,10 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
 
     private fun minTextSize() {
         updateLastTalker(0)
-        talkC().textSize = 12f  // for accsident of bigest text
+        val list=pref.getTalkingListFromPref(1)
+        val index=currentPage()
+        list[index].textSize = 12f  // for accsident of bigest text
+        pref.saveTalkingListInPref(list)
         drawAnim()
     }
 
@@ -245,12 +252,12 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
     }
 
     fun updateTitleTalkerSituation() {
-        /*with(talkC()) {
+        with(talkC()) {
             val text =
                 "l=${takingArray.size}sty=$styleNum anim=$animNum size=${textSize.toInt()}" +
                         " bord=$borderWidth dur=$dur sw=$swingRepeat"
 
-        }*/
+        }
 
     }
 

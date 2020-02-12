@@ -501,8 +501,8 @@ class ArrangeScreen(val context: Context) {
             actionList.add("-")
         }
         val list = arrayListOf(
-            "100",
-            "10", "11", "12", "13", "14", "15",
+            "100","101","102","103","104","105","106","107","108","109",
+            "110","111","10", "11", "12", "13", "14", "15",
             "20", "21", "22", "23", "24", "25",
             "30", "31", "32", "33", "34", "35",
             "40", "41", "42", "43", "44", "45", "46",
@@ -516,7 +516,7 @@ class ArrangeScreen(val context: Context) {
         val adapter1 =
             ArrayAdapter<String>(context, R.layout.mytext, actionList)
         activity.action_ListView.adapter = adapter1
-        activity.action_ListView.setSelection(15)
+        activity.action_ListView.setSelection(5)
     }
 
     private fun backGroundConfigaration() {

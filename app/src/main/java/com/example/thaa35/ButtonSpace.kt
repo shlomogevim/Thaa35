@@ -25,6 +25,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
     private val animationInAction = AnimationInAction(context)
     private var statrTime: Long = 0
     private var endTime = System.nanoTime()
+    private val utile=Utile(context)
 
 
     /*fun currentPage(): Int {
@@ -369,7 +370,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
         letsPlay(view)
 
         val size = pref.getLastTalker().takingArray.size
-         Utile.listener1 = { it1, _ ->
+         utile.listener1 = { it1, _ ->
             // Log.d("clima", "Hii num->$it1 and time->$it2 and size=$size")
             if (size == 1 || it1 == size) {
                 time("onClickB114")

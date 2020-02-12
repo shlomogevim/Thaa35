@@ -37,9 +37,8 @@
             android:id="@+id/godSpeaking2A"
             style="@style/SimpleOne"
             android:layout_width="wrap_content"
-
             android:layout_height="wrap_content"
-            android:layout_marginTop="65dp"
+            android:layout_marginTop="30dp"
             android:elevation="10dp"
             android:gravity="center_horizontal"
             tools:text="godSpeaking2A" />
@@ -92,9 +91,8 @@
             android:id="@+id/godSpeaking0"
             style="@style/SimpleOne"
             android:layout_width="wrap_content"
-
             android:layout_height="wrap_content"
-            android:layout_marginTop="65dp"
+            android:layout_marginTop="30dp"
             android:elevation="10dp"
             android:gravity="center_horizontal"
             tools:text="godSpeaking0" />

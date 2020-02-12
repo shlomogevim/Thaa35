@@ -20,6 +20,7 @@ class AnimationInAction(val context: Context) {
     val pref = GetAndStoreData(context)
     val showPosition=pref.getShowPosition()
     val talkList = pref.getTalkingList(1)
+    val utile=Utile(context)
 
 
     private val helper = Helper(context)
@@ -168,58 +169,65 @@ class AnimationInAction(val context: Context) {
     }
 
     private fun letsMove(
-        talker: Talker, listOfTextview: ArrayList<TextView?>, listOfTextviewM: ArrayList<TextView?>,
+         talker: Talker, listOfTextview: ArrayList<TextView?>, listOfTextviewM: ArrayList<TextView?>,
         listOfTextviewM2: ArrayList<TextView?>
     ) {
+        initAnimPara()
 
         when (talker.animNum) {
+           in  0..99->simpleAnim(talker,listOfTextview,listOfTextviewM,listOfTextviewM2)
+           in  100..120->iterpolatorAnime(talker,listOfTextview,listOfTextviewM,listOfTextviewM2)
+            1000 -> utile.moveScale100(talker, listOfTextview)
+            else -> utile.move_swing(0, talker, listOfTextview)
+        }
+    }
 
-            100,1000 -> Utile.moveScale100(talker, listOfTextview)
+    private fun simpleAnim(talker: Talker, listOfTextview: ArrayList<TextView?>, listOfTextviewM: ArrayList<TextView?>, listOfTextviewM2: ArrayList<TextView?>) {
+        when (talker.animNum) {
+            10 -> utile.move_swing(10, talker, listOfTextview)
+            11 -> utile.move_swing(11, talker, listOfTextview)
+            12 -> utile.move_swing(12, talker, listOfTextview)
+            13 -> utile.move_swing(13, talker, listOfTextview)
+            14 -> utile.move_swing(14, talker, listOfTextview)
+            15 -> utile.move_swing(15, talker, listOfTextview)
 
-            10 -> Utile.move_swing(10, talker, listOfTextview)
-            11 -> Utile.move_swing(11, talker, listOfTextview)
-            12 -> Utile.move_swing(12, talker, listOfTextview)
-            13 -> Utile.move_swing(13, talker, listOfTextview)
-            14 -> Utile.move_swing(14, talker, listOfTextview)
-            15 -> Utile.move_swing(15, talker, listOfTextview)
+            20 -> utile.scale_swing(20, talker, listOfTextview)
+            21 -> utile.scale_swing(21, talker, listOfTextview)
+            22 -> utile.scale_swing(22, talker, listOfTextview)
+            23 -> utile.scale_swing(23, talker, listOfTextview)
+            24 -> utile.scale_swing(24, talker, listOfTextview)
+            25 -> utile.scale_swing(25, talker, listOfTextview)
 
-            20 -> Utile.scale_swing(20, talker, listOfTextview)
-            21 -> Utile.scale_swing(21, talker, listOfTextview)
-            22 -> Utile.scale_swing(22, talker, listOfTextview)
-            23 -> Utile.scale_swing(23, talker, listOfTextview)
-            24 -> Utile.scale_swing(24, talker, listOfTextview)
-            25 -> Utile.scale_swing(25, talker, listOfTextview)
-
-            30 -> Utile.move_scale(30, listOfTextview, talker.dur)
-            31 -> Utile.move_scale(31, listOfTextview, talker.dur)
-            32 -> Utile.move_scale(32, listOfTextview, talker.dur)
-            33 -> Utile.move_scale(33, listOfTextview, talker.dur)
-            34 -> Utile.move_scale(34, listOfTextview, talker.dur)
-            35 -> Utile.move_scale(35, listOfTextview, talker.dur)
+            30 -> utile.move_scale(30, listOfTextview, talker.dur)
+            31 -> utile.move_scale(31, listOfTextview, talker.dur)
+            32 -> utile.move_scale(32, listOfTextview, talker.dur)
+            33 -> utile.move_scale(33, listOfTextview, talker.dur)
+            34 -> utile.move_scale(34, listOfTextview, talker.dur)
+            35 -> utile.move_scale(35, listOfTextview, talker.dur)
 
 
-            40 -> Utile.move_scale_rotate(40, talker, listOfTextview)
-            41 -> Utile.move_scale_rotate(41, talker, listOfTextview)
-            42 -> Utile.move_scale_rotate(42, talker, listOfTextview)
-            43 -> Utile.move_scale_rotate(43, talker, listOfTextview)
-            44 -> Utile.move_scale_rotate(44, talker, listOfTextview)
-            45 -> Utile.move_scale_rotate(45, talker, listOfTextview)
-            46 -> Utile.move_scale_rotate(46, talker, listOfTextview)
+            40 -> utile.move_scale_rotate(40, talker, listOfTextview)
+            41 -> utile.move_scale_rotate(41, talker, listOfTextview)
+            42 -> utile.move_scale_rotate(42, talker, listOfTextview)
+            43 -> utile.move_scale_rotate(43, talker, listOfTextview)
+            44 -> utile.move_scale_rotate(44, talker, listOfTextview)
+            45 -> utile.move_scale_rotate(45, talker, listOfTextview)
+            46 -> utile.move_scale_rotate(46, talker, listOfTextview)
 
-            50 -> Utile.apeareOneAfterAnother(listOfTextview, talker)
-            51 -> Utile.apeareOneAfterAnotherAndSwing(listOfTextview, talker)
+            50 -> utile.apeareOneAfterAnother(listOfTextview, talker)
+            51 -> utile.apeareOneAfterAnotherAndSwing(listOfTextview, talker)
 
-             60 -> if (talker.whoSpeake == "god") {
-                // Utile.godAppearFromTwoPlaces(0, listOfTextview, listOfTextviewM,talker.colorBack, dur)
-                Utile.godAppearFromTwoPlaces(
+            60 -> if (talker.whoSpeake == "god") {
+                // utile.godAppearFromTwoPlaces(0, listOfTextview, listOfTextviewM,talker.colorBack, dur)
+                utile.godAppearFromTwoPlaces(
                     0, talker, listOfTextview, listOfTextviewM, listOfTextviewM2
                 )
             } else {
-                Utile.move_swing(0, talker, listOfTextview)
+                utile.move_swing(0, talker, listOfTextview)
                 Toast.makeText(context, "Sorry It just for God", Toast.LENGTH_LONG).show()
             }
             61 -> if (talker.whoSpeake == "god") {
-                Utile.godAppearFromTwoPlaces(
+                utile.godAppearFromTwoPlaces(
                     1,
                     talker,
                     listOfTextview,
@@ -227,15 +235,33 @@ class AnimationInAction(val context: Context) {
                     listOfTextviewM2
                 )
             }
-            else -> Utile.move_swing(0, talker, listOfTextview)
         }
     }
 
-    /*private fun operateBackgroundColor(talker: Talker) {
-        if (talker.whoSpeake == "man") {
-            var layout = R.layout.man_layout
+    private fun iterpolatorAnime(talker: Talker, listOfTextview: ArrayList<TextView?>, listOfTextviewM: ArrayList<TextView?>, listOfTextviewM2: ArrayList<TextView?>) {
+        when (talker.animNum) {
+            100->  pref.saveAnim1(0)
+            101 ->  pref.saveAnim1(1)
+            102 ->  pref.saveAnim1(2)
+            103 -> pref.saveAnim1(3)
+            104 -> pref.saveAnim1(4)
+            105 -> pref.saveAnim1(5)
+            106 -> pref.saveAnim1(6)
+            107 -> pref.saveAnim1(7)
+            108 -> pref.saveAnim1(8)
+            109 -> pref.saveAnim1(9)
+            110 -> pref.saveAnim1(10)
+            111 -> pref.saveAnim1(11)
         }
-    }*/
+        utile.moveScale100(talker, listOfTextview)
+    }
+
+    private fun initAnimPara() {
+        pref.saveAnim1(0)
+        pref.saveAnim2(0)
+        pref.saveAnim3(0)
+        pref.saveAnim4(0)
+    }
 
     private fun configGodTextView(talker: Talker) {
         initTextview()

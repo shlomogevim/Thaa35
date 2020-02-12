@@ -1,16 +1,19 @@
 package com.example.thaa35
 
+import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Point
 import android.view.View
-import android.view.animation.AccelerateInterpolator
-import android.view.animation.BounceInterpolator
+import android.view.animation.*
 import android.widget.TextView
 import com.github.florent37.viewanimator.ViewAnimator
 
-object Utile {
-    var wi: Float = Resources.getSystem().displayMetrics.widthPixels.toFloat()
+    //object Utile {
+class Utile(context: Context) {
+        private val pref = GetAndStoreData(context)
+
+        var wi: Float = Resources.getSystem().displayMetrics.widthPixels.toFloat()
     var hi: Float = Resources.getSystem().displayMetrics.heightPixels.toFloat()
     var start = 0L
     var end = 0L
@@ -65,30 +68,177 @@ object Utile {
     }
 
     private fun basicMoveAndScale(textView:TextView,point:Point,dur:Long,ind:Int){
-        ViewAnimator
-            .animate(textView).scale(0f, 1f).translationX(point.x.toFloat(), 0f).translationY(point.y.toFloat(), 0f)
-            .duration(dur)
-            .start().onStop {
-                end = System.currentTimeMillis() - start
-                listener1?.invoke(ind, end)
-            }
-
+        var animNum=pref.getAnim1()
+        when (animNum){
+            0->{basicMoveAndScale0(textView,point,dur,ind)}
+            1->{basicMoveAndScale1(textView,point,dur,ind)}
+            2->{basicMoveAndScale2(textView,point,dur,ind)}
+            3->{basicMoveAndScale3(textView,point,dur,ind)}
+            4->{basicMoveAndScale4(textView,point,dur,ind)}
+            5->{basicMoveAndScale5(textView,point,dur,ind)}
+            6->{basicMoveAndScale6(textView,point,dur,ind)}
+            7->{basicMoveAndScale7(textView,point,dur,ind)}
+            8->{basicMoveAndScale8(textView,point,dur,ind)}
+            9->{basicMoveAndScale9(textView,point,dur,ind)}
+            10->{basicMoveAndScale10(textView,point,dur,ind)}
+            11->{basicMoveAndScale11(textView,point,dur,ind)}
+        }
     }
-    private fun basicMoveAndScale1(textView:TextView,point:Point,dur:Long,ind:Int){
+    private fun basicMoveAndScale0(textView:TextView,point:Point,dur:Long,ind:Int){
         ViewAnimator
             .animate(textView)
             .scale(0f, 1f)
             .translationX(point.x.toFloat(), 0f)
             .translationY(point.y.toFloat(), 0f)
-            //.interpolator(BounceInterpolator()) 
-            .interpolator(AccelerateInterpolator(1.2f))
             .duration(dur)
             .start().onStop {
                 end = System.currentTimeMillis() - start
                 listener1?.invoke(ind, end)
             }
-
     }
+        private fun basicMoveAndScale1(textView:TextView,point:Point,dur:Long,ind:Int){
+            ViewAnimator
+                .animate(textView)
+                .scale(0f, 1f)
+                .translationX(point.x.toFloat(), 0f)
+                .translationY(point.y.toFloat(), 0f)
+               .interpolator(AccelerateInterpolator(2f))
+                .duration(dur)
+                .start().onStop {
+                    end = System.currentTimeMillis() - start
+                    listener1?.invoke(ind, end)
+                }
+        }
+        private fun basicMoveAndScale2(textView:TextView,point:Point,dur:Long,ind:Int){
+            ViewAnimator
+                .animate(textView)
+                .scale(0f, 1f)
+                .translationX(point.x.toFloat(), 0f)
+                .translationY(point.y.toFloat(), 0f)
+                 .interpolator(DecelerateInterpolator(2f))
+                .duration(dur)
+                .start().onStop {
+                    end = System.currentTimeMillis() - start
+                    listener1?.invoke(ind, end)
+                }
+        }
+        private fun basicMoveAndScale3(textView:TextView,point:Point,dur:Long,ind:Int){
+            ViewAnimator
+                .animate(textView)
+                .scale(0f, 1f)
+                .translationX(point.x.toFloat(), 0f)
+                .translationY(point.y.toFloat(), 0f)
+                .interpolator(BounceInterpolator())
+                .duration(dur)
+                .start().onStop {
+                    end = System.currentTimeMillis() - start
+                    listener1?.invoke(ind, end)
+                }
+        }
+        private fun basicMoveAndScale4(textView:TextView,point:Point,dur:Long,ind:Int){
+            ViewAnimator
+                .animate(textView)
+                .scale(0f, 1f)
+                .translationX(point.x.toFloat(), 0f)
+                .translationY(point.y.toFloat(), 0f)
+                .interpolator(OvershootInterpolator())
+                .duration(dur)
+                .start().onStop {
+                    end = System.currentTimeMillis() - start
+                    listener1?.invoke(ind, end)
+                }
+        }
+        private fun basicMoveAndScale5(textView:TextView,point:Point,dur:Long,ind:Int){
+            ViewAnimator
+                .animate(textView)
+                .scale(0f, 1f)
+                .translationX(point.x.toFloat(), 0f)
+                .translationY(point.y.toFloat(), 0f)
+                 .swing()
+                .duration(dur)
+                .start().onStop {
+                    end = System.currentTimeMillis() - start
+                    listener1?.invoke(ind, end)
+                }
+        }
+        private fun basicMoveAndScale6(textView:TextView,point:Point,dur:Long,ind:Int){
+            ViewAnimator
+                .animate(textView)
+                .scale(0f, 1f)
+                .translationX(point.x.toFloat(), 0f)
+                .translationY(point.y.toFloat(), 0f)
+                .duration(dur)
+                .thenAnimate(textView).swing()
+                .start().onStop {
+                    end = System.currentTimeMillis() - start
+                    listener1?.invoke(ind, end)
+                }
+        }
+        private fun basicMoveAndScale7(textView:TextView,point:Point,dur:Long,ind:Int){
+            ViewAnimator
+                .animate(textView)
+                .scale(0f, 1f)
+                .translationX(point.x.toFloat(), 0f)
+                .translationY(point.y.toFloat(), 0f)
+                  .fall()
+                .duration(dur)
+                .start().onStop {
+                    end = System.currentTimeMillis() - start
+                    listener1?.invoke(ind, end)
+                }
+        }
+        private fun basicMoveAndScale8(textView:TextView,point:Point,dur:Long,ind:Int){
+            ViewAnimator
+                .animate(textView)
+                .scale(0f, 1f)
+                .translationX(point.x.toFloat(), 0f)
+                .translationY(point.y.toFloat(), 0f)
+                 .rubber()
+                .duration(dur)
+                .start().onStop {
+                    end = System.currentTimeMillis() - start
+                    listener1?.invoke(ind, end)
+                }
+        }
+        private fun basicMoveAndScale9(textView:TextView,point:Point,dur:Long,ind:Int){
+            ViewAnimator
+                .animate(textView)
+                .scale(0f, 1f)
+                .translationX(point.x.toFloat(), 0f)
+                .translationY(point.y.toFloat(), 0f)
+                .wave()
+                .duration(dur)
+                .start().onStop {
+                    end = System.currentTimeMillis() - start
+                    listener1?.invoke(ind, end)
+                }
+        }
+        private fun basicMoveAndScale10(textView:TextView,point:Point,dur:Long,ind:Int){
+            ViewAnimator
+                .animate(textView)
+                .scale(0f, 1f)
+                .translationX(point.x.toFloat(), 0f)
+                .translationY(point.y.toFloat(), 0f)
+                .duration(dur)
+                .thenAnimate(textView).flipVertical()
+                .start().onStop {
+                    end = System.currentTimeMillis() - start
+                    listener1?.invoke(ind, end)
+                }
+        }
+        private fun basicMoveAndScale11(textView:TextView,point:Point,dur:Long,ind:Int){
+            ViewAnimator
+                .animate(textView)
+                .scale(0f, 1f)
+                .translationX(point.x.toFloat(), 0f)
+                .translationY(point.y.toFloat(), 0f)
+                .duration(dur)
+                .thenAnimate(textView).flipVertical()
+                .start().onStop {
+                    end = System.currentTimeMillis() - start
+                    listener1?.invoke(ind, end)
+                }
+        }
     private fun initTextView(textView:TextView):TextView{
         textView.visibility = View.VISIBLE
         textView.scaleX = 1f

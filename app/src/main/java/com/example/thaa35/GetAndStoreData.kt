@@ -6,6 +6,10 @@ import android.graphics.BitmapFactory
 import android.util.Base64
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.example.thaa35.Const.Companion.ANIM1
+import com.example.thaa35.Const.Companion.ANIM2
+import com.example.thaa35.Const.Companion.ANIM3
+import com.example.thaa35.Const.Companion.ANIM4
 import com.example.thaa35.Const.Companion.ASSEETS_FILE
 import com.example.thaa35.Const.Companion.CURRENT_PAGE
 import com.example.thaa35.Const.Companion.FILE_NUM
@@ -21,18 +25,22 @@ import java.io.ByteArrayOutputStream
 class GetAndStoreData(val context: Context) : AppCompatActivity() {
 
     var myPref = context.getSharedPreferences(PREFS_NAME, 0)
-    private var talkList = getTalkingList(1)
-
 
     fun saveCurrentPage(index: Int) {myPref.edit().putInt(CURRENT_PAGE, index).apply()}
-    fun saveLastPage(index: Int) {myPref.edit().putInt(LAST_PAGE, index).apply()}
     fun saveShowPosition(bo: Boolean) {myPref.edit().putBoolean(SHOWPOSITION, bo).apply()}
 
-
     fun getCurrentPage(): Int = myPref.getInt(CURRENT_PAGE, 1)
-    fun getLastPage(): Int = myPref.getInt(LAST_PAGE, 1)
     fun getCurrentFile(): Int = myPref.getInt(FILE_NUM, 1)
     fun getShowPosition(): Boolean = myPref.getBoolean(SHOWPOSITION, true)
+
+    fun saveAnim1(index: Int) {myPref.edit().putInt(ANIM1, index).apply()}
+    fun saveAnim2(index: Int) {myPref.edit().putInt(ANIM2, index).apply()}
+    fun saveAnim3(index: Int) {myPref.edit().putInt(ANIM3, index).apply()}
+    fun saveAnim4(index: Int) {myPref.edit().putInt(ANIM4, index).apply()}
+    fun getAnim1(): Int = myPref.getInt(ANIM1, 0)
+    fun getAnim2(): Int = myPref.getInt(ANIM2, 0)
+    fun getAnim3(): Int = myPref.getInt(ANIM3, 0)
+    fun getAnim4(): Int = myPref.getInt(ANIM4, 0)
 
 
     fun currentTalk():Talker{
@@ -155,6 +163,11 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
 
     private fun improveString(st: String) = st.substring(1, st.length - 1)
 
+
+
+
+    fun saveLastPage(index: Int) {myPref.edit().putInt(LAST_PAGE, index).apply()}
+    fun getLastPage(): Int = myPref.getInt(LAST_PAGE, 1)
     fun saveCurrentFile(index: Int) {myPref.edit().putInt(FILE_NUM, index).apply()}
     private fun createTalkArray(jsonString: String?) {
         var talkList: ArrayList<Talker>

@@ -1,6 +1,5 @@
 package com.example.thaa35
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -27,79 +26,77 @@ class ArrangeScreen(val context: Context) {
     private val pref = GetAndStoreData(context)
     private  val showPosition=pref.getShowPosition()
     private val animationInAction = AnimationInAction(context)
-   // val talkList = pref.getTalkingListFromPref(1)
-
 
     private var interval = 0
     private var currentColor = "#stam"
 
-    //fun talkC() = talkList[currentPage()]
-    fun talkC():Talker{
-        val list=pref.getTalkingListFromPref(1)
-        val index=pref.getCurrentPage()
-        return list[index]
-    }
 
-
-    fun drawAnim() {
-        updateTitleTalkerSituation()
-        animationInAction.executeTalker(talkC())
-    }
-
-    fun currentPage(): Int {
-        val talkList = pref.getTalkingListFromPref(1)
-        var cu = pref.getCurrentPage()
-        if (cu < 1 || cu >= talkList.size) {
-            cu = 1
-            pref.saveCurrentPage(cu)
-        }
-        return cu
-    }
-
-    private fun backGroundConfigaration() {
-        val imageV = activity.findViewById<ImageView>(R.id.imageView)
-        val animationDrawable = imageV.background as? AnimationDrawable
-        animationDrawable?.setEnterFadeDuration(2000)
-        animationDrawable?.setExitFadeDuration(4000)
-        animationDrawable?.start()
-    }
+   /* fun avtivateAnimation() {
+      //  updateTitleTalkerSituation()
+        animationInAction.executeTalker()
+    }*/
 
     fun operateListView() {
-        operateStyleLV()
-        patamListView()
-        ttParaListView()
-        animationMovmentListView()
-        updatePage(0)
-        updateTitleTalkerSituation()
+        operateStyleLV()     //ListView in the left
+        paramListView()      //ListView in the middle left
+        ttParaListView()     //ListView in the middle right
+        animationMovement()   //ListView in the middle right
+       // updatePage(0)
+      //  updateTitleTalkerSituation()
     }
 
-    private fun animationMovmentListView() {  // list view in the right side
+    private fun operateStyleLV() {
+        activity.style_ListView.setOnItemClickListener { _, _, position, _ ->
+            val currentTalker = pref.currentTalk()
+            if (position == 16) {     // ther is NB
+                currentTalker.backExist = false
+            } else {
+                currentTalker.backExist = true
+                currentTalker.styleNum = styleList[position].toInt()
+            }
+            upgradeTalker(currentTalker)
+        }
+    }
+    private fun paramListView() {
+        activity.para_ListView.setOnItemClickListener { _, _, position, _ ->
+            translaePara(position)
+        }
+    }
+    private fun ttParaListView() {
+        activity.ttPara_listView.setOnItemClickListener { _, _, position, _ ->
+            translaeTtPara(position)
+            Toast.makeText(
+                context,
+                //  "Don't forget to select Para ListView to excute the operation",
+                "Don't forget to select Para ", Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun animationMovement() {  // list view in the right side
         createAnimLV()
 
         activity.action_ListView.setOnItemClickListener { _, _, position, _ ->
-            var talker=talkC()
+            var talker=pref.currentTalk()
             talker.animNum = actionList[position].toInt()
             upgradeTalker(talker)
         }
     }
 
-    private fun patamListView() {
-        activity.para_ListView.setOnItemClickListener { _, _, position, _ ->
-            //tranferTalkItem(0)
-            translaePara(position)
-        }
-    }
-
     private fun translaePara(position: Int) {
 
-        var talker = talkC()
+        var talker = pref.currentTalk()
         val s = activity.plusAndMinusBtn.text
         val intv = if (s == "+") interval else -interval
 
         when (position) {
 
-            7 ->  pref.saveCurrentPage(1)
-            10 -> enterNewPage()
+            7 -> {
+                pref.saveCurrentPage(1)
+                animationInAction.executeTalker()
+            }
+            8->enterNewPage()
+                10->talker=pref.getLastTalker().copy()
             11 -> copySpecialTalker(1)
             15 -> talker.textSize = talker.textSize + intv
             16 -> talker.dur = talker.dur + intv
@@ -111,22 +108,35 @@ class ArrangeScreen(val context: Context) {
             24 -> changeSwingRepeat(talker, intv)
             25 -> changeRadius(talker, intv)
         }
-        if (position != 10) upgradeTalker(talker)
-
-        // talker=chkNewData(talker)
-       // if (position!=7) copyTalketToLalkerList(talker)
-       // if (position != 10) moveTheAnimation()
-       // updateTitleTalkerSituation()
+        if (position >= 10) upgradeTalker(talker)
     }
 
-    private fun copyTalketToLalkerList(talker: Talker) {
-        val talkList = pref.getTalkingListFromPref(1)
-        talkList[currentPage()]=talker.copy()
-        pref.saveTalkingListInPref(talkList)
+       private fun upgradeTalker(talker: Talker) {
+        var bo = true
+        if (talker.textSize < 3) {
+            talker.textSize = 3f
+            Toast.makeText(context, "Text Size too small", Toast.LENGTH_SHORT).show()
+            bo = false
+        }
+        if (talker.dur < 100) {
+            talker.textSize = 100f
+            Toast.makeText(context, "Duration too small", Toast.LENGTH_SHORT).show()
+            bo = false
+        }
+        val style = findStyleObject(talker.styleNum)
+        talker.colorBack = style.colorBack
+        talker.colorText = style.colorText
+        if (bo) {
+            val talkList = pref.getTalkingList(1)
+            var index=pref.getCurrentPage()
+            talkList[index]=talker.copy()
+            pref.saveTalkingList(talkList)
+            animationInAction.executeTalker()
+        }
     }
 
     fun copySpecialTalker(modelNum: Int) {
-        val talker=talkC()
+        val talker=pref.currentTalk()
         val spicalTalkList = arrayListOf(
             Talker(
                 numTalker = 1, styleNum = 411, animNum = 61, textSize = 288f, dur = 3000
@@ -155,7 +165,7 @@ class ArrangeScreen(val context: Context) {
 
     fun initIt() {
         pref.saveCurrentPage(1)
-        moveTheAnimation()
+       // moveTheAnimation()
     }
 
 
@@ -169,7 +179,7 @@ class ArrangeScreen(val context: Context) {
             override fun onClick(p0: DialogInterface?, p1: Int) {
                 val num = input.text.toString().toInt()
                 pref.saveCurrentPage(num)
-                drawAnim()
+                animationInAction.executeTalker()
                 return
             }
 
@@ -205,7 +215,7 @@ class ArrangeScreen(val context: Context) {
     }
 
     private fun updateLastTalker(ind: Int) {
-        var talker=pref.currenteTalk()
+        var talker=pref.currentTalk()
         with(pref) {
             if (ind == 0) saveLastTalker(talker)
             else {
@@ -253,18 +263,6 @@ class ArrangeScreen(val context: Context) {
         talker.colorText = currentColor
 
     }
-
-    private fun ttParaListView() {
-        activity.ttPara_listView.setOnItemClickListener { _, _, position, _ ->
-            translaeTtPara(position)
-            Toast.makeText(
-                context,
-                //  "Don't forget to select Para ListView to excute the operation",
-                "Don't forget to select Para ", Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
-
 
     private fun translaeTtPara(position: Int) {
         when (position) {
@@ -318,76 +316,18 @@ class ArrangeScreen(val context: Context) {
         }
     }
 
-    private fun operateStyleLV() {
-        activity.style_ListView.setOnItemClickListener { _, _, position, _ ->
-            // tranferTalkItem(0)
-            val currentTalker = talkC()
-            if (position == 16) {     // ther is NB
-                currentTalker.backExist = false
-            } else {
-                currentTalker.backExist = true
-                currentTalker.styleNum = styleList[position].toInt()
-            }
-           upgradeTalker(currentTalker)
 
-        }
 
-    }
-
-    private fun upgradeTalker(talker: Talker) {
-
-        var bo = true
-        if (talker.textSize < 3) {
-            talker.textSize = 3f
-            Toast.makeText(context, "Text Size too small", Toast.LENGTH_SHORT).show()
-            bo = false
-        }
-        if (talker.dur < 100) {
-            talker.textSize = 100f
-            Toast.makeText(context, "Duration too small", Toast.LENGTH_SHORT).show()
-            bo = false
-        }
-        if (bo) {
-            trasferStyle(talker)
-            copyTalketToLalkerList(talker)
-            updateTitleTalkerSituation()
-            moveTheAnimation()
-        }
-
-    }
     private fun startListFromTheBeginning(){
         pref.saveCurrentPage(1)
-        moveTheAnimation()
+     //  moveTheAnimation()
     }
 
 
-    private fun moveTheAnimation() {
+   /* private fun moveTheAnimation() {
         updateTitleTalkerSituation()
-        animationInAction.executeTalker(talkC())
-    }
-
-
-    fun updateTitleTalkerSituation() {
-      // pref.saveTalkingListInPref(talkList)
-        val talker = talkC()
-
-        with(talker) {
-            val text =
-                "l=${takingArray.size}sty=$styleNum anim=$animNum size=${textSize.toInt()}" +
-                        " bord=$borderWidth dur=$dur sw=$swingRepeat"
-            val cu = pref.getCurrentPage()
-            activity.tvPage.text = cu.toString()
-            numTalker = cu
-            activity.tvAnimatinKind.text = text
-        }
-    }
-
-    private fun trasferStyle(talker: Talker) {
-
-        val style = findStyleObject(talker.styleNum)
-        talker.colorBack = style.colorBack
-        talker.colorText = style.colorText
-    }
+        animationInAction.executeTalker(pref.currentTalk())
+    }*/
 
     private fun findStyleObject(index: Int): StyleObject {
         var style1 = StyleObject()
@@ -405,22 +345,31 @@ class ArrangeScreen(val context: Context) {
         return style1
     }
 
-    private fun updatePage(ind: Int) {
-        val cu = currentPage()
-        val la = pref.getLastPage()
+   /* fun currentPage(): Int {
+        val talkList = pref.getTalkingListFromPref(1)
+        var cu = pref.getCurrentPage()
+        if (cu < 1 || cu >= talkList.size) {
+            cu = 1
+            pref.saveCurrentPage(cu)
+        }
+        return cu
+    }*/
+   /* private fun updatePage(ind: Int) {
+        val currentPage = pref.getCurrentPage()
+        val lastPage = pref.getLastPage()
         if (ind == 0) {
             //lastTalker = talkList[counterStep].copy()
-            pref.saveLastPage(cu)
+            pref.saveLastPage(currentPage)
         } else {
             //talkList[counterStep] = lastTalker.copy()
-            if (la > 1) {
-                pref.saveLastPage(la - 1)
+            if (lastPage > 1) {
+                pref.saveLastPage(lastPage - 1)
             }
-            if (cu > 1) {
-                pref.saveCurrentPage(cu - 1)
+            if (currentPage > 1) {
+                pref.saveCurrentPage(currentPage - 1)
             }
         }
-    }
+    }*/
 
     private fun drawListView() {
 
@@ -456,9 +405,9 @@ class ArrangeScreen(val context: Context) {
         val list = arrayListOf(
             "-",
             "Start",
-            "-",
-            "-",
             "Page",
+            "-",
+            "Last Talker",
             "CopyTalk1",
             "-",
             "-",
@@ -483,7 +432,7 @@ class ArrangeScreen(val context: Context) {
 
         val adapter10 = ArrayAdapter<String>(context, R.layout.mytext, paraList)
         activity.para_ListView.adapter = adapter10
-        activity.para_ListView.setSelection(15)
+        activity.para_ListView.setSelection(5)
     }
 
     private fun createTtParaTV() {
@@ -548,7 +497,6 @@ class ArrangeScreen(val context: Context) {
     )
 
     private fun createAnimLV() {
-
         for (i in 0..15) {
             actionList.add("-")
         }
@@ -571,9 +519,14 @@ class ArrangeScreen(val context: Context) {
         activity.action_ListView.setSelection(15)
     }
 
-    @SuppressLint("RestrictedApi")
+    private fun backGroundConfigaration() {
+        val imageV = activity.findViewById<ImageView>(R.id.imageView)
+        val animationDrawable = imageV.background as? AnimationDrawable
+        animationDrawable?.setEnterFadeDuration(2000)
+        animationDrawable?.setExitFadeDuration(4000)
+        animationDrawable?.start()
+    }
     fun setLayoutShowMode() {
-        // backGroundConfigaration()
         with(activity) {
             if (!showPosition) {
                 drawListView()
@@ -586,8 +539,8 @@ class ArrangeScreen(val context: Context) {
                 ttPara_listView.visibility = VISIBLE
                 action_ListView.visibility = VISIBLE
                 tvAnimatinKind.visibility = VISIBLE
-                fab.visibility = INVISIBLE
-                fab1.visibility = INVISIBLE
+                fab.hide()
+                fab1.hide()
 
             }
             if (showPosition) {
@@ -599,33 +552,10 @@ class ArrangeScreen(val context: Context) {
                 ttPara_listView.visibility = INVISIBLE
                 action_ListView.visibility = INVISIBLE
                 tvAnimatinKind.visibility = INVISIBLE
-                fab.visibility = VISIBLE
-                fab1.visibility = VISIBLE
+                fab.show()
+                fab1.show()
             }
         }
     }
-    /*private fun showEditText(ind: Int) {
-        with(view) {
-            if (ind == 0) {
-                style_ListView.visibility = INVISIBLE
-                para_ListView.visibility = INVISIBLE
-                ttPara_listView.visibility = INVISIBLE
-                action_ListView.visibility = INVISIBLE
-                pageNumEditText.visibility = VISIBLE
-            } else {
-                style_ListView.visibility = VISIBLE
-                para_ListView.visibility = VISIBLE
-                ttPara_listView.visibility = VISIBLE
-                action_ListView.visibility = VISIBLE
-                pageNumEditText.visibility = INVISIBLE
-                pageNumEditText.hideKeyboard()
-            }
-        }
-    }
-
-    fun View.hideKeyboard() {
-        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(windowToken, 0)
-    }*/
 
 }

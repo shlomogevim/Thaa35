@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
 import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.thaa35.Const.Companion.ASSEETS_FILE
 import com.example.thaa35.Const.Companion.CURRENT_PAGE
@@ -22,7 +21,7 @@ import java.io.ByteArrayOutputStream
 class GetAndStoreData(val context: Context) : AppCompatActivity() {
 
     var myPref = context.getSharedPreferences(PREFS_NAME, 0)
-    private var talkList = getTalkingListFromPref(1)
+    private var talkList = getTalkingList(1)
 
 
     fun saveCurrentPage(index: Int) {myPref.edit().putInt(CURRENT_PAGE, index).apply()}
@@ -36,9 +35,14 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
     fun getShowPosition(): Boolean = myPref.getBoolean(SHOWPOSITION, true)
 
 
-    fun currenteTalk() = talkList[getCurrentPage()]
+    fun currentTalk():Talker{
+        val list=getTalkingList(1)
+        val index=getCurrentPage()
+        return list[index]
+    }
 
-    fun saveTalkingListInPref(talkingList: ArrayList<Talker>) {
+
+    fun saveTalkingList(talkingList: ArrayList<Talker>) {
         val gson = Gson()
         val tagNum=getCurrentFile()
         val jsonString = gson.toJson(talkingList)
@@ -62,20 +66,22 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
         return talker
     }
 
-    fun getTalkingListFromPref(ind: Int): ArrayList<Talker> {
-        val talkList1: ArrayList<Talker>
+    fun getTalkingList(ind: Int): ArrayList<Talker> {
+        val talkList: ArrayList<Talker>
         val gson = Gson()
         val jsonString = myPref.getString(TALKLIST, null)
 
         if (ind == 0 || jsonString == null) {
-            talkList1 = createTalkListFromTheStart()
-            saveTalkingListInPref(talkList1)
+            talkList = createTalkListFromTheStart()
+            saveTalkingList(talkList)
+            saveCurrentPage(1)
+            saveLastTalker(talkList[1])
 
         } else {
             val type = object : TypeToken<ArrayList<Talker>>() {}.type
-            talkList1 = gson.fromJson(jsonString, type)
+            talkList = gson.fromJson(jsonString, type)
         }
-        return talkList1
+        return talkList
     }
 
     fun createTalkListFromTheStart(): ArrayList<Talker> {
@@ -198,14 +204,14 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
         // val jsonString = intent.getStringExtra(JSONSTRING)
         // val jsonString = intent.getStringExtra(JSONSTRING)
         if (jsonString == "none" || jsonString == "") {
-            talkList = getTalkingListFromPref(0)
-            saveTalkingListInPref(talkList)
+            talkList = getTalkingList(0)
+            saveTalkingList(talkList)
 
         } else {
             val gson = Gson()
             val type = object : TypeToken<ArrayList<Talker>>() {}.type
             talkList = gson.fromJson(jsonString, type)
-            saveTalkingListInPref(talkList)
+            saveTalkingList(talkList)
         }
         return talkList
     }

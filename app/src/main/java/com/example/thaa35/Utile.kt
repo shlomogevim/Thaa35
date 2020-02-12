@@ -4,6 +4,8 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Point
 import android.view.View
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.BounceInterpolator
 import android.widget.TextView
 import com.github.florent37.viewanimator.ViewAnimator
 
@@ -65,6 +67,21 @@ object Utile {
     private fun basicMoveAndScale(textView:TextView,point:Point,dur:Long,ind:Int){
         ViewAnimator
             .animate(textView).scale(0f, 1f).translationX(point.x.toFloat(), 0f).translationY(point.y.toFloat(), 0f)
+            .duration(dur)
+            .start().onStop {
+                end = System.currentTimeMillis() - start
+                listener1?.invoke(ind, end)
+            }
+
+    }
+    private fun basicMoveAndScale1(textView:TextView,point:Point,dur:Long,ind:Int){
+        ViewAnimator
+            .animate(textView)
+            .scale(0f, 1f)
+            .translationX(point.x.toFloat(), 0f)
+            .translationY(point.y.toFloat(), 0f)
+            //.interpolator(BounceInterpolator()) 
+            .interpolator(AccelerateInterpolator(1.2f))
             .duration(dur)
             .start().onStop {
                 end = System.currentTimeMillis() - start

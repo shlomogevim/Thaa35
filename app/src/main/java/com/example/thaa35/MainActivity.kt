@@ -21,18 +21,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         initAll()
         enterData()
-        animationInAction.executeTalker(talkC())
+        animationInAction.executeTalker()
     }
-    private fun talkC() = talkList[currentPage()]
-    fun currentPage(): Int {
-        var cu = pref.getCurrentPage()
-        if (cu < 1 || cu >= talkList.size) {
-            cu = 1
-            pref.saveCurrentPage(cu)
-        }
-        return cu
-    }
-
     private fun enterData(){
    //    pref.saveCurrentPage(1)
 //        val currentPage=pref.getCurrentPage()
@@ -52,7 +42,7 @@ class MainActivity : AppCompatActivity() {
             showPositionBtn.text="toShow"
 
         }
-        talkList = pref.getTalkingListFromPref(1)
+        talkList = pref.getTalkingList(1)
         arrangeScreen = ArrangeScreen(this)
         buttonSpace = ButtonSpace(this)
         animationInAction = AnimationInAction(this)
@@ -60,6 +50,8 @@ class MainActivity : AppCompatActivity() {
         arrangeScreen.setLayoutShowMode()
         arrangeScreen.operateListView()
         buttonSpace.setShowPositionMode()
+        var talker=pref.currentTalk()
+        pref.saveLastTalker(talker)
     }
 
 

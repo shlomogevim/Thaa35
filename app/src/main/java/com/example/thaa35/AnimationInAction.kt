@@ -11,6 +11,7 @@ import android.widget.Toast
 import com.github.florent37.viewanimator.ViewAnimator
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.god_layout.*
+import kotlinx.android.synthetic.main.helper_view_layout.*
 import kotlinx.android.synthetic.main.man_layout.*
 import java.util.*
 
@@ -18,7 +19,7 @@ class AnimationInAction(val context: Context) {
     val activity = context as Activity
     val pref = GetAndStoreData(context)
     val showPosition=pref.getShowPosition()
-    val talkList = pref.getTalkingListFromPref(1)
+    val talkList = pref.getTalkingList(1)
 
 
     private val helper = Helper(context)
@@ -52,7 +53,7 @@ class AnimationInAction(val context: Context) {
 
    // fun talkC() = talkList[currentPage()]
    fun talkC():Talker{
-       val list=pref.getTalkingListFromPref(1)
+       val list=pref.getTalkingList(1)
        val index=currentPage()
        return list[index]
    }
@@ -90,14 +91,21 @@ class AnimationInAction(val context: Context) {
         return tv
     }
 
-
-    fun executeTalker( talker:Talker) {
-
-       // lastTalker = talkList[counterStep].copy()
-
-        talkList[currentPage()]=talker.copy()
-        pref.saveTalkingListInPref(talkList)
-
+    private fun updateTitleTalkerSituation() {
+        val talker = pref.currentTalk()
+        val index = pref.getCurrentPage()
+        with(talker) {
+            val newTalkerDetails =
+                "l=${takingArray.size}*sty=$styleNum*anim=$animNum*size=${textSize.toInt()}" +
+                        "*bord=$borderWidth*dur=$dur sw=$swingRepeat"
+            activity.tvAnimatinKind.text = newTalkerDetails
+            activity.tvPage.text = index.toString()
+            //  numTalker = index
+        }
+    }
+    fun executeTalker( ) {
+        updateTitleTalkerSituation()
+       val talker=talkC()
         activateHowSpeaking(talker)
         if (talker.whoSpeake == "man") {
             configManTextView(talker)
@@ -166,7 +174,7 @@ class AnimationInAction(val context: Context) {
 
         when (talker.animNum) {
 
-            100 -> Utile.moveScale100(talker, listOfTextview)
+            100,1000 -> Utile.moveScale100(talker, listOfTextview)
 
             10 -> Utile.move_swing(10, talker, listOfTextview)
             11 -> Utile.move_swing(11, talker, listOfTextview)

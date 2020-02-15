@@ -18,7 +18,7 @@ import java.util.*
 class AnimationInAction(val context: Context) {
     val activity = context as Activity
     val pref = GetAndStoreData(context)
-    val showPosition=pref.getShowPosition()
+    var showPosition=pref.getShowPosition()
     val talkList = pref.getTalkingList(1)
     val utile=Utile(context)
 
@@ -98,6 +98,7 @@ class AnimationInAction(val context: Context) {
     }
 
     private fun updateTitleTalkerSituation() {
+        if (!showPosition) return
         val talker = pref.currentTalk()
         val index = pref.getCurrentPage()
         with(talker) {
@@ -110,6 +111,7 @@ class AnimationInAction(val context: Context) {
         }
     }
     fun executeTalker( ) {
+        showPosition=pref.getShowPosition()
         updateTitleTalkerSituation()
        val talker=talkC()
         activateHowSpeaking(talker)

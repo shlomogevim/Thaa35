@@ -67,6 +67,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
         }else{
             activity.showPositionBtn.text="toShow"
         }
+        animationInAction.executeTalker()
     }
 
     fun setShowPositionMode() {

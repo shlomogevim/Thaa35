@@ -14,7 +14,11 @@ import android.widget.EditText
 import android.widget.Toast
 import com.github.florent37.viewanimator.ViewAnimator
 import kotlinx.android.synthetic.main.helper_view_layout.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import java.util.concurrent.TimeUnit
+import kotlin.coroutines.coroutineContext
 
 class ButtonSpace(val context: Context) : View.OnClickListener {
 
@@ -27,33 +31,8 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
     private var endTime = System.nanoTime()
     private val utile=Utile(context)
 
-
-    /*fun currentPage(): Int {
-        val talkList = pref.getTalkingListFromPref(1)
-        var cu = pref.getCurrentPage()
-        if (cu < 1 || cu >= talkList.size) {
-            cu = 1
-            pref.saveCurrentPage(cu)
-        }
-        return cu
-    }*/
-    //  fun talkC() = talkList[currentPage()]
-
-    fun drawAnim() {
-        if (!showPosition) {
-            updateTitleTalkerSituation()
-        }
-        // view.tvAnimatinKind.text = text
-        val cu = getCurrentPage()
-        activity.tvPage.text = cu.toString()
-        pref.currentTalk().numTalker = cu
-     //   updateTitleTalkerSituation()
-        animationInAction.executeTalker()
-    }
-
-    fun letsPlay(v: View) {
-
-        when (v.id) {
+    override fun onClick(view: View) {
+        when (view.id) {
             R.id.textRevBtn -> readAgainTextFile()
             R.id.newPageBtn -> enterNewPage()
             R.id.showPositionBtn -> changeShowPosition()
@@ -67,38 +46,16 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
             R.id.fab -> nextIt()
             R.id.fab1 -> previousIt()
             else -> drawAnim()
-
         }
-
-       /* time("let play 1")
+    }
+    fun drawAnim() {
         if (!showPosition) {
-            when (v.id) {
-                R.id.textRevBtn -> readAgainTextFile()
-                R.id.newPageBtn -> enterNewPage()
-                R.id.showPositionBtn -> changeShowPosition()
-                R.id.toShowModeBtn -> animationInAction.executeTalker(pref.currentTalk())
-                R.id.plusAndMinusBtn -> changePlusMinusMode()
-              //  R.id.showPositionBtn -> drawAnim()
-                R.id.saveButton -> saveIt()
-                R.id.nextButton -> nextIt()
-                R.id.previousButton -> previousIt()
-                R.id.lastTalker_button -> retriveLastTalker()
-                R.id.reSizeTextBtn -> minTextSize()
-//                R.id.tvAnimatinKind -> tvAnimatinKind.visibility = View.VISIBLE
-                else -> drawAnim()
-
-            }
-            return
+            updateTitleTalkerSituation()
         }
-        // var cu = getAndStoreData.getCurrentPage()
-        if (showPosition) {
-            when (v.id) {
-                R.id.fab -> nextItFab()
-                R.id.fab1 -> previousIt()
-                else -> drawAnim()
-            }
-        }
-        time("let play 2")*/
+        val cu = getCurrentPage()
+        activity.tvPage.text = cu.toString()
+        pref.currentTalk().numTalker = cu
+        animationInAction.executeTalker()
     }
 
     private fun changeShowPosition() {
@@ -110,7 +67,6 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
         }else{
             activity.showPositionBtn.text="toShow"
         }
-
     }
 
     fun setShowPositionMode() {
@@ -157,26 +113,44 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
     }
 
     private fun readAgainTextFile() {
-        var talkList = pref.getTalkingList(1)
-        val textTalkList = pref.createTalkListFromTheStart()
-        talkList = textReRead(talkList, textTalkList)
-        pref.saveTalkingList(talkList)
-        drawAnim()
+        var list= ArrayList<Talker>()
+
+       CoroutineScope(IO).launch{
+           val talkList =async {pref.getTalkingList(1)  }
+           val textTalkList =async { pref.createTalkListFromTheStart() }
+           val talkList1 = async {textReRead(talkList.await(), textTalkList.await()) }
+           pref.saveTalkingList(talkList1.await())
+           list=talkList1.await()
+          withContext (Main){
+              delay(1000)
+              drawAnim()
+          }
+       }
     }
 
+    fun cleanArr(arr:List<String>):List<String>{
+       val ar= arrayListOf<String>()
+       for (item in arr) {
+           if (item != "") {
+               ar.add(item)
+           }
+       }
+       return ar
+   }
     fun textReRead(
         talkList: ArrayList<Talker>,
         textTalkList: ArrayList<Talker>
     ): ArrayList<Talker> {
-        for (index in 0..talkList.size - 1) {
+        for (index in 1..talkList.size - 1) {
             val st1 = textTalkList[index].taking
             var arr = st1.split("\n")
-            val ar = arrayListOf<String>()
+            arr=cleanArr(arr)
+            /*val ar = arrayListOf<String>()
             for (item in arr) {
                 if (item != "") {
                     ar.add(item)
                 }
-            }
+            }*/
 
             if (index > talkList.size) {
                 var talk1 = textTalkList[index].copy()
@@ -184,7 +158,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
 
             } else {
 
-                talkList[index].takingArray = ar
+                talkList[index].takingArray = arr as ArrayList<String>
                 talkList[index].taking = textTalkList[index].taking
             }
 
@@ -303,45 +277,57 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
 
     }
 
-    override fun onClick(view: View) {
-
-        letsPlay(view)
 
 
-  //     if (!showPosition) {
-            //onClickOther(view)
-   //         return
-   //     }
-           /*   var def = 0
-             if (view == activity.fab) {
-                 def++
+    fun letsPlay(v: View) {
+
+        when (v.id) {
+            R.id.textRevBtn -> readAgainTextFile()
+            R.id.newPageBtn -> enterNewPage()
+            R.id.showPositionBtn -> changeShowPosition()
+            R.id.toShowModeBtn -> animationInAction.executeTalker()
+            R.id.plusAndMinusBtn -> changePlusMinusMode()
+            R.id.saveButton -> saveIt()
+            R.id.nextButton -> nextIt()
+            R.id.previousButton -> previousIt()
+            R.id.lastTalker_button -> retriveLastTalker()
+            R.id.reSizeTextBtn -> minTextSize()
+            R.id.fab -> nextIt()
+            R.id.fab1 -> previousIt()
+            else -> drawAnim()
+
+        }
+
+        /* time("let play 1")
+         if (!showPosition) {
+             when (v.id) {
+                 R.id.textRevBtn -> readAgainTextFile()
+                 R.id.newPageBtn -> enterNewPage()
+                 R.id.showPositionBtn -> changeShowPosition()
+                 R.id.toShowModeBtn -> animationInAction.executeTalker(pref.currentTalk())
+                 R.id.plusAndMinusBtn -> changePlusMinusMode()
+               //  R.id.showPositionBtn -> drawAnim()
+                 R.id.saveButton -> saveIt()
+                 R.id.nextButton -> nextIt()
+                 R.id.previousButton -> previousIt()
+                 R.id.lastTalker_button -> retriveLastTalker()
+                 R.id.reSizeTextBtn -> minTextSize()
+ //                R.id.tvAnimatinKind -> tvAnimatinKind.visibility = View.VISIBLE
+                 else -> drawAnim()
+
              }
-             if (view == activity.fab1) {
-                 def--
+             return
+         }
+         // var cu = getAndStoreData.getCurrentPage()
+         if (showPosition) {
+             when (v.id) {
+                 R.id.fab -> nextItFab()
+                 R.id.fab1 -> previousIt()
+                 else -> drawAnim()
              }
-             buttonActivation(0)
-
-             var counterStep = getCurrentPage() + def
-
-             if (counterStep < 1) counterStep = 1
-             if (counterStep == talkList.size) counterStep = 1
-             getAndStoreData.saveCurrentPage(counterStep)
-
-             chageBackgroundColor(1, 1000)
-
-             letsPlay(view)
-
-             val size = pref.currentTalk().takingArray.size
-
-             Utile.listener1 = { it1, _ ->
-                 // Log.d("clima", "Hii num->$it1 and time->$it2 and size=$size")
-                 if (size == 1 || it1 == size) {
-                     buttonActivation(1)
-                     chageBackgroundColor(0, 1000)
-                 }
-             }*/
+         }
+         time("let play 2")*/
     }
-
     private fun onClickOther(view: View) {
         val talkList = pref.getTalkingList(1)
 

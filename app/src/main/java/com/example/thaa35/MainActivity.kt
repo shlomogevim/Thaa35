@@ -12,17 +12,16 @@ class MainActivity : AppCompatActivity() {
     lateinit var buttonSpace: ButtonSpace
     lateinit var talkList: ArrayList<Talker>
 
-
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        pref = GetAndStoreData(this)
         initAll()
         enterData()
+
         animationInAction.executeTalker()
     }
+
     private fun enterData(){
    //    pref.saveCurrentPage(1)
 //        val currentPage=pref.getCurrentPage()
@@ -31,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initAll() {
-        pref = GetAndStoreData(this)
+
 
         var showPosition = false
         pref.saveShowPosition(showPosition)
@@ -43,6 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         }
         talkList = pref.getTalkingList(1)
+      //  talkList = pref.getTalkingList(0)  // to Init all data
         arrangeScreen = ArrangeScreen(this)
         buttonSpace = ButtonSpace(this)
         animationInAction = AnimationInAction(this)

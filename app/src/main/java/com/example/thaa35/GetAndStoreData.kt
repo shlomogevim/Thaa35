@@ -42,13 +42,11 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
     fun getAnim3(): Int = myPref.getInt(ANIM3, 0)
     fun getAnim4(): Int = myPref.getInt(ANIM4, 0)
 
-
     fun currentTalk():Talker{
         val list=getTalkingList(1)
         val index=getCurrentPage()
         return list[index]
     }
-
 
     fun saveTalkingList(talkingList: ArrayList<Talker>) {
         val gson = Gson()
@@ -132,13 +130,20 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
                             takingArray.add(item)
                         }
                     }
-                    colorText = "#000000"
-                    colorBack = "#ffffff"
-                    animNum = 10
+
+                    backExist=true
+                    borderColor="#000000"
+                    borderWidth=0
+                    styleNum=50
+                    swingRepeat=0
+                    colorText = "#fdd835"
+                    colorBack = "#574339"
+                    textSize=28f
+                    animNum = 100
+                    dur=3000
+                    radius=25f
                 }
-
                 talkList1.add(talker)
-
                 countItem++
                 talker = Talker()
                 with(talker) {
@@ -151,9 +156,17 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
                             takingArray.add(item)
                         }
                     }
-                    colorText = "#000000"
-                    colorBack = "#ffffff"
-                    animNum = 10
+                    backExist=true
+                    borderColor="#000000"
+                    borderWidth=0
+                    styleNum=51
+                    swingRepeat=0
+                    colorText = "#574339"
+                    colorBack = "#fdd835"
+                    textSize=28f
+                    animNum = 100
+                    dur=3000
+                    radius=25f
                 }
                 talkList1.add(talker)
             }
@@ -163,7 +176,9 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
 
     private fun improveString(st: String) = st.substring(1, st.length - 1)
 
-
+    fun deletAllData(){
+        myPref.edit().clear().commit()
+    }
 
 
     fun saveLastPage(index: Int) {myPref.edit().putInt(LAST_PAGE, index).apply()}

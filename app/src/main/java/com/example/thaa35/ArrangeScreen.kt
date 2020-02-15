@@ -107,8 +107,12 @@ class ArrangeScreen(val context: Context) {
             23 -> talker.borderWidth = 0
             24 -> changeSwingRepeat(talker, intv)
             25 -> changeRadius(talker, intv)
+            26->{
+                pref.saveCurrentPage(1)
+                animationInAction.executeTalker()
+            }
         }
-        if (position >= 10) upgradeTalker(talker)
+        if (position >9 && position<26) upgradeTalker(talker)
     }
 
        private fun upgradeTalker(talker: Talker) {
@@ -422,7 +426,8 @@ class ArrangeScreen(val context: Context) {
             "Bord Line",
             "No Bord",
             "Swing Re.",
-            "Radius"
+            "Radius",
+            "Start"
         )
         paraList.addAll(list)
 
@@ -501,7 +506,7 @@ class ArrangeScreen(val context: Context) {
             actionList.add("-")
         }
         val list = arrayListOf(
-            "100","101","102","103","104","105","106","107","108","109",
+            "100","1001","101","102","103","104","105","106","107","108","109",
             "110","111","10", "11", "12", "13", "14", "15",
             "20", "21", "22", "23", "24", "25",
             "30", "31", "32", "33", "34", "35",

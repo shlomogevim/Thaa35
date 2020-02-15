@@ -55,6 +55,7 @@ class AnimationInAction(val context: Context) {
    // fun talkC() = talkList[currentPage()]
    fun talkC():Talker{
        val list=pref.getTalkingList(1)
+       list[1].whoSpeake="man"
        val index=currentPage()
        return list[index]
    }
@@ -63,7 +64,11 @@ class AnimationInAction(val context: Context) {
     private fun styleTextViewTalk(tv: TextView, st: String, talker: Talker): TextView {
         val shape = GradientDrawable()
         shape.setCornerRadius(talker.radius)
-        shape.setStroke(20, Color.parseColor(talker.borderColor))
+        if (talker.borderColor=="#000"){
+            shape.setStroke(0, Color.parseColor("#000000"))
+        }else {
+            shape.setStroke(20, Color.parseColor(talker.borderColor))
+        }
         if (talker.colorBack == "none" || !talker.backExist) {
             shape.setColor(Color.TRANSPARENT)
             shape.setStroke(20, Color.TRANSPARENT)
@@ -178,6 +183,8 @@ class AnimationInAction(val context: Context) {
            in  0..99->simpleAnim(talker,listOfTextview,listOfTextviewM,listOfTextviewM2)
            in  100..120->iterpolatorAnime(talker,listOfTextview,listOfTextviewM,listOfTextviewM2)
             1000 -> utile.moveScale100(talker, listOfTextview)
+            in  1001..1100->iterpolatorAnime(talker,listOfTextview,listOfTextviewM,listOfTextviewM2)
+
             else -> utile.move_swing(0, talker, listOfTextview)
         }
     }
@@ -241,6 +248,7 @@ class AnimationInAction(val context: Context) {
     private fun iterpolatorAnime(talker: Talker, listOfTextview: ArrayList<TextView?>, listOfTextviewM: ArrayList<TextView?>, listOfTextviewM2: ArrayList<TextView?>) {
         when (talker.animNum) {
             100->  pref.saveAnim1(0)
+            1001->  pref.saveAnim1(1001)
             101 ->  pref.saveAnim1(1)
             102 ->  pref.saveAnim1(2)
             103 -> pref.saveAnim1(3)

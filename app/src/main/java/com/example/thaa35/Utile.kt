@@ -71,6 +71,7 @@ class Utile(context: Context) {
         var animNum=pref.getAnim1()
         when (animNum){
             0->{basicMoveAndScale0(textView,point,dur,ind)}
+            1001->{basicMoveAndScale1001(textView,point,dur,ind)}
             1->{basicMoveAndScale1(textView,point,dur,ind)}
             2->{basicMoveAndScale2(textView,point,dur,ind)}
             3->{basicMoveAndScale3(textView,point,dur,ind)}
@@ -96,6 +97,23 @@ class Utile(context: Context) {
                 listener1?.invoke(ind, end)
             }
     }
+        private fun basicMoveAndScale1001(textView:TextView,point:Point,dur:Long,ind:Int){
+            ViewAnimator
+                .animate(textView)
+                .scale(0f, 0.2f)
+                .translationX(point.x.toFloat(), point.x/2.toFloat())
+                .translationY(point.y.toFloat(), point.y/2.toFloat())
+                .duration(1000)
+                .thenAnimate(textView)
+                .scale(0.2f, 1f)
+                .translationX(point.x/2.toFloat(), 0f)
+                .translationY(point.y/2.toFloat(), 0f)
+                .duration(dur)
+                .start().onStop {
+                    end = System.currentTimeMillis() - start
+                    listener1?.invoke(ind, end)
+                }
+        }
         private fun basicMoveAndScale1(textView:TextView,point:Point,dur:Long,ind:Int){
             ViewAnimator
                 .animate(textView)

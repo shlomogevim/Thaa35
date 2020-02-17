@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.github.florent37.viewanimator.ViewAnimator
@@ -185,10 +186,18 @@ class AnimationInAction(val context: Context) {
            in  0..99->simpleAnim(talker,listOfTextview,listOfTextviewM,listOfTextviewM2)
            in  100..120->iterpolatorAnime(talker,listOfTextview,listOfTextviewM,listOfTextviewM2)
             1000 -> utile.moveScale100(talker, listOfTextview)
-            in  1001..1100->iterpolatorAnime(talker,listOfTextview,listOfTextviewM,listOfTextviewM2)
-
+            in  1001..1199->iterpolatorAnime(talker,listOfTextview,listOfTextviewM,listOfTextviewM2)
+             in 1200..1300->indevidualLetter(talker)
             else -> utile.move_swing(0, talker, listOfTextview)
         }
+    }
+
+
+    private fun indevidualLetter(talker: Talker){
+        when (talker.animNum){
+            1200->utile.individualLetter1200((talker))
+        }
+
     }
 
     private fun simpleAnim(talker: Talker, listOfTextview: ArrayList<TextView?>, listOfTextviewM: ArrayList<TextView?>, listOfTextviewM2: ArrayList<TextView?>) {

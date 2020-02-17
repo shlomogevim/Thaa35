@@ -1,17 +1,22 @@
 package com.example.thaa35
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Point
 import android.view.View
 import android.view.animation.*
+import android.widget.ImageView
 import android.widget.TextView
 import com.github.florent37.viewanimator.ViewAnimator
+import kotlinx.android.synthetic.main.activity_main.*
 
-    //object Utile {
-class Utile(context: Context) {
-        private val pref = GetAndStoreData(context)
+//object Utile {
+class Utile(val context: Context) {
+
+    val activity = context as Activity
+    private val pref = GetAndStoreData(context)
 
         var wi: Float = Resources.getSystem().displayMetrics.widthPixels.toFloat()
     var hi: Float = Resources.getSystem().displayMetrics.heightPixels.toFloat()
@@ -22,6 +27,20 @@ class Utile(context: Context) {
     var pointLeftUp=Point((-wi / 2).toInt(), -hi.toInt())
     var pointRightUp=Point((wi / 2).toInt(), -hi.toInt())
     var listener1: ((item: Int, myTime: Long) -> Unit)? = null
+
+   fun individualLetter1200(talker: Talker) {
+        val strArray=talker.taking.toCharArray()
+        strArray.forEach { lettet->
+            val image= ImageView(context)
+            activity.mainLayout.addView(image)
+        }
+
+
+//        mainLayout.addView(image)
+//        setParameters(ott)
+
+
+    }
 
     fun moveScale100( talker: Talker, arr: ArrayList<TextView?>) {
         if (talker.whoSpeake=="man") {

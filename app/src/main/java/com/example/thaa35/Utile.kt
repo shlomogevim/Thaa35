@@ -5,9 +5,9 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Point
+import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.view.animation.*
-import android.widget.ImageView
 import android.widget.TextView
 import com.github.florent37.viewanimator.ViewAnimator
 import kotlinx.android.synthetic.main.activity_main.*
@@ -17,30 +17,146 @@ class Utile(val context: Context) {
 
     val activity = context as Activity
     private val pref = GetAndStoreData(context)
+    val helper=Helper(context)
 
-        var wi: Float = Resources.getSystem().displayMetrics.widthPixels.toFloat()
-    var hi: Float = Resources.getSystem().displayMetrics.heightPixels.toFloat()
+    val wight = Resources.getSystem().displayMetrics.widthPixels
+    val hight = Resources.getSystem().displayMetrics.heightPixels
+    val wi=wight.toFloat()
+    val hi=hight.toFloat()
+
+  //  var wi=wi.toInt()
+  //  var hight1=hi.toInt()
     var start = 0L
     var end = 0L
-    var pointLeftDown=Point((-wi / 2).toInt(), hi.toInt())
-    var pointRightDown=Point((wi / 2).toInt(), hi.toInt())
-    var pointLeftUp=Point((-wi / 2).toInt(), -hi.toInt())
-    var pointRightUp=Point((wi / 2).toInt(), -hi.toInt())
+    var pointLeftDown=Point((-wight / 2).toInt(), hight.toInt())
+    var pointRightDown=Point((wight / 2).toInt(), hight.toInt())
+    var pointLeftUp=Point((-wight / 2).toInt(), -hight.toInt())
+    var pointRightUp=Point((wight / 2).toInt(), -hight.toInt())
     var listener1: ((item: Int, myTime: Long) -> Unit)? = null
 
-   fun individualLetter1200(talker: Talker) {
+    var pointX=true
+
+   fun individualLetter1200(index:Int,talker: Talker) {
+
         val strArray=talker.taking.toCharArray()
-        strArray.forEach { lettet->
-            val image= ImageView(context)
-            activity.mainLayout.addView(image)
+        strArray.forEach { letter->
+            var tv= TextView(context)
+            activity.mainLayout.addView(tv)
+            tv=setStyleToTheLetter(tv,letter.toString(),talker)
+            tv.visibility=View.INVISIBLE
+            setParameters(talker,tv,letter)
+            startLettrAnim(index,tv,talker)
+        }
+    }
+
+    fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
+
+    private fun startLettrAnim(index:Int,tv: TextView, talker: Talker){
+
+           tv.visibility=View.VISIBLE
+            val x1=(-wight..wight).random()
+            val y1=(-hight..hight).random()
+            val point1=Point(x1,y1)
+            val point2=Point(x1,y1)
+            if (pointX){
+                moveLetter(index,tv,point1,talker.dur,0)
+                pointX=false
+            }else{
+                moveLetter(index,tv,point2,talker.dur,0)
+                pointX=true
+            }
+        }
+    private fun moveLetter(index: Int,textView:TextView,point:Point,dur:Long,ind:Int) {
+        when (index){
+            1200->moveLetter1200(textView,point,dur,ind)
+            1201->moveLetter1201(textView,point,dur,ind)
+        }
+    }
+
+
+        private fun moveLetter1200(textView:TextView,point:Point,dur:Long,ind:Int){
+                ViewAnimator
+                    .animate(textView)
+                    .scale(0f, 1f)
+                    .translationX(point.x.toFloat(), 0f)
+                    .translationY(point.y.toFloat(), 0f)
+                    .duration(dur)
+                    .thenAnimate(textView)
+                    .scale(1f,0f)
+                    .alpha(1f,0f)
+                    .duration(100)
+                    .start().onStop {
+                        end = System.currentTimeMillis() - start
+                        listener1?.invoke(ind, end)
+                    }
+            }
+    private fun moveLetter1201(textView:TextView,point:Point,dur:Long,ind:Int){
+        ViewAnimator
+            .animate(textView)
+            .scale(0f, 1f,0f)
+            .translationX(point.x.toFloat(), 0f)
+            .translationY(point.y.toFloat(), 0f)
+            .duration(dur)
+            .start().onStop {
+                end = System.currentTimeMillis() - start
+                listener1?.invoke(ind, end)
+            }
+    }
+
+    private fun setStyleToTheLetter(tv: TextView, st: String, talker: Talker): TextView {
+        val shape = GradientDrawable()
+        shape.setCornerRadius(talker.radius)
+        if (talker.borderColor=="#000"){
+            shape.setStroke(0, Color.parseColor("#000000"))
+        }else {
+            shape.setStroke(20, Color.parseColor(talker.borderColor))
+        }
+        if (talker.colorBack == "none" || !talker.backExist) {
+            shape.setColor(Color.TRANSPARENT)
+            shape.setStroke(20, Color.TRANSPARENT)
+        } else {
+            try {
+                shape.setColor(Color.parseColor(talker.colorBack))
+                shape.setStroke(talker.borderWidth, Color.parseColor(talker.borderColor))
+            } catch (e: Exception) {
+                shape.setColor(Color.parseColor("#000000"))
+            }
+        }
+        tv.background = shape
+
+        try {
+            tv.setTextColor(Color.parseColor(talker.colorText))
+        } catch (e: Exception) {
+            tv.setTextColor(Color.parseColor("#ffffff"))
         }
 
+        tv.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, talker.textSize)
+        tv.typeface = helper.getTypeFace(1)
+        tv.setPadding(talker.padding[0], talker.padding[1], talker.padding[2], talker.padding[3])
+        //   tv.setPadding(40, 40, 40, 40)
+        tv.text = st.trim()
 
-//        mainLayout.addView(image)
-//        setParameters(ott)
-
-
+        return tv
     }
+
+    private fun setParameters(talker: Talker,tv:TextView,letter:Char) {
+
+        tv.id=android.view.View.generateViewId()
+        val set = androidx.constraintlayout.widget.ConstraintSet()
+        set.clone(activity.mainLayout)
+
+        set.connect(
+            tv.id, androidx.constraintlayout.widget.ConstraintSet.BOTTOM, androidx.constraintlayout.widget.ConstraintSet.PARENT_ID,
+            androidx.constraintlayout.widget.ConstraintSet.BOTTOM, (hight*0.86).toInt()
+        )
+
+        set.connect(
+            tv.id, androidx.constraintlayout.widget.ConstraintSet.END, androidx.constraintlayout.widget.ConstraintSet.PARENT_ID,
+            androidx.constraintlayout.widget.ConstraintSet.END, wight/2
+        )
+        set.applyTo(activity.mainLayout)
+    }
+
 
     fun moveScale100( talker: Talker, arr: ArrayList<TextView?>) {
         if (talker.whoSpeake=="man") {

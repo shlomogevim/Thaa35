@@ -14,6 +14,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.god_layout.*
 import kotlinx.android.synthetic.main.helper_view_layout.*
 import kotlinx.android.synthetic.main.man_layout.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
 class AnimationInAction(val context: Context) {
@@ -53,7 +57,6 @@ class AnimationInAction(val context: Context) {
     var listOfTextviewMul = arrayListOf<TextView?>()
     var listOfTextviewMul2 = arrayListOf<TextView?>()
 
-   // fun talkC() = talkList[currentPage()]
    fun talkC():Talker{
        val list=pref.getTalkingList(1)
        list[1].whoSpeake="man"
@@ -99,7 +102,7 @@ class AnimationInAction(val context: Context) {
     }
 
     private fun updateTitleTalkerSituation() {
-        if (!showPosition) return
+        if (showPosition) return
         val talker = pref.currentTalk()
         val index = pref.getCurrentPage()
         with(talker) {
@@ -187,18 +190,31 @@ class AnimationInAction(val context: Context) {
            in  100..120->iterpolatorAnime(talker,listOfTextview,listOfTextviewM,listOfTextviewM2)
             1000 -> utile.moveScale100(talker, listOfTextview)
             in  1001..1199->iterpolatorAnime(talker,listOfTextview,listOfTextviewM,listOfTextviewM2)
-             in 1200..1300->indevidualLetter(talker)
+             in 1200..1300->indevidualLetter(talker,listOfTextview)
             else -> utile.move_swing(0, talker, listOfTextview)
         }
     }
 
 
-    private fun indevidualLetter(talker: Talker){
+    private fun indevidualLetter(talker: Talker, listOfTextview: ArrayList<TextView?>){
         when (talker.animNum){
-            1200->utile.individualLetter1200((talker))
+          1200->{
+              CoroutineScope(Main).launch {
+                  utile.individualLetter1200(1200,talker)
+                  // delay(talker.dur+5000)
+                  utile.scale_swing(20, talker, listOfTextview)
+                           }
+          }
+            1201->{
+                CoroutineScope(Main).launch {
+                    utile.individualLetter1200(1201,talker)
+                   // delay(talker.dur-1500)
+                    utile.scale_swing(20, talker, listOfTextview)
+                }
+            }
         }
-
     }
+
 
     private fun simpleAnim(talker: Talker, listOfTextview: ArrayList<TextView?>, listOfTextviewM: ArrayList<TextView?>, listOfTextviewM2: ArrayList<TextView?>) {
         when (talker.animNum) {

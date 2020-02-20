@@ -47,7 +47,31 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
             R.id.fab1 -> previousIt()
             else -> drawAnim()
         }
+
+      /*  activity.fab.isClickable = false
+        activity.fab1.isClickable = false
+        greenRedSign(1, 1000)*/
+
+
+
+
+       // val size = pref.getLastTalker().takingArray.size
+        val list=pref.getTalkingList(1)
+        val index=pref.getCurrentPage()
+        val size = list[index].takingArray.size
+
+        utile.listener1 = { it1, _ ->
+             Log.d("clima", "Hii num->$it1  and size=$size")
+            if (size == 1 || it1 == size) {
+               //buttonActivation(1)
+                activity.fab.isClickable = true
+                activity.fab1.isClickable = true
+                greenRedSign(0, 1000)
+            }
+        }
     }
+
+
     fun drawAnim() {
         if (!showPosition) {
             updateTitleTalkerSituation()
@@ -236,6 +260,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
     }
 
     fun previousIt() {
+       // buttonActivation(0)
         var cu = getCurrentPage()
         cu--
         pref.saveCurrentPage(cu)
@@ -254,6 +279,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
     fun nextIt() {
         // var cu1 = getAndStoreData.getCurrentPage()
        // updateLastTalker(0)
+       // buttonActivation(0)
         pref.saveLastTalker(pref.currentTalk())
         var cu = getCurrentPage()
         cu++
@@ -352,7 +378,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
 
         }
 
-        chageBackgroundColor(1, 1000)
+        greenRedSign(1, 1000)
 
         letsPlay(view)
 
@@ -362,7 +388,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
             if (size == 1 || it1 == size) {
                 time("onClickB114")
                 buttonActivation(1)
-                chageBackgroundColor(0, 1000)
+                greenRedSign(0, 1000)
             }
         }
     }
@@ -378,7 +404,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
         return cu
     }
 
-    fun chageBackgroundColor(ind: Int, dur: Long) {
+    fun greenRedSign(ind: Int, dur: Long) {
         if (ind == 0) {
             ViewAnimator
                 .animate(activity.tvPage)

@@ -29,6 +29,7 @@
             android:layout_height="wrap_content"
             android:elevation="10dp"
             android:gravity="center_horizontal"
+            android:includeFontPadding="false"
             tools:text="Man Speaking0" />
 
         <TextView
@@ -36,6 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="10dp"
+            android:includeFontPadding="false"
             android:gravity="center_horizontal"
             tools:text="Man Speaking1" />
 
@@ -44,6 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="10dp"
+            android:includeFontPadding="false"
             android:gravity="center_horizontal"
             tools:text="Man Speaking2" />
 
@@ -52,6 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="10dp"
+            android:includeFontPadding="false"
             android:gravity="center_horizontal"
             android:typeface="normal"
             tools:text="Man Speaking3" />
@@ -61,6 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="10dp"
+            android:includeFontPadding="false"
             android:gravity="center_horizontal"
             android:typeface="normal"
             tools:text="Man Speaking4" />
@@ -71,6 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="65dp"
             android:elevation="10dp"
+            android:includeFontPadding="false"
             android:gravity="center_horizontal"
             android:typeface="normal"
             tools:text="Man Speaking5" />

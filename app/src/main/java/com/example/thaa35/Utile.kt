@@ -6,6 +6,7 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.GradientDrawable
+import android.util.Log
 import android.view.View
 import android.view.animation.*
 import android.widget.TextView
@@ -32,6 +33,7 @@ class Utile(val context: Context) {
     var pointRightDown=Point((wight / 2).toInt(), hight.toInt())
     var pointLeftUp=Point((-wight / 2).toInt(), -hight.toInt())
     var pointRightUp=Point((wight / 2).toInt(), -hight.toInt())
+
     var listener1: ((item: Int, myTime: Long) -> Unit)? = null
 
     var pointX=true
@@ -131,7 +133,8 @@ class Utile(val context: Context) {
         }
 
         tv.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, talker.textSize)
-        tv.typeface = helper.getTypeFace(1)
+        val font=pref.getFonts()
+        tv.typeface = helper.getTypeFace(font)
         tv.setPadding(talker.padding[0], talker.padding[1], talker.padding[2], talker.padding[3])
         //   tv.setPadding(40, 40, 40, 40)
         tv.text = st.trim()
@@ -797,6 +800,9 @@ class Utile(val context: Context) {
                 for (index in 0 until linesNum) {
                     arr[index]?.let {
                         item_scale_swing(index + 1, it, dur, swingRepeat)
+                        if (index==linesNum-1){
+                            Log.d("clima","get to the end")
+                        }
                     }
                 }
             }

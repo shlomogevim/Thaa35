@@ -13,6 +13,7 @@ import com.example.thaa35.Const.Companion.ANIM4
 import com.example.thaa35.Const.Companion.ASSEETS_FILE
 import com.example.thaa35.Const.Companion.CURRENT_PAGE
 import com.example.thaa35.Const.Companion.FILE_NUM
+import com.example.thaa35.Const.Companion.FONTS
 import com.example.thaa35.Const.Companion.LASTTALKER
 import com.example.thaa35.Const.Companion.LAST_PAGE
 import com.example.thaa35.Const.Companion.PREFS_NAME
@@ -37,14 +38,18 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
     fun saveAnim2(index: Int) {myPref.edit().putInt(ANIM2, index).apply()}
     fun saveAnim3(index: Int) {myPref.edit().putInt(ANIM3, index).apply()}
     fun saveAnim4(index: Int) {myPref.edit().putInt(ANIM4, index).apply()}
+    fun saveFonts(index: Int) {myPref.edit().putInt(FONTS, index).apply()}
     fun getAnim1(): Int = myPref.getInt(ANIM1, 0)
     fun getAnim2(): Int = myPref.getInt(ANIM2, 0)
     fun getAnim3(): Int = myPref.getInt(ANIM3, 0)
     fun getAnim4(): Int = myPref.getInt(ANIM4, 0)
+    fun getFonts(): Int = myPref.getInt(FONTS, 1)
 
     fun currentTalk():Talker{
         val list=getTalkingList(1)
-        val index=getCurrentPage()
+        var index=getCurrentPage()
+        if (list.size<=index) index=1
+        saveCurrentPage(index)
         return list[index]
     }
 
@@ -176,9 +181,7 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
 
     private fun improveString(st: String) = st.substring(1, st.length - 1)
 
-    fun deletAllData(){
-        myPref.edit().clear().commit()
-    }
+
 
 
     fun saveLastPage(index: Int) {myPref.edit().putInt(LAST_PAGE, index).apply()}

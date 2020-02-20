@@ -17,5 +17,7 @@ class Const {
         const val ANIM3="anim3"
         const val ANIM4="anim4"
 
+        const val FONTS="fonts"
+
     }
 }

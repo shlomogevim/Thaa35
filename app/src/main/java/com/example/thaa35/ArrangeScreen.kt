@@ -96,8 +96,10 @@ class ArrangeScreen(val context: Context) {
                 animationInAction.executeTalker()
             }
             8->enterNewPage()
-                10->talker=pref.getLastTalker().copy()
-            11 -> copySpecialTalker(1)
+            9->pref.saveFonts(interval)
+            10->talker=pref.getLastTalker().copy()
+            11 -> changePaddind(1,intv,talker)
+            12 -> changePaddind(2,intv,talker)
             15 -> talker.textSize = talker.textSize + intv
             16 -> talker.dur = talker.dur + intv
             19 -> changeTextColor(talker)
@@ -112,10 +114,31 @@ class ArrangeScreen(val context: Context) {
                 animationInAction.executeTalker()
             }
         }
-        if (position >9 && position<26) upgradeTalker(talker)
+        if (position >=9 && position<26) upgradeTalker(talker)
     }
 
-       private fun upgradeTalker(talker: Talker) {
+    private fun changePaddind (ind:Int,intV:Int,talker: Talker):Talker{
+        if (ind==1){
+            talker.padding[1]=talker.padding[1]+intV
+            talker.padding[3]=talker.padding[3]+intV
+        }else{
+            talker.padding[0]=talker.padding[0]+intV
+            talker.padding[2]=talker.padding[2]+intV
+        }
+        /*if (talker.padding[1]<0) talker.padding[1]=0
+        if (talker.padding[2]<0) talker.padding[2]=0
+        if (talker.padding[3]<0) talker.padding[3]=0
+        if (talker.padding[4]<0) talker.padding[4]=0*/
+        return talker
+    }
+
+    private fun changeFonts(ind:Int) {
+        if (ind>=0 && ind<=6){
+            pref.saveFonts(ind)
+        }
+    }
+
+    private fun upgradeTalker(talker: Talker) {
         var bo = true
         if (talker.textSize < 3) {
             talker.textSize = 3f
@@ -410,10 +433,10 @@ class ArrangeScreen(val context: Context) {
             "-",
             "Start",
             "Page",
-            "-",
+            "Fonts",
             "Last Talker",
-            "CopyTalk1",
-            "-",
+            "Padding Ver",
+            "Padding Hor",
             "-",
             "-",
             "TextSize",

@@ -93,8 +93,10 @@ class AnimationInAction(val context: Context) {
         }
 
         tv.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, talker.textSize)
-        tv.typeface = helper.getTypeFace(1)
+        val font=pref.getFonts()
+        tv.typeface = helper.getTypeFace(font)
         tv.setPadding(talker.padding[0], talker.padding[1], talker.padding[2], talker.padding[3])
+     // tv.setPadding(0, -20, 0, -20)
      //   tv.setPadding(40, 40, 40, 40)
         tv.text = st.trim()
 

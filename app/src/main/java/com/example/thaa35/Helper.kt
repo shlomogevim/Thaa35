@@ -233,7 +233,13 @@ class Helper(val context: Context) {
             ind == 3 -> Typeface.createFromAsset(context.assets, "fonts/shmulik.ttf")
             ind == 4 -> Typeface.createFromAsset(context.assets, "fonts/stam.ttf")
             ind == 5 -> Typeface.createFromAsset(context.assets, "fonts/drug.ttf")
-            ind == 6 -> Typeface.createFromAsset(context.assets, "fonts/drug.ttf")
-            else -> Typeface.MONOSPACE
+            ind == 6 -> Typeface.createFromAsset(context.assets, "fonts/shofar.ttf")
+            ind == 7 -> Typeface.createFromAsset(context.assets, "fonts/adasim.ttf")
+            ind == 8 -> Typeface.createFromAsset(context.assets, "fonts/alef.ttf")
+            ind == 9 -> Typeface.createFromAsset(context.assets, "fonts/david.ttf")
+            ind == 10 -> Typeface.createFromAsset(context.assets, "fonts/frank.ttf")
+          //  ind == 11 -> Typeface.createFromAsset(context.assets, "fonts/ozrad.ttf")
+            ind == 12 -> Typeface.createFromAsset(context.assets, "fonts/simple.ttf")
+            else -> Typeface.SANS_SERIF
         }
 }

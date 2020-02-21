@@ -47,7 +47,7 @@ class ArrangeScreen(val context: Context) {
 
     private fun operateStyleLV() {
         activity.style_ListView.setOnItemClickListener { _, _, position, _ ->
-            val currentTalker = pref.currentTalk()
+            val currentTalker = pref.currentTalker()
             if (position == 16) {     // ther is NB
                 currentTalker.backExist = false
             } else {
@@ -77,7 +77,7 @@ class ArrangeScreen(val context: Context) {
         createAnimLV()
 
         activity.action_ListView.setOnItemClickListener { _, _, position, _ ->
-            var talker=pref.currentTalk()
+            var talker=pref.currentTalker()
             talker.animNum = actionList[position].toInt()
             upgradeTalker(talker)
         }
@@ -85,7 +85,7 @@ class ArrangeScreen(val context: Context) {
 
     private fun translaePara(position: Int) {
 
-        var talker = pref.currentTalk()
+        var talker = pref.currentTalker()
         val s = activity.plusAndMinusBtn.text
         val intv = if (s == "+") interval else -interval
 
@@ -163,7 +163,7 @@ class ArrangeScreen(val context: Context) {
     }
 
     fun copySpecialTalker(modelNum: Int) {
-        val talker=pref.currentTalk()
+        val talker=pref.currentTalker()
         val spicalTalkList = arrayListOf(
             Talker(
                 numTalker = 1, styleNum = 411, animNum = 61, textSize = 288f, dur = 3000
@@ -242,7 +242,7 @@ class ArrangeScreen(val context: Context) {
     }
 
     private fun updateLastTalker(ind: Int) {
-        var talker=pref.currentTalk()
+        var talker=pref.currentTalker()
         with(pref) {
             if (ind == 0) saveLastTalker(talker)
             else {

@@ -23,10 +23,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun enterData(){
+      //  updaeList()
    //    pref.saveCurrentPage(1)
 //        val currentPage=pref.getCurrentPage()
 //        talkList[currentPage].animNum=1000
 //        pref.saveTalkingListInPref(talkList)
+    }
+
+    private fun updaeList() {
+        var list=pref.getTalkingList(1)
+        for (index in 0..list.size-1){
+            with (list[index]){
+                padding[0]=0
+                padding[1]=0
+                padding[2]=0
+                padding[3]=0
+            }
+        }
+        pref.saveTalkingList(list)
     }
 
     private fun initAll() {
@@ -50,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         arrangeScreen.setLayoutShowMode()
         arrangeScreen.operateListView()
         buttonSpace.setShowPositionMode()
-        var talker=pref.currentTalk()
+        var talker=pref.currentTalker()
         pref.saveLastTalker(talker)
     }
 

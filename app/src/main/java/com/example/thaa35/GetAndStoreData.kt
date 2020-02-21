@@ -45,7 +45,7 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
     fun getAnim4(): Int = myPref.getInt(ANIM4, 0)
     fun getFonts(): Int = myPref.getInt(FONTS, 1)
 
-    fun currentTalk():Talker{
+    fun currentTalker():Talker{
         val list=getTalkingList(1)
         var index=getCurrentPage()
         if (list.size<=index) index=1

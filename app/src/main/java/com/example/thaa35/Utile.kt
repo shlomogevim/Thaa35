@@ -36,8 +36,15 @@ class Utile(val context: Context) {
 
     var listener1: ((item: Int, myTime: Long) -> Unit)? = null
 
+
     var pointX=true
 
+   /* fun currentTalker():Talker{
+        val list=pref.getTalkingList(1)
+        list[1].whoSpeake="man"
+        val index=pref.getCurrentPage()
+        return list[index]
+    }*/
    fun individualLetter1200(index:Int,talker: Talker) {
 
         val strArray=talker.taking.toCharArray()
@@ -46,7 +53,7 @@ class Utile(val context: Context) {
             activity.mainLayout.addView(tv)
             tv=setStyleToTheLetter(tv,letter.toString(),talker)
             tv.visibility=View.INVISIBLE
-            setParameters(talker,tv,letter)
+            setParameters(tv)
             startLettrAnim(index,tv,talker)
         }
     }
@@ -142,7 +149,7 @@ class Utile(val context: Context) {
         return tv
     }
 
-    private fun setParameters(talker: Talker,tv:TextView,letter:Char) {
+    private fun setParameters(tv:TextView) {
 
         tv.id=android.view.View.generateViewId()
         val set = androidx.constraintlayout.widget.ConstraintSet()
@@ -447,16 +454,16 @@ class Utile(val context: Context) {
     }
 
 
-    fun moveSwingNew(selector: Int, talker: Talker, arr: ArrayList<TextView?>) {
+    fun moveSwingNew( talker: Talker, arr: ArrayList<TextView?>) {
         val linesNum = talker.takingArray.size
         for (index in 1..linesNum) {
-            itemMoveSwingNew(selector, talker, index, arr[index - 1]!!)
+            itemMoveSwingNew( talker, index, arr[index - 1]!!)
         }
     }
 
-    private fun itemMoveSwingNew(selector: Int, talker: Talker, ind: Int, textView: TextView) {
+    private fun itemMoveSwingNew( talker: Talker, ind: Int, textView: TextView) {
 
-        var arr = arrayOf<Float>()
+        var arr: Array<Float>
         textView.visibility = View.VISIBLE
         textView.scaleX = 1f
         textView.scaleY = 1f
@@ -522,7 +529,7 @@ class Utile(val context: Context) {
         }
     }
 
-    fun item_scale_swing(ind: Int, textView: TextView, dur: Long, rep: Int) {
+    fun item_scale_swing( textView: TextView, dur: Long, rep: Int) {
 
         if (rep == 0) {
             ViewAnimator
@@ -532,7 +539,7 @@ class Utile(val context: Context) {
                 .start()
                 .onStop {
                     end = System.currentTimeMillis() - start
-                    listener1?.invoke(ind, end)
+                   // listener1?.invoke(ind, end)
                 }
         } else {
             ViewAnimator
@@ -545,7 +552,7 @@ class Utile(val context: Context) {
                 .start()
                 .onStop {
                     end = System.currentTimeMillis() - start
-                    listener1?.invoke(ind, end)
+                //    listener1?.invoke(ind, end)
                 }
 
         }
@@ -600,7 +607,7 @@ class Utile(val context: Context) {
     }
 
     fun item_move_swing100(talker: Talker, ind: Int, textView: TextView, dur: Long, rep: Int) {
-        var arr = arrayOf<Float>()
+        var arr: Array<Float>
         textView.visibility = View.VISIBLE
         // textView.setBackgroundColor(Color.GREEN)
         textView.scaleX = 1f
@@ -799,9 +806,9 @@ class Utile(val context: Context) {
             if (selector == 20) {
                 for (index in 0 until linesNum) {
                     arr[index]?.let {
-                        item_scale_swing(index + 1, it, dur, swingRepeat)
+                        item_scale_swing( it, dur, swingRepeat)
                         if (index==linesNum-1){
-                            Log.d("clima","get to the end")
+                            Log.d("clima","get to the end of amim 20")
                         }
                     }
                 }
@@ -812,10 +819,10 @@ class Utile(val context: Context) {
                     arr[index - 1]?.let {
                         if (index == 1) {
                             // item_scale(index, it, dur)
-                            item_scale_swing(index, it, dur, 0)
+                            item_scale_swing( it, dur, 0)
 
                         } else {
-                            item_scale_swing(index, it, dur, swingRepeat)
+                            item_scale_swing( it, dur, swingRepeat)
 
                         }
                     }
@@ -826,9 +833,9 @@ class Utile(val context: Context) {
                     arr[index - 1]?.let {
                         if (index <= 2) {
                             //item_scale(index, it, dur)
-                            item_scale_swing(index, it, dur, 0)
+                            item_scale_swing( it, dur, 0)
                         } else {
-                            item_scale_swing(index, it, dur, swingRepeat)
+                            item_scale_swing( it, dur, swingRepeat)
 
                         }
                     }
@@ -839,9 +846,9 @@ class Utile(val context: Context) {
                     arr[index - 1]?.let {
                         if (index <= 3) {
                             //  item_scale(index, it, dur)
-                            item_scale_swing(index, it, dur, 0)
+                            item_scale_swing( it, dur, 0)
                         } else {
-                            item_scale_swing(index, it, dur, swingRepeat)
+                            item_scale_swing( it, dur, swingRepeat)
                         }
                     }
                 }
@@ -851,9 +858,9 @@ class Utile(val context: Context) {
                     arr[index - 1]?.let {
                         if (index <= 4) {
                             // item_scale(index, it, dur)
-                            item_scale_swing(index, it, dur, 0)
+                            item_scale_swing( it, dur, 0)
                         } else {
-                            item_scale_swing(index, it, dur, swingRepeat)
+                            item_scale_swing( it, dur, swingRepeat)
 
                         }
                     }
@@ -864,9 +871,9 @@ class Utile(val context: Context) {
                     arr[index - 1]?.let {
                         if (index <= 5) {
                             //  item_scale(index, it, dur)
-                            item_scale_swing(index, it, dur, 0)
+                            item_scale_swing( it, dur, 0)
                         } else {
-                            item_scale_swing(index, it, dur, swingRepeat)
+                            item_scale_swing( it, dur, swingRepeat)
 
                         }
                     }
@@ -875,6 +882,101 @@ class Utile(val context: Context) {
         }
     }
 
+    fun scaleSwing(selector: Int, talker: Talker, arr: ArrayList<TextView?>):Boolean {
+        var itFinish=false
+        var talker1=pref.currentTalker()
+        start = System.currentTimeMillis()
+        with(talker1) {
+            val linesNum = takingArray.size
+            if (selector != 20 && swingRepeat < 1) swingRepeat = 1
+            /*with(pref.currentTalker()){
+                val st="numTalking->$numTalker  taking=>$taking"
+                Log.i("clima",st)
+            }*/
+
+            if (selector == 20) {
+                for (index in 0 until linesNum) {
+                    arr[index]?.let {
+
+                        item_scale_swing( it, dur, swingRepeat)
+
+                        /*with(pref.currentTalker()){
+   // val st="numTalking->$numTalker  taking=>$taking it->$it talkingArray->$takingArray"
+    val st="1->$takingArray[0] 2->$takingArray[1]"
+                            Log.i("clima",st)
+                       }*/
+                    }
+                }
+            }
+
+            if (selector == 21) {
+                for (index in 1..linesNum) {
+                    arr[index - 1]?.let {
+                        if (index == 1) {
+                            // item_scale(index, it, dur)
+                            item_scale_swing( it, dur, 0)
+
+                        } else {
+                            item_scale_swing( it, dur, swingRepeat)
+
+                        }
+                    }
+                }
+            }
+            if (selector == 22) {
+                for (index in 1..linesNum) {
+                    arr[index - 1]?.let {
+                        if (index <= 2) {
+                            //item_scale(index, it, dur)
+                            item_scale_swing( it, dur, 0)
+                        } else {
+                            item_scale_swing( it, dur, swingRepeat)
+
+                        }
+                    }
+                }
+            }
+            if (selector == 23) {
+                for (index in 1..linesNum) {
+                    arr[index - 1]?.let {
+                        if (index <= 3) {
+                            //  item_scale(index, it, dur)
+                            item_scale_swing( it, dur, 0)
+                        } else {
+                            item_scale_swing( it, dur, swingRepeat)
+                        }
+                    }
+                }
+            }
+            if (selector == 24) {
+                for (index in 1..linesNum) {
+                    arr[index - 1]?.let {
+                        if (index <= 4) {
+                            // item_scale(index, it, dur)
+                            item_scale_swing( it, dur, 0)
+                        } else {
+                            item_scale_swing( it, dur, swingRepeat)
+
+                        }
+                    }
+                }
+            }
+            if (selector == 25) {
+                for (index in 1..linesNum) {
+                    arr[index - 1]?.let {
+                        if (index <= 5) {
+                            //  item_scale(index, it, dur)
+                            item_scale_swing( it, dur, 0)
+                        } else {
+                            item_scale_swing( it, dur, swingRepeat)
+
+                        }
+                    }
+                }
+            }
+        }
+        return itFinish
+    }
     fun move_scale(selector: Int, arr: ArrayList<TextView?>, dur: Long) {
         start = System.currentTimeMillis()
         if (selector == 30) {
@@ -1020,7 +1122,7 @@ class Utile(val context: Context) {
                             item_move_scale_rotate(index, it, talker)
                         } else {
                             if (swingRepeat < 1) swingRepeat = 1
-                            item_scale_swing(index, it, dur, swingRepeat)
+                            item_scale_swing( it, dur, swingRepeat)
                         }
                     }
                 }
@@ -1469,9 +1571,9 @@ class Utile(val context: Context) {
         ViewAnimator.animate(textView).scale(0f, 1f).duration(dur).start()
     }
 
-    fun creatPoints() {
+    /*fun creatPoints() {
         val leftTop = Point((-wi / 2).toInt(), (-hi).toInt())
-    }
+    }*/
 
     fun getCordinateAndSpine(ind: Int): Array<Float> {
         var x01 = 0f

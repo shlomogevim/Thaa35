@@ -5,8 +5,8 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.util.Log
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.github.florent37.viewanimator.ViewAnimator
@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.helper_view_layout.*
 import kotlinx.android.synthetic.main.man_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -96,16 +95,29 @@ class AnimationInAction(val context: Context) {
         val font=pref.getFonts()
         tv.typeface = helper.getTypeFace(font)
         tv.setPadding(talker.padding[0], talker.padding[1], talker.padding[2], talker.padding[3])
-     // tv.setPadding(0, -20, 0, -20)
+     // tv.setPadding(10, 0, 10, 0)
      //   tv.setPadding(40, 40, 40, 40)
-        tv.text = st.trim()
+        //tv.text = st.trim()
+      //  tv.text = "קקקק"
+
+        tv.text = st
+        val st=st.trim()
+        Log.d("clima","st->$st")
 
         return tv
     }
 
+    fun currentPage(): Int {
+        var cu = pref.getCurrentPage()
+        if (cu < 1 || cu >= talkList.size) {
+            cu = 1
+            pref.saveCurrentPage(cu)
+        }
+        return cu
+    }
     private fun updateTitleTalkerSituation() {
         if (showPosition) return
-        val talker = pref.currentTalk()
+        val talker = pref.currentTalker()
         val index = pref.getCurrentPage()
         with(talker) {
             val newTalkerDetails =
@@ -117,6 +129,11 @@ class AnimationInAction(val context: Context) {
         }
     }
     fun executeTalker( ) {
+       /* with(pref.currentTalker()){
+            val st="numTalking->$numTalker  taking=>$taking"
+            Log.i("clima",st)
+        }
+*/
         showPosition=pref.getShowPosition()
         updateTitleTalkerSituation()
        val talker=talkC()
@@ -143,9 +160,7 @@ class AnimationInAction(val context: Context) {
             listOfTextviewMul2.removeAll(Collections.singleton(null))
 
         }
-
         letsMove(talker, listOfTextview, listOfTextviewMul, listOfTextviewMul2)
-
     }
 
     private fun activateHowSpeaking(talker: Talker) {
@@ -171,14 +186,6 @@ class AnimationInAction(val context: Context) {
             activity.god_speaking_iv.visibility = View.INVISIBLE
             activity.man_speaking_iv.visibility = View.INVISIBLE
         }
-    }
-    fun currentPage(): Int {
-        var cu = pref.getCurrentPage()
-        if (cu < 1 || cu >= talkList.size) {
-            cu = 1
-            pref.saveCurrentPage(cu)
-        }
-        return cu
     }
 
     private fun letsMove(
@@ -219,6 +226,11 @@ class AnimationInAction(val context: Context) {
 
 
     private fun simpleAnim(talker: Talker, listOfTextview: ArrayList<TextView?>, listOfTextviewM: ArrayList<TextView?>, listOfTextviewM2: ArrayList<TextView?>) {
+       /* with(pref.currentTalker()){
+            val st="numTalking->$numTalker  taking=>$taking"
+            Log.i("clima",st)
+        }*/
+
         when (talker.animNum) {
             10 -> utile.move_swing(10, talker, listOfTextview)
             11 -> utile.move_swing(11, talker, listOfTextview)
@@ -227,7 +239,7 @@ class AnimationInAction(val context: Context) {
             14 -> utile.move_swing(14, talker, listOfTextview)
             15 -> utile.move_swing(15, talker, listOfTextview)
 
-            20 -> utile.scale_swing(20, talker, listOfTextview)
+            20 -> utile.scaleSwing(20, talker, listOfTextview)
             21 -> utile.scale_swing(21, talker, listOfTextview)
             22 -> utile.scale_swing(22, talker, listOfTextview)
             23 -> utile.scale_swing(23, talker, listOfTextview)

@@ -121,15 +121,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
         val index = pref.getCurrentPage()
         val size = list[index].takingArray.size
 
-        utile.listener1 = { it1, _ ->
-            Log.d("clima", "Hii num->$it1  and size=$size")
-            if (size == 1 || it1 == size) {
-                //buttonActivation(1)
-                activity.fab.isClickable = true
-                activity.fab1.isClickable = true
-                animationInActionSign(0, 1000)
-            }
-        }
+
     }
 
     fun drawAnim() {
@@ -427,14 +419,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
         letsPlay(view)
 
         val size = pref.getLastTalker().takingArray.size
-        utile.listener1 = { it1, _ ->
-            // Log.d("clima", "Hii num->$it1 and time->$it2 and size=$size")
-            if (size == 1 || it1 == size) {
-                time("onClickB114")
-                buttonActivation(1)
-                animationInActionSign(0, 1000)
-            }
-        }
+
     }
 
     fun getCurrentPage(): Int {

@@ -14,7 +14,7 @@ import com.github.florent37.viewanimator.ViewAnimator
 import kotlinx.android.synthetic.main.activity_main.*
 
 //object Utile {
-class Utile(val context: Context) {
+class Utile1(val context: Context) {
 
     val activity = context as Activity
     private val pref = GetAndStoreData(context)
@@ -34,18 +34,31 @@ class Utile(val context: Context) {
     var pointLeftUp=Point((-wight / 2).toInt(), -hight.toInt())
     var pointRightUp=Point((wight / 2).toInt(), -hight.toInt())
 
-  // var listener1: ((item: Int, myTime: Long) -> Unit)? = null
-
-
     var pointX=true
 
-   /* fun currentTalker():Talker{
-        val list=pref.getTalkingList(1)
-        list[1].whoSpeake="man"
-        val index=pref.getCurrentPage()
-        return list[index]
-    }*/
-   fun individualLetter1200(index:Int,talker: Talker) {
+
+     fun activateAnimation20(textViewList: ArrayList<TextView>) {
+         var talker=pref.currentTalker()
+         for (index in 0 until textViewList.size){
+             textViewList[index]?.let {
+                 itemScale(it,talker.dur)
+             }
+         }
+
+    }
+
+    private fun itemScale(view: TextView,dur:Long) {
+        view.visibility=View.VISIBLE
+        ViewAnimator
+            .animate(view)
+            .alpha(0f,1f)
+            .scale(0f,1f)
+            .duration(dur)
+            .start()
+    }
+
+
+    fun individualLetter1200(index:Int,talker: Talker) {
 
         val strArray=talker.taking.toCharArray()
         strArray.forEach { letter->

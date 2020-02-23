@@ -1,82 +1,166 @@
 package com.example.thaa35
 
-import android.animation.AnimatorInflater
 import android.app.Activity
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.view.Gravity
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
-import com.github.florent37.viewanimator.ViewAnimator
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.god_layout.*
-import kotlinx.android.synthetic.main.helper_view_layout.*
-import kotlinx.android.synthetic.main.man_layout.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.launch
-import java.util.*
 
-class AnimationInAction(val context: Context) {
+class AnimationInAction2(val context: Context) {
     val activity = context as Activity
     val pref = GetAndStoreData(context)
-    var showPosition = pref.getShowPosition()
-    val talkList = pref.getTalkingList(1)
     val utile = Utile(context)
-
-
+    val utile1 = Utile1(context)
     private val helper = Helper(context)
-    private var tv0: TextView? = null
-    private var tv0A: TextView? = null
-    private var tv2A: TextView? = null
-    private var tv1: TextView? = null
-    private var tv2: TextView? = null
-    private var tv3: TextView? = null
-    private var tv4: TextView? = null
-    private var tv5: TextView? = null
+    val wight = Resources.getSystem().displayMetrics.widthPixels
+    val hight = Resources.getSystem().displayMetrics.heightPixels
+    var margeArray = ArrayList<Int>()
 
-    private var man0: TextView = activity.manSpeaking0
-    private var man1: TextView = activity.manSpeaking1
-    private var man2: TextView = activity.manSpeaking2
-    private var man3: TextView = activity.manSpeaking3
-    private var man4: TextView = activity.manSpeaking4
-    private var man5: TextView = activity.manSpeaking5
-    private var god0: TextView = activity.godSpeaking0
-    private var god0A: TextView = activity.godSpeaking0A
-    private var god2A: TextView = activity.godSpeaking2A
-    private var god1: TextView = activity.godSpeaking1
-    private var god2: TextView = activity.godSpeaking2
-    private var god3: TextView = activity.godSpeaking3
-    private var god4: TextView = activity.godSpeaking4
-    private var god5: TextView = activity.godSpeaking5
+    init {
+        margeArray = arrayListOf(70, 100, 130, 160, 190, 220)
+    }
 
-    var listOfTextview = arrayListOf<TextView?>()
-    var listOfTextviewMul = arrayListOf<TextView?>()
-    var listOfTextviewMul2 = arrayListOf<TextView?>()
+    fun executeTalker2() {
 
-    fun talkC(): Talker {
-        val list = pref.getTalkingList(1)
-        list[1].whoSpeake = "man"
-        val index = currentPage()
-        return list[index]
+        pref.saveCurrentPage(2)
+
+        letsMove2()
+
+    }
+
+    private fun letsMove2() {
+        var talker = pref.currentTalker()
+        if (talker.whoSpeake == "man") {
+            createAnimationNum20()
+        } else {
+            createAnimationNum20God()
+        }
+
+
+    }
+
+    private fun createAnimationNum20God() {
+        val textViewList = ArrayList<TextView>()
+        var talker = pref.currentTalker()
+        var size = talker.takingArray.size
+        pref.saveMargin(40)
+        for (index in 0 until size) {
+            var tv = TextView(context)
+            activity.mainLayout.addView(tv)
+            tv.visibility = View.INVISIBLE
+            tv = setShape(tv)
+            val st = talker.takingArray[index]
+            tv.text = st.trim()
+            setParameters(talker, tv, index)
+            textViewList.add(tv)
+        }
+        utile1.activateAnimation20(textViewList)
+    }
+
+    fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
+
+    private fun createAnimationNum20() {
+        val textViewList = ArrayList<TextView>()
+        var talker = pref.currentTalker()
+        var size = talker.takingArray.size
+        pref.saveMargin(70)
+        for (index in size - 1 downTo 0) {
+            var tv = TextView(context)
+            activity.mainLayout.addView(tv)
+            tv.visibility = View.INVISIBLE
+            tv = setShape(tv)
+            val st = talker.takingArray[index]
+            tv.text = st.trim()
+            setParameters(talker, tv, index)
+            textViewList.add(tv)
+        }
+        utile1.activateAnimation20(textViewList)
+    }
+
+    private fun setParameters(talker: Talker, tv: TextView, index: Int) {
+        var margin = pref.getMargin()
+        tv.id = android.view.View.generateViewId()
+        val set = androidx.constraintlayout.widget.ConstraintSet()
+        set.clone(activity.mainLayout)
+        if (talker.whoSpeake == "mam") {
+            set.connect(
+                tv.id,
+                androidx.constraintlayout.widget.ConstraintSet.BOTTOM,
+                androidx.constraintlayout.widget.ConstraintSet.PARENT_ID,
+                androidx.constraintlayout.widget.ConstraintSet.BOTTOM, margin.toPx()
+            )
+        } else {
+            set.connect(
+                tv.id,
+                androidx.constraintlayout.widget.ConstraintSet.TOP,
+                androidx.constraintlayout.widget.ConstraintSet.PARENT_ID,
+                androidx.constraintlayout.widget.ConstraintSet.TOP, margin.toPx()
+            )
+        }
+        set.connect(
+            tv.id,
+            androidx.constraintlayout.widget.ConstraintSet.END,
+            androidx.constraintlayout.widget.ConstraintSet.PARENT_ID,
+            androidx.constraintlayout.widget.ConstraintSet.END
+        )
+        set.connect(
+            tv.id,
+            androidx.constraintlayout.widget.ConstraintSet.START,
+            androidx.constraintlayout.widget.ConstraintSet.PARENT_ID,
+            androidx.constraintlayout.widget.ConstraintSet.START
+        )
+        set.applyTo(activity.mainLayout)
+        if (index < talker.takingArray.size-1) {
+            if (talker.whoSpeake=="man") {
+                updateMarginMan(talker, tv, index)
+            }else{
+                updateMarginGod(talker, tv, index)
+            }
+        }
     }
 
 
-    private fun styleTextViewTalk(tv: TextView, st: String, talker: Talker): TextView {
-       // tv.clearAnimation()
+    private fun updateMarginMan(talker: Talker, tv: TextView, index: Int) {
+        var interval = 30
+        var interval1 = 0
+        var textSize = talker.textSize
+        var st = tv.text.toString()
+        var count = st.length
+        val space = (count * textSize).toInt().toPx()
+        if (space > wight) {
+            val dif = space / wight - 1
+                interval1 = dif * 34
+        }
+        val oldMargin = pref.getMargin()
+        val newMargin = oldMargin + interval + interval1
+        pref.saveMargin(newMargin)
+    }
+    private fun updateMarginGod(talker: Talker, tv: TextView, index: Int) {
+        var interval = 0
+        var interval1 = 0
+            interval= 32
+        var textSize = talker.textSize
+        var st = tv.text.toString()
+        var count = st.length
+        val space = (count * textSize).toInt().toPx()
+        if (space > wight) {
+            val dif = space / wight - 1
+                interval1 = dif * 34
+        }
+        val oldMargin = pref.getMargin()
+        val newMargin = oldMargin + interval + interval1
+        pref.saveMargin(newMargin)
+    }
+    private fun setShape(tv: TextView): TextView {
+        var talker = pref.currentTalker()
         val shape = GradientDrawable()
         shape.setCornerRadius(talker.radius)
-
-        if (talker.borderColor == "#000") {
-            shape.setStroke(0, Color.parseColor("#000000"))
-        } else {
-            shape.setStroke(20, Color.parseColor(talker.borderColor))
-        }
-        //shape.setStroke(20, Color.parseColor(talker.borderColor))
-
-
-
+        if (talker.borderColor == "#000") shape.setStroke(0, Color.parseColor("#000000"))
+        else shape.setStroke(20, Color.parseColor(talker.borderColor))
         if (talker.colorBack == "none" || !talker.backExist) {
             shape.setColor(Color.TRANSPARENT)
             shape.setStroke(20, Color.TRANSPARENT)
@@ -95,54 +179,180 @@ class AnimationInAction(val context: Context) {
         } catch (e: Exception) {
             tv.setTextColor(Color.parseColor("#ffffff"))
         }
-        tv.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, talker.textSize)
 
+        tv.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, talker.textSize)
+        tv.gravity=Gravity.CENTER
         val font = pref.getFonts()
         tv.typeface = helper.getTypeFace(font)
-
         tv.setPadding(talker.padding[0], talker.padding[1], talker.padding[2], talker.padding[3])
-
-        // tv.setPadding(10, 0, 10, 0)
         //   tv.setPadding(40, 40, 40, 40)
-
-        tv.text = st.trim()
-
-
         return tv
     }
+}
 
-    fun currentPage(): Int {
-        var cu = pref.getCurrentPage()
-        if (cu < 1 || cu >= talkList.size) {
-            cu = 1
-            pref.saveCurrentPage(cu)
-        }
-        return cu
-    }
 
-    private fun updateTitleTalkerSituation() {
-        if (showPosition) return
-        val talker = pref.currentTalker()
-        val index = pref.getCurrentPage()
-        with(talker) {
-            val newTalkerDetails =
-                "l=${takingArray.size}*sty=$styleNum*anim=$animNum*size=${textSize.toInt()}" +
-                        "*bord=$borderWidth*dur=$dur sw=$swingRepeat"
-            activity.tvAnimatinKind.text = newTalkerDetails
-            activity.tvPage.text = index.toString()
-            //  numTalker = index
-        }
-    }
+/*
+  private fun setStyleToTextView(tv: TextView, st: String): TextView {
+  val shape = GradientDrawable()
+  shape.setCornerRadius(talker.radius)
+  if (talker.borderColor=="#000"){
+      shape.setStroke(0, Color.parseColor("#000000"))
+  }else {
+      shape.setStroke(20, Color.parseColor(talker.borderColor))
+  }
+  if (talker.colorBack == "none" || !talker.backExist) {
+      shape.setColor(Color.TRANSPARENT)
+      shape.setStroke(20, Color.TRANSPARENT)
+  } else {
+      try {
+          shape.setColor(Color.parseColor(talker.colorBack))
+          shape.setStroke(talker.borderWidth, Color.parseColor(talker.borderColor))
+      } catch (e: Exception) {
+          shape.setColor(Color.parseColor("#000000"))
+      }
+  }
+  tv.background = shape
 
-    fun executeTalker() {
-        /* with(pref.currentTalker()){
+  try {
+      tv.setTextColor(Color.parseColor(talker.colorText))
+  } catch (e: Exception) {
+      tv.setTextColor(Color.parseColor("#ffffff"))
+  }
+
+  tv.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, talker.textSize)
+  val font=pref.getFonts()
+  tv.typeface = helper.getTypeFace(font)
+  tv.setPadding(talker.padding[0], talker.padding[1], talker.padding[2], talker.padding[3])
+  //   tv.setPadding(40, 40, 40, 40)
+  tv.text = st.trim()
+
+  return tv
+}   */
+
+
+/*   val strArray=talker.taking.toCharArray()
+      strArray.forEach { letter->
+          var tv= TextView(context)
+          activity.mainLayout.addView(tv)
+          tv=setStyleToTheLetter(tv,letter.toString(),talker)
+          tv.visibility=View.INVISIBLE
+          setParameters(tv)
+          startLettrAnim(index,tv,talker)
+      }*/
+
+
+/*
+
+   val talkList = pref.getTalkingList(1)
+   private var tv0: TextView? = null
+   private var tv0A: TextView? = null
+   private var tv2A: TextView? = null
+   private var tv1: TextView? = null
+   private var tv2: TextView? = null
+   private var tv3: TextView? = null
+   private var tv4: TextView? = null
+   private var tv5: TextView? = null
+
+   private var man0: TextView = activity.manSpeaking0
+   private var man1: TextView = activity.manSpeaking1
+   private var man2: TextView = activity.manSpeaking2
+   private var man3: TextView = activity.manSpeaking3
+   private var man4: TextView = activity.manSpeaking4
+   private var man5: TextView = activity.manSpeaking5
+   private var god0: TextView = activity.godSpeaking0
+   private var god0A: TextView = activity.godSpeaking0A
+   private var god2A: TextView = activity.godSpeaking2A
+   private var god1: TextView = activity.godSpeaking1
+   private var god2: TextView = activity.godSpeaking2
+   private var god3: TextView = activity.godSpeaking3
+   private var god4: TextView = activity.godSpeaking4
+   private var god5: TextView = activity.godSpeaking5
+
+   var listOfTextview = arrayListOf<TextView?>()
+   var listOfTextviewMul = arrayListOf<TextView?>()
+   var listOfTextviewMul2 = arrayListOf<TextView?>()
+
+   private fun styleTextViewTalk(tv: TextView, st: String, talker: Talker): TextView {
+      // tv.clearAnimation()
+       val shape = GradientDrawable()
+       shape.setCornerRadius(talker.radius)
+
+       if (talker.borderColor == "#000") {
+           shape.setStroke(0, Color.parseColor("#000000"))
+       } else {
+           shape.setStroke(20, Color.parseColor(talker.borderColor))
+       }
+       //shape.setStroke(20, Color.parseColor(talker.borderColor))
+
+
+
+       if (talker.colorBack == "none" || !talker.backExist) {
+           shape.setColor(Color.TRANSPARENT)
+           shape.setStroke(20, Color.TRANSPARENT)
+       } else {
+           try {
+               shape.setColor(Color.parseColor(talker.colorBack))
+               shape.setStroke(talker.borderWidth, Color.parseColor(talker.borderColor))
+           } catch (e: Exception) {
+               shape.setColor(Color.parseColor("#000000"))
+           }
+       }
+       tv.background = shape
+
+       try {
+           tv.setTextColor(Color.parseColor(talker.colorText))
+       } catch (e: Exception) {
+           tv.setTextColor(Color.parseColor("#ffffff"))
+       }
+       tv.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, talker.textSize)
+
+       val font = pref.getFonts()
+       tv.typeface = helper.getTypeFace(font)
+
+       tv.setPadding(talker.padding[0], talker.padding[1], talker.padding[2], talker.padding[3])
+
+       // tv.setPadding(10, 0, 10, 0)
+       //   tv.setPadding(40, 40, 40, 40)
+
+       tv.text = st.trim()
+
+
+       return tv
+   }
+
+   fun currentPage(): Int {
+       var cu = pref.getCurrentPage()
+       if (cu < 1 || cu >= talkList.size) {
+           cu = 1
+           pref.saveCurrentPage(cu)
+       }
+       return cu
+   }
+
+   private fun updateTitleTalkerSituation() {
+       var showPosition = pref.getShowPosition()
+       if (showPosition) return
+       val talker = pref.currentTalker()
+       val index = pref.getCurrentPage()
+       with(talker) {
+           val newTalkerDetails =
+               "l=${takingArray.size}*sty=$styleNum*anim=$animNum*size=${textSize.toInt()}" +
+                       "*bord=$borderWidth*dur=$dur sw=$swingRepeat"
+           activity.tvAnimatinKind.text = newTalkerDetails
+           activity.tvPage.text = index.toString()
+           //  numTalker = index
+       }
+   }
+
+   fun executeTalker() {
+       *//* with(pref.currentTalker()){
              val st="numTalking->$numTalker  taking=>$taking"
              Log.i("clima",st)
          }
- */
-        showPosition = pref.getShowPosition()
+ *//*
+        var showPosition = pref.getShowPosition()
         updateTitleTalkerSituation()
-        val talker = talkC()
+        val talker = pref.currentTalker()
         activateHowSpeaking(talker)
         if (talker.whoSpeake == "man") {
             configManTextView(talker)
@@ -171,7 +381,7 @@ class AnimationInAction(val context: Context) {
 
     private fun activateHowSpeaking(talker: Talker) {
         val anim = AnimatorInflater.loadAnimator(context, R.animator.alpha)
-
+ var showPosition = pref.getShowPosition()
         if (showPosition) {
             if (talker.whoSpeake == "man") {
                 activity.man_speaking_iv.visibility = View.VISIBLE
@@ -248,10 +458,10 @@ class AnimationInAction(val context: Context) {
         listOfTextviewM: ArrayList<TextView?>,
         listOfTextviewM2: ArrayList<TextView?>
     ) {
-        /* with(pref.currentTalker()){
+        *//* with(pref.currentTalker()){
              val st="numTalking->$numTalker  taking=>$taking"
              Log.i("clima",st)
-         }*/
+         }*//*
 
         when (talker.animNum) {
             10 -> utile.move_swing(10, talker, listOfTextview)
@@ -363,10 +573,10 @@ class AnimationInAction(val context: Context) {
     private fun configManTextView(talker: Talker) {
         initTextview()
         initManTextview(1)
-        /* val st = talker.taking
+        *//* val st = talker.taking
          val arr = st.split("\n")
          val size = talker.lines
- */
+ *//*
         val arr = talker.takingArray
         val size = arr.size
         if (size == 6) {
@@ -479,8 +689,8 @@ class AnimationInAction(val context: Context) {
             .duration(dur)
             .start()
     }
+*/
 
-}
 
 
 

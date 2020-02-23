@@ -16,6 +16,7 @@ import com.example.thaa35.Const.Companion.FILE_NUM
 import com.example.thaa35.Const.Companion.FONTS
 import com.example.thaa35.Const.Companion.LASTTALKER
 import com.example.thaa35.Const.Companion.LAST_PAGE
+import com.example.thaa35.Const.Companion.MARGIM
 import com.example.thaa35.Const.Companion.PREFS_NAME
 import com.example.thaa35.Const.Companion.SHOWPOSITION
 import com.example.thaa35.Const.Companion.TALKLIST
@@ -39,11 +40,13 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
     fun saveAnim3(index: Int) {myPref.edit().putInt(ANIM3, index).apply()}
     fun saveAnim4(index: Int) {myPref.edit().putInt(ANIM4, index).apply()}
     fun saveFonts(index: Int) {myPref.edit().putInt(FONTS, index).apply()}
+    fun saveMargin(index: Int) {myPref.edit().putInt(MARGIM, index).apply()}
     fun getAnim1(): Int = myPref.getInt(ANIM1, 0)
     fun getAnim2(): Int = myPref.getInt(ANIM2, 0)
     fun getAnim3(): Int = myPref.getInt(ANIM3, 0)
     fun getAnim4(): Int = myPref.getInt(ANIM4, 0)
     fun getFonts(): Int = myPref.getInt(FONTS, 1)
+    fun getMargin(): Int = myPref.getInt(MARGIM, 0)
 
     fun currentTalker():Talker{
         val list=getTalkingList(1)
@@ -135,18 +138,6 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
                             takingArray.add(item)
                         }
                     }
-
-                    backExist=true
-                    borderColor="#000000"
-                    borderWidth=0
-                    styleNum=50
-                    swingRepeat=0
-                    colorText = "#fdd835"
-                    colorBack = "#574339"
-                    textSize=28f
-                    animNum = 100
-                    dur=3000
-                    radius=25f
                 }
                 talkList1.add(talker)
                 countItem++

@@ -18,6 +18,7 @@ class Const {
         const val ANIM4="anim4"
 
         const val FONTS="fonts"
+        const val MARGIM="margin"
 
     }
 }

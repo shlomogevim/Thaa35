@@ -8,26 +8,37 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var animationInAction2: AnimationInAction2
     lateinit var pref: GetAndStoreData
+    lateinit var arrangeScreen: ArrangeScreen
+    lateinit var buttonSpace: ButtonSpace
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        pref = GetAndStoreData(this)
-        animationInAction2=AnimationInAction2(this)
+
         initAll()
-        enterData()
+
         animationInAction2.executeTalker2()
     }
 
     private fun initAll() {
+        pref = GetAndStoreData(this)
+        animationInAction2 = AnimationInAction2(this)
+        arrangeScreen = ArrangeScreen(this)
+        buttonSpace = ButtonSpace(this)
+
         var showPosition = false
         pref.saveShowPosition(showPosition)
 
         if (showPosition) showPositionBtn.text = "toTest"
-                    else showPositionBtn.text = "toShow"
+        else showPositionBtn.text = "toShow"
 
-    // var   talkList = pref.getTalkingList(1)
-      var  talkList = pref.getTalkingList(0)  // to Init all data
+        buttonSpace.initButton()
+        arrangeScreen.setLayoutShowMode()
+        arrangeScreen.operateListView()
+
+       //  var   talkList = pref.getTalkingList(1)
+        var talkList = pref.getTalkingList(0)  // to Init all data
+        pref.saveCurrentPage(3)
     }
 
     private fun enterData() {
@@ -36,6 +47,8 @@ class MainActivity : AppCompatActivity() {
 //        val currentPage=pref.getCurrentPage()
 //        talkList[currentPage].animNum=1000
 //        pref.saveTalkingListInPref(talkList)
+        enterData()
+
     }
 
     private fun updaeList() {

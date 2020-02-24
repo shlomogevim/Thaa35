@@ -23,19 +23,14 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
 
     private val activity = context as Activity
     private val pref = GetAndStoreData(context)
-    private var showPosition = pref.getShowPosition()
-    //private var talkList = pref.getTalkingListFromPref(1)
-    private val animationInAction = AnimationInAction(context)
-    private var statrTime: Long = 0
-    private var endTime = System.nanoTime()
-    private val utile = Utile(context)
+    var animationInAction2= AnimationInAction2(context)
 
     override fun onClick(view: View) {
         when (view.id) {
             R.id.textRevBtn -> readAgainTextFile()
             R.id.newPageBtn -> enterNewPage()
             R.id.showPositionBtn -> changeShowPosition()
-            R.id.toShowModeBtn -> animationInAction.executeTalker()
+            R.id.toShowModeBtn -> animationInAction2.executeTalker2()
             R.id.plusAndMinusBtn -> changePlusMinusMode()
             R.id.saveButton -> saveIt()
             R.id.nextButton -> nextIt()
@@ -71,14 +66,13 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
     }
 
     fun drawNewAnimation() {
-        if (!showPosition) updateTitleTalkerSituation()
         val page = pref.getCurrentPage()
         activity.tvPage.text = page.toString()
-        pref.currentTalker().numTalker = page
+       // pref.currentTalker().numTalker = page
        /* activity.fab.isClickable = false
         activity.fab1.isClickable = false
         animationInActionSign(1, 500)*/
-        animationInAction.executeTalker()
+        animationInAction2.executeTalker2()
       /*  CoroutineScope(Main).launch {
             waitTillAnimationEnd()
         }*/
@@ -125,16 +119,13 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
     }
 
     fun drawAnim() {
-        if (!showPosition) {
-            updateTitleTalkerSituation()
-        }
         val cu = getCurrentPage()
         activity.tvPage.text = cu.toString()
-        pref.currentTalker().numTalker = cu
-        animationInAction.executeTalker()
+        animationInAction2.executeTalker2()
     }
 
     private fun changeShowPosition() {
+        var showPosition=pref.getShowPosition()
         showPosition = !showPosition
         pref.saveShowPosition(showPosition)
         setShowPositionMode()
@@ -143,10 +134,11 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
         } else {
             activity.showPositionBtn.text = "toShow"
         }
-        animationInAction.executeTalker()
+        animationInAction2.executeTalker2()
     }
 
     fun setShowPositionMode() {
+        val showPosition=pref.getShowPosition()
         with(activity) {
             if (!showPosition) {
                 plusAndMinusBtn.text = "+"
@@ -334,9 +326,9 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
     }
 
     private fun time(st: String) {
-        endTime = System.nanoTime()
-        val interval = TimeUnit.MILLISECONDS.convert(endTime - statrTime, TimeUnit.NANOSECONDS)
-        Log.d("clima", st + " --> $interval ms")
+//        endTime = System.nanoTime()
+//        val interval = TimeUnit.MILLISECONDS.convert(endTime - statrTime, TimeUnit.NANOSECONDS)
+//        Log.d("clima", st + " --> $interval ms")
 
     }
 
@@ -347,7 +339,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
             R.id.textRevBtn -> readAgainTextFile()
             R.id.newPageBtn -> enterNewPage()
             R.id.showPositionBtn -> changeShowPosition()
-            R.id.toShowModeBtn -> animationInAction.executeTalker()
+            R.id.toShowModeBtn -> animationInAction2.executeTalker2()
             R.id.plusAndMinusBtn -> changePlusMinusMode()
             R.id.saveButton -> saveIt()
             R.id.nextButton -> nextIt()
@@ -391,36 +383,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
          time("let play 2")*/
     }
 
-    private fun onClickOther(view: View) {
-        val talkList = pref.getTalkingList(1)
 
-        var def = 0
-        if (view == activity.fab) {
-            def++
-        }
-        if (view == activity.fab1) {
-            def--
-        }
-
-        var counterStep = getCurrentPage() + def
-
-        if (counterStep < 1) counterStep = 1
-        if (counterStep == talkList.size) counterStep = 1
-        pref.saveCurrentPage(counterStep)
-
-        if (showPosition) {
-            time("onClickA113")
-            buttonActivation(0)
-
-        }
-
-        animationInActionSign(1, 1000)
-
-        letsPlay(view)
-
-        val size = pref.getLastTalker().takingArray.size
-
-    }
 
     fun getCurrentPage(): Int {
         val talkList = pref.getTalkingList(1)
@@ -451,51 +414,6 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
                 .duration(2000)
                 .start()
         }
-    }
-
-    @SuppressLint("RestrictedApi")
-    fun buttonActivation(ind: Int) {
-        time("buttonActivation 1 ind=$ind")
-
-        with(activity) {
-            if (ind == 0) {
-                if (showPosition) {
-                    fab.isClickable = false
-                    fab1.isClickable = false
-                    fabAnimation(0)
-                } else {
-                    textRevBtn.visibility = INVISIBLE
-                    newPageBtn.visibility = INVISIBLE
-                    toShowModeBtn.visibility = INVISIBLE
-                    plusAndMinusBtn.visibility = INVISIBLE
-                    showPositionBtn.visibility = INVISIBLE
-                    saveButton.visibility = INVISIBLE
-                    nextButton.visibility = INVISIBLE
-                    previousButton.visibility = INVISIBLE
-                    lastTalker_button.visibility = INVISIBLE
-                    reSizeTextBtn.visibility = INVISIBLE
-                }
-            }
-            if (ind == 1) {
-                if (showPosition) {
-                    fab.isClickable = true
-                    fab1.isClickable = true
-                    fabAnimation(1)
-                } else {
-                    textRevBtn.visibility = VISIBLE
-                    newPageBtn.visibility = VISIBLE
-                    toShowModeBtn.visibility = VISIBLE
-                    plusAndMinusBtn.visibility = VISIBLE
-                    showPositionBtn.visibility = VISIBLE
-                    saveButton.visibility = VISIBLE
-                    nextButton.visibility = VISIBLE
-                    previousButton.visibility = VISIBLE
-                    lastTalker_button.visibility = VISIBLE
-                    reSizeTextBtn.visibility = VISIBLE
-                }
-            }
-        }
-        time("buttonActivation 2 ind=$ind")
     }
 
     fun initButton() {

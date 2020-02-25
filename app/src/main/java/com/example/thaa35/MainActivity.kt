@@ -17,6 +17,8 @@ class MainActivity : AppCompatActivity() {
 
         initAll()
 
+        pref.saveCurrentPage(2)
+
         animationInAction2.executeTalker2()
     }
 
@@ -38,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
        //  var   talkList = pref.getTalkingList(1)
         var talkList = pref.getTalkingList(0)  // to Init all data
-        pref.saveCurrentPage(3)
+
     }
 
     private fun enterData() {

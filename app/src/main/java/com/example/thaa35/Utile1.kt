@@ -6,113 +6,143 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.GradientDrawable
-import android.util.Log
 import android.view.View
-import android.view.animation.*
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.BounceInterpolator
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.OvershootInterpolator
 import android.widget.TextView
 import com.github.florent37.viewanimator.ViewAnimator
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.delay
 
 //object Utile {
 class Utile1(val context: Context) {
 
     val activity = context as Activity
     private val pref = GetAndStoreData(context)
-    val helper=Helper(context)
+    val helper = Helper(context)
 
     val wight = Resources.getSystem().displayMetrics.widthPixels
     val hight = Resources.getSystem().displayMetrics.heightPixels
-    val wi=wight.toFloat()
-    val hi=hight.toFloat()
+    val wi = wight.toFloat()
+    val hi = hight.toFloat()
 
-  //  var wi=wi.toInt()
-  //  var hight1=hi.toInt()
+    //  var wi=wi.toInt()
+    //  var hight1=hi.toInt()
     var start = 0L
     var end = 0L
-    var pointLeftDown=Point((-wight / 2).toInt(), hight.toInt())
-    var pointRightDown=Point((wight / 2).toInt(), hight.toInt())
-    var pointLeftUp=Point((-wight / 2).toInt(), -hight.toInt())
-    var pointRightUp=Point((wight / 2).toInt(), -hight.toInt())
+    var pointLeftDown = Point((-wight / 2).toInt(), hight.toInt())
+    var pointRightDown = Point((wight / 2).toInt(), hight.toInt())
+    var pointLeftUp = Point((-wight / 2).toInt(), -hight.toInt())
+    var pointRightUp = Point((wight / 2).toInt(), -hight.toInt())
 
-    var pointX=true
+    var pointX = true
 
 
      fun activateAnimation20(textViewList: ArrayList<TextView>) {
-         var talker=pref.currentTalker()
-         for (index in 0 until textViewList.size){
-             textViewList[index]?.let {
-                 itemScale(it,talker.dur)
-             }
-         }
+        var talker = pref.currentTalker()
+        val startNum = textViewList.size - 1
+        if (talker.whoSpeake == "man") {
+            for (index in startNum downTo 0) {
+                itemScale(textViewList[index], talker.dur)
+                /*textViewList[index].let {
+                itemScale(it,talker.dur)
+            }*/
+            }
+        } else {
 
+            for (index in 0..startNum) {
+                itemScale(textViewList[index], talker.dur)
+                /*textViewList[index].let {
+                itemScale(it,talker.dur)
+            }*/
+            }
+        }
     }
 
-    private fun itemScale(view: TextView,dur:Long) {
-        view.visibility=View.VISIBLE
+    /* suspend fun activateAnimation20(textViewList: ArrayList<TextView>) {
+         var talker=pref.currentTalker()
+         for (index in 0 until textViewList.size){
+             delay(1000)
+             itemScale(textViewList[index],talker.dur)
+
+             *//*textViewList[index].let {
+
+                itemScale(it,talker.dur)
+            }*//*
+        }
+    }*/
+
+    private fun itemScale(view: TextView, dur: Long) {
+        view.visibility = View.VISIBLE
+
         ViewAnimator
             .animate(view)
-            .alpha(0f,1f)
-            .scale(0f,1f)
+            .alpha(0f, 1f)
+            .scale(0f, 1f)
             .duration(dur)
             .start()
     }
 
 
-    fun individualLetter1200(index:Int,talker: Talker) {
+    fun individualLetter1200(index: Int, talker: Talker) {
 
-        val strArray=talker.taking.toCharArray()
-        strArray.forEach { letter->
-            var tv= TextView(context)
+        val strArray = talker.taking.toCharArray()
+        strArray.forEach { letter ->
+            var tv = TextView(context)
             activity.mainLayout.addView(tv)
-            tv=setStyleToTheLetter(tv,letter.toString(),talker)
-            tv.visibility=View.INVISIBLE
+            tv = setStyleToTheLetter(tv, letter.toString(), talker)
+            tv.visibility = View.INVISIBLE
             setParameters(tv)
-            startLettrAnim(index,tv,talker)
+            startLettrAnim(index, tv, talker)
         }
     }
 
     fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
 
-    private fun startLettrAnim(index:Int,tv: TextView, talker: Talker){
+    private fun startLettrAnim(index: Int, tv: TextView, talker: Talker) {
 
-           tv.visibility=View.VISIBLE
-            val x1=(-wight..wight).random()
-            val y1=(-hight..hight).random()
-            val point1=Point(x1,y1)
-            val point2=Point(x1,y1)
-            if (pointX){
-                moveLetter(index,tv,point1,talker.dur)
-                pointX=false
-            }else{
-                moveLetter(index,tv,point2,talker.dur)
-                pointX=true
-            }
+        tv.visibility = View.VISIBLE
+        val x1 = (-wight..wight).random()
+        val y1 = (-hight..hight).random()
+        val point1 = Point(x1, y1)
+        val point2 = Point(x1, y1)
+        if (pointX) {
+            moveLetter(index, tv, point1, talker.dur)
+            pointX = false
+        } else {
+            moveLetter(index, tv, point2, talker.dur)
+            pointX = true
         }
-    private fun moveLetter(index: Int,textView:TextView,point:Point,dur:Long) {
-        when (index){
-            1200->moveLetter1200(textView,point,dur)
-            1201->moveLetter1201(textView,point,dur)
+    }
+
+    private fun moveLetter(index: Int, textView: TextView, point: Point, dur: Long) {
+        when (index) {
+            1200 -> moveLetter1200(textView, point, dur)
+            1201 -> moveLetter1201(textView, point, dur)
         }
     }
 
 
-        private fun moveLetter1200(textView:TextView,point:Point,dur:Long){
-                ViewAnimator
-                    .animate(textView)
-                    .scale(0f, 1f)
-                    .translationX(point.x.toFloat(), 0f)
-                    .translationY(point.y.toFloat(), 0f)
-                    .duration(dur)
-                    .thenAnimate(textView)
-                    .scale(1f,0f)
-                    .alpha(1f,0f)
-                    .duration(100)
-                    .start()
-            }
-    private fun moveLetter1201(textView:TextView,point:Point,dur:Long){
+    private fun moveLetter1200(textView: TextView, point: Point, dur: Long) {
         ViewAnimator
             .animate(textView)
-            .scale(0f, 1f,0f)
+            .scale(0f, 1f)
+            .translationX(point.x.toFloat(), 0f)
+            .translationY(point.y.toFloat(), 0f)
+            .duration(dur)
+            .thenAnimate(textView)
+            .scale(1f, 0f)
+            .alpha(1f, 0f)
+            .duration(100)
+            .start()
+    }
+
+    private fun moveLetter1201(textView: TextView, point: Point, dur: Long) {
+        ViewAnimator
+            .animate(textView)
+            .scale(0f, 1f, 0f)
             .translationX(point.x.toFloat(), 0f)
             .translationY(point.y.toFloat(), 0f)
             .duration(dur)
@@ -122,9 +152,9 @@ class Utile1(val context: Context) {
     private fun setStyleToTheLetter(tv: TextView, st: String, talker: Talker): TextView {
         val shape = GradientDrawable()
         shape.setCornerRadius(talker.radius)
-        if (talker.borderColor=="#000"){
+        if (talker.borderColor == "#000") {
             shape.setStroke(0, Color.parseColor("#000000"))
-        }else {
+        } else {
             shape.setStroke(20, Color.parseColor(talker.borderColor))
         }
         if (talker.colorBack == "none" || !talker.backExist) {
@@ -147,7 +177,7 @@ class Utile1(val context: Context) {
         }
 
         tv.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, talker.textSize)
-        val font=pref.getFonts()
+        val font = pref.getFonts()
         tv.typeface = helper.getTypeFace(font)
         tv.setPadding(talker.padding[0], talker.padding[1], talker.padding[2], talker.padding[3])
         //   tv.setPadding(40, 40, 40, 40)
@@ -156,50 +186,56 @@ class Utile1(val context: Context) {
         return tv
     }
 
-    private fun setParameters(tv:TextView) {
+    private fun setParameters(tv: TextView) {
 
-        tv.id=android.view.View.generateViewId()
+        tv.id = android.view.View.generateViewId()
         val set = androidx.constraintlayout.widget.ConstraintSet()
         set.clone(activity.mainLayout)
 
         set.connect(
-            tv.id, androidx.constraintlayout.widget.ConstraintSet.BOTTOM, androidx.constraintlayout.widget.ConstraintSet.PARENT_ID,
-            androidx.constraintlayout.widget.ConstraintSet.BOTTOM, (hight*0.86).toInt()
+            tv.id,
+            androidx.constraintlayout.widget.ConstraintSet.BOTTOM,
+            androidx.constraintlayout.widget.ConstraintSet.PARENT_ID,
+            androidx.constraintlayout.widget.ConstraintSet.BOTTOM,
+            (hight * 0.86).toInt()
         )
 
         set.connect(
-            tv.id, androidx.constraintlayout.widget.ConstraintSet.END, androidx.constraintlayout.widget.ConstraintSet.PARENT_ID,
-            androidx.constraintlayout.widget.ConstraintSet.END, wight/2
+            tv.id,
+            androidx.constraintlayout.widget.ConstraintSet.END,
+            androidx.constraintlayout.widget.ConstraintSet.PARENT_ID,
+            androidx.constraintlayout.widget.ConstraintSet.END,
+            wight / 2
         )
         set.applyTo(activity.mainLayout)
     }
 
 
-    fun moveScale100( talker: Talker, arr: ArrayList<TextView?>) {
-        if (talker.whoSpeake=="man") {
+    fun moveScale100(talker: Talker, arr: ArrayList<TextView?>) {
+        if (talker.whoSpeake == "man") {
             val linesNum = talker.takingArray.size
             for (index in 1..linesNum) {
                 itemMoveScaleMan(talker, index, arr[index - 1]!!)
             }
-        }else{
-            moveScale2000(talker,arr)
+        } else {
+            moveScale2000(talker, arr)
         }
     }
 
     private fun itemMoveScaleMan(talker: Talker, ind: Int, textView: TextView) {
-        val tv=initTextView(textView)
-        when (ind){
-            1-> basicMoveAndScale(tv, pointLeftUp, talker.dur)
-            2-> basicMoveAndScale(tv, pointRightUp, talker.dur)
-            3-> basicMoveAndScale(tv, pointLeftUp, talker.dur)
-            4-> basicMoveAndScale(tv, pointRightUp, talker.dur)
-            5-> basicMoveAndScale(tv, pointLeftUp, talker.dur)
-            6-> basicMoveAndScale(tv, pointRightUp, talker.dur)
+        val tv = initTextView(textView)
+        when (ind) {
+            1 -> basicMoveAndScale(tv, pointLeftUp, talker.dur)
+            2 -> basicMoveAndScale(tv, pointRightUp, talker.dur)
+            3 -> basicMoveAndScale(tv, pointLeftUp, talker.dur)
+            4 -> basicMoveAndScale(tv, pointRightUp, talker.dur)
+            5 -> basicMoveAndScale(tv, pointLeftUp, talker.dur)
+            6 -> basicMoveAndScale(tv, pointRightUp, talker.dur)
         }
     }
 
 
-    fun moveScale2000( talker: Talker, arr: ArrayList<TextView?>) {
+    fun moveScale2000(talker: Talker, arr: ArrayList<TextView?>) {
         val linesNum = talker.takingArray.size
         for (index in 1..linesNum) {
             itemMoveScale(talker, index, arr[index - 1]!!)
@@ -208,36 +244,63 @@ class Utile1(val context: Context) {
 
 
     private fun itemMoveScale(talker: Talker, ind: Int, textView: TextView) {
-        val tv=initTextView(textView)
-        when (ind){
-            1-> basicMoveAndScale(tv, pointLeftDown, talker.dur)
-            2-> basicMoveAndScale(tv, pointRightDown, talker.dur)
-            3-> basicMoveAndScale(tv, pointLeftDown, talker.dur)
-            4-> basicMoveAndScale(tv, pointRightDown, talker.dur)
-            5-> basicMoveAndScale(tv, pointLeftDown, talker.dur)
-            6-> basicMoveAndScale(tv, pointRightDown, talker.dur)
+        val tv = initTextView(textView)
+        when (ind) {
+            1 -> basicMoveAndScale(tv, pointLeftDown, talker.dur)
+            2 -> basicMoveAndScale(tv, pointRightDown, talker.dur)
+            3 -> basicMoveAndScale(tv, pointLeftDown, talker.dur)
+            4 -> basicMoveAndScale(tv, pointRightDown, talker.dur)
+            5 -> basicMoveAndScale(tv, pointLeftDown, talker.dur)
+            6 -> basicMoveAndScale(tv, pointRightDown, talker.dur)
         }
     }
 
-    private fun basicMoveAndScale(textView:TextView,point:Point,dur:Long){
-        var animNum=pref.getAnim1()
-        when (animNum){
-            0->{basicMoveAndScale0(textView,point,dur)}
-            1001->{basicMoveAndScale1001(textView,point,dur)}
-            1->{basicMoveAndScale1(textView,point,dur)}
-            2->{basicMoveAndScale2(textView,point,dur)}
-            3->{basicMoveAndScale3(textView,point,dur)}
-            4->{basicMoveAndScale4(textView,point,dur)}
-            5->{basicMoveAndScale5(textView,point,dur)}
-            6->{basicMoveAndScale6(textView,point,dur)}
-            7->{basicMoveAndScale7(textView,point,dur)}
-            8->{basicMoveAndScale8(textView,point,dur)}
-            9->{basicMoveAndScale9(textView,point,dur)}
-            10->{basicMoveAndScale10(textView,point,dur)}
-            11->{basicMoveAndScale11(textView,point,dur)}
+    private fun basicMoveAndScale(textView: TextView, point: Point, dur: Long) {
+        var animNum = pref.getAnim1()
+        when (animNum) {
+            0 -> {
+                basicMoveAndScale0(textView, point, dur)
+            }
+            1001 -> {
+                basicMoveAndScale1001(textView, point, dur)
+            }
+            1 -> {
+                basicMoveAndScale1(textView, point, dur)
+            }
+            2 -> {
+                basicMoveAndScale2(textView, point, dur)
+            }
+            3 -> {
+                basicMoveAndScale3(textView, point, dur)
+            }
+            4 -> {
+                basicMoveAndScale4(textView, point, dur)
+            }
+            5 -> {
+                basicMoveAndScale5(textView, point, dur)
+            }
+            6 -> {
+                basicMoveAndScale6(textView, point, dur)
+            }
+            7 -> {
+                basicMoveAndScale7(textView, point, dur)
+            }
+            8 -> {
+                basicMoveAndScale8(textView, point, dur)
+            }
+            9 -> {
+                basicMoveAndScale9(textView, point, dur)
+            }
+            10 -> {
+                basicMoveAndScale10(textView, point, dur)
+            }
+            11 -> {
+                basicMoveAndScale11(textView, point, dur)
+            }
         }
     }
-    private fun basicMoveAndScale0(textView:TextView,point:Point,dur:Long){
+
+    private fun basicMoveAndScale0(textView: TextView, point: Point, dur: Long) {
         ViewAnimator
             .animate(textView)
             .scale(0f, 1f)
@@ -246,134 +309,146 @@ class Utile1(val context: Context) {
             .duration(dur)
             .start()
     }
-        private fun basicMoveAndScale1001(textView:TextView,point:Point,dur:Long){
-            ViewAnimator
-                .animate(textView)
-                .scale(0f, 0.2f)
-                .translationX(point.x.toFloat(), point.x/2.toFloat())
-                .translationY(point.y.toFloat(), point.y/2.toFloat())
-                .duration(1000)
-                .thenAnimate(textView)
-                .scale(0.2f, 1f)
-                .translationX(point.x/2.toFloat(), 0f)
-                .translationY(point.y/2.toFloat(), 0f)
-                .duration(dur)
-                .start()
-        }
-        private fun basicMoveAndScale1(textView:TextView,point:Point,dur:Long){
-            ViewAnimator
-                .animate(textView)
-                .scale(0f, 1f)
-                .translationX(point.x.toFloat(), 0f)
-                .translationY(point.y.toFloat(), 0f)
-               .interpolator(AccelerateInterpolator(2f))
-                .duration(dur)
-                .start()
-        }
-        private fun basicMoveAndScale2(textView:TextView,point:Point,dur:Long){
-            ViewAnimator
-                .animate(textView)
-                .scale(0f, 1f)
-                .translationX(point.x.toFloat(), 0f)
-                .translationY(point.y.toFloat(), 0f)
-                 .interpolator(DecelerateInterpolator(2f))
-                .duration(dur)
-                .start()
-        }
-        private fun basicMoveAndScale3(textView:TextView,point:Point,dur:Long){
-            ViewAnimator
-                .animate(textView)
-                .scale(0f, 1f)
-                .translationX(point.x.toFloat(), 0f)
-                .translationY(point.y.toFloat(), 0f)
-                .interpolator(BounceInterpolator())
-                .duration(dur)
-                .start()
-        }
-        private fun basicMoveAndScale4(textView:TextView,point:Point,dur:Long){
-            ViewAnimator
-                .animate(textView)
-                .scale(0f, 1f)
-                .translationX(point.x.toFloat(), 0f)
-                .translationY(point.y.toFloat(), 0f)
-                .interpolator(OvershootInterpolator())
-                .duration(dur)
-                .start()
-        }
-        private fun basicMoveAndScale5(textView:TextView,point:Point,dur:Long){
-            ViewAnimator
-                .animate(textView)
-                .scale(0f, 1f)
-                .translationX(point.x.toFloat(), 0f)
-                .translationY(point.y.toFloat(), 0f)
-                 .swing()
-                .duration(dur)
-                .start()
-        }
-        private fun basicMoveAndScale6(textView:TextView,point:Point,dur:Long){
-            ViewAnimator
-                .animate(textView)
-                .scale(0f, 1f)
-                .translationX(point.x.toFloat(), 0f)
-                .translationY(point.y.toFloat(), 0f)
-                .duration(dur)
-                .thenAnimate(textView).swing()
-                .start()
-        }
-        private fun basicMoveAndScale7(textView:TextView,point:Point,dur:Long){
-            ViewAnimator
-                .animate(textView)
-                .scale(0f, 1f)
-                .translationX(point.x.toFloat(), 0f)
-                .translationY(point.y.toFloat(), 0f)
-                  .fall()
-                .duration(dur)
-                .start()
-        }
-        private fun basicMoveAndScale8(textView:TextView,point:Point,dur:Long){
-            ViewAnimator
-                .animate(textView)
-                .scale(0f, 1f)
-                .translationX(point.x.toFloat(), 0f)
-                .translationY(point.y.toFloat(), 0f)
-                 .rubber()
-                .duration(dur)
-                .start()
-        }
-        private fun basicMoveAndScale9(textView:TextView,point:Point,dur:Long){
-            ViewAnimator
-                .animate(textView)
-                .scale(0f, 1f)
-                .translationX(point.x.toFloat(), 0f)
-                .translationY(point.y.toFloat(), 0f)
-                .wave()
-                .duration(dur)
-        }
-        private fun basicMoveAndScale10(textView:TextView,point:Point,dur:Long){
-            ViewAnimator
-                .animate(textView)
-                .scale(0f, 1f)
-                .translationX(point.x.toFloat(), 0f)
-                .translationY(point.y.toFloat(), 0f)
-                .duration(dur)
-                .thenAnimate(textView).flipVertical()
-        }
-        private fun basicMoveAndScale11(textView:TextView,point:Point,dur:Long){
-            ViewAnimator
-                .animate(textView)
-                .scale(0f, 1f)
-                .translationX(point.x.toFloat(), 0f)
-                .translationY(point.y.toFloat(), 0f)
-                .duration(dur)
-                .thenAnimate(textView).flipVertical()
-        }
-    private fun initTextView(textView:TextView):TextView{
+
+    private fun basicMoveAndScale1001(textView: TextView, point: Point, dur: Long) {
+        ViewAnimator
+            .animate(textView)
+            .scale(0f, 0.2f)
+            .translationX(point.x.toFloat(), point.x / 2.toFloat())
+            .translationY(point.y.toFloat(), point.y / 2.toFloat())
+            .duration(1000)
+            .thenAnimate(textView)
+            .scale(0.2f, 1f)
+            .translationX(point.x / 2.toFloat(), 0f)
+            .translationY(point.y / 2.toFloat(), 0f)
+            .duration(dur)
+            .start()
+    }
+
+    private fun basicMoveAndScale1(textView: TextView, point: Point, dur: Long) {
+        ViewAnimator
+            .animate(textView)
+            .scale(0f, 1f)
+            .translationX(point.x.toFloat(), 0f)
+            .translationY(point.y.toFloat(), 0f)
+            .interpolator(AccelerateInterpolator(2f))
+            .duration(dur)
+            .start()
+    }
+
+    private fun basicMoveAndScale2(textView: TextView, point: Point, dur: Long) {
+        ViewAnimator
+            .animate(textView)
+            .scale(0f, 1f)
+            .translationX(point.x.toFloat(), 0f)
+            .translationY(point.y.toFloat(), 0f)
+            .interpolator(DecelerateInterpolator(2f))
+            .duration(dur)
+            .start()
+    }
+
+    private fun basicMoveAndScale3(textView: TextView, point: Point, dur: Long) {
+        ViewAnimator
+            .animate(textView)
+            .scale(0f, 1f)
+            .translationX(point.x.toFloat(), 0f)
+            .translationY(point.y.toFloat(), 0f)
+            .interpolator(BounceInterpolator())
+            .duration(dur)
+            .start()
+    }
+
+    private fun basicMoveAndScale4(textView: TextView, point: Point, dur: Long) {
+        ViewAnimator
+            .animate(textView)
+            .scale(0f, 1f)
+            .translationX(point.x.toFloat(), 0f)
+            .translationY(point.y.toFloat(), 0f)
+            .interpolator(OvershootInterpolator())
+            .duration(dur)
+            .start()
+    }
+
+    private fun basicMoveAndScale5(textView: TextView, point: Point, dur: Long) {
+        ViewAnimator
+            .animate(textView)
+            .scale(0f, 1f)
+            .translationX(point.x.toFloat(), 0f)
+            .translationY(point.y.toFloat(), 0f)
+            .swing()
+            .duration(dur)
+            .start()
+    }
+
+    private fun basicMoveAndScale6(textView: TextView, point: Point, dur: Long) {
+        ViewAnimator
+            .animate(textView)
+            .scale(0f, 1f)
+            .translationX(point.x.toFloat(), 0f)
+            .translationY(point.y.toFloat(), 0f)
+            .duration(dur)
+            .thenAnimate(textView).swing()
+            .start()
+    }
+
+    private fun basicMoveAndScale7(textView: TextView, point: Point, dur: Long) {
+        ViewAnimator
+            .animate(textView)
+            .scale(0f, 1f)
+            .translationX(point.x.toFloat(), 0f)
+            .translationY(point.y.toFloat(), 0f)
+            .fall()
+            .duration(dur)
+            .start()
+    }
+
+    private fun basicMoveAndScale8(textView: TextView, point: Point, dur: Long) {
+        ViewAnimator
+            .animate(textView)
+            .scale(0f, 1f)
+            .translationX(point.x.toFloat(), 0f)
+            .translationY(point.y.toFloat(), 0f)
+            .rubber()
+            .duration(dur)
+            .start()
+    }
+
+    private fun basicMoveAndScale9(textView: TextView, point: Point, dur: Long) {
+        ViewAnimator
+            .animate(textView)
+            .scale(0f, 1f)
+            .translationX(point.x.toFloat(), 0f)
+            .translationY(point.y.toFloat(), 0f)
+            .wave()
+            .duration(dur)
+    }
+
+    private fun basicMoveAndScale10(textView: TextView, point: Point, dur: Long) {
+        ViewAnimator
+            .animate(textView)
+            .scale(0f, 1f)
+            .translationX(point.x.toFloat(), 0f)
+            .translationY(point.y.toFloat(), 0f)
+            .duration(dur)
+            .thenAnimate(textView).flipVertical()
+    }
+
+    private fun basicMoveAndScale11(textView: TextView, point: Point, dur: Long) {
+        ViewAnimator
+            .animate(textView)
+            .scale(0f, 1f)
+            .translationX(point.x.toFloat(), 0f)
+            .translationY(point.y.toFloat(), 0f)
+            .duration(dur)
+            .thenAnimate(textView).flipVertical()
+    }
+
+    private fun initTextView(textView: TextView): TextView {
         textView.visibility = View.VISIBLE
         textView.scaleX = 1f
         textView.scaleY = 1f
         return textView
     }
-
 
 
     fun getCordinateAndSpineNew(ind: Int): Array<Float> {
@@ -419,14 +494,14 @@ class Utile1(val context: Context) {
     }
 
 
-    fun moveSwingNew( talker: Talker, arr: ArrayList<TextView?>) {
+    fun moveSwingNew(talker: Talker, arr: ArrayList<TextView?>) {
         val linesNum = talker.takingArray.size
         for (index in 1..linesNum) {
-            itemMoveSwingNew( talker, index, arr[index - 1]!!)
+            itemMoveSwingNew(talker, index, arr[index - 1]!!)
         }
     }
 
-    private fun itemMoveSwingNew( talker: Talker, ind: Int, textView: TextView) {
+    private fun itemMoveSwingNew(talker: Talker, ind: Int, textView: TextView) {
 
         var arr: Array<Float>
         textView.visibility = View.VISIBLE
@@ -483,7 +558,7 @@ class Utile1(val context: Context) {
         }
     }
 
-    fun item_scale_swing( textView: TextView, dur: Long, rep: Int) {
+    fun item_scale_swing(textView: TextView, dur: Long, rep: Int) {
 
         if (rep == 0) {
             ViewAnimator
@@ -722,8 +797,8 @@ class Utile1(val context: Context) {
             if (selector == 20) {
                 for (index in 0 until linesNum) {
                     arr[index]?.let {
-                      //  item_scale_swing( it, dur, swingRepeat)
-                        item_scale_swing( it, dur, swingRepeat)
+                        //  item_scale_swing( it, dur, swingRepeat)
+                        item_scale_swing(it, dur, swingRepeat)
 
                     }
                 }
@@ -734,10 +809,10 @@ class Utile1(val context: Context) {
                     arr[index - 1]?.let {
                         if (index == 1) {
                             // item_scale(index, it, dur)
-                            item_scale_swing( it, dur, 0)
+                            item_scale_swing(it, dur, 0)
 
                         } else {
-                            item_scale_swing( it, dur, swingRepeat)
+                            item_scale_swing(it, dur, swingRepeat)
 
                         }
                     }
@@ -748,9 +823,9 @@ class Utile1(val context: Context) {
                     arr[index - 1]?.let {
                         if (index <= 2) {
                             //item_scale(index, it, dur)
-                            item_scale_swing( it, dur, 0)
+                            item_scale_swing(it, dur, 0)
                         } else {
-                            item_scale_swing( it, dur, swingRepeat)
+                            item_scale_swing(it, dur, swingRepeat)
 
                         }
                     }
@@ -761,9 +836,9 @@ class Utile1(val context: Context) {
                     arr[index - 1]?.let {
                         if (index <= 3) {
                             //  item_scale(index, it, dur)
-                            item_scale_swing( it, dur, 0)
+                            item_scale_swing(it, dur, 0)
                         } else {
-                            item_scale_swing( it, dur, swingRepeat)
+                            item_scale_swing(it, dur, swingRepeat)
                         }
                     }
                 }
@@ -773,9 +848,9 @@ class Utile1(val context: Context) {
                     arr[index - 1]?.let {
                         if (index <= 4) {
                             // item_scale(index, it, dur)
-                            item_scale_swing( it, dur, 0)
+                            item_scale_swing(it, dur, 0)
                         } else {
-                            item_scale_swing( it, dur, swingRepeat)
+                            item_scale_swing(it, dur, swingRepeat)
 
                         }
                     }
@@ -786,9 +861,9 @@ class Utile1(val context: Context) {
                     arr[index - 1]?.let {
                         if (index <= 5) {
                             //  item_scale(index, it, dur)
-                            item_scale_swing( it, dur, 0)
+                            item_scale_swing(it, dur, 0)
                         } else {
-                            item_scale_swing( it, dur, swingRepeat)
+                            item_scale_swing(it, dur, swingRepeat)
 
                         }
                     }
@@ -797,9 +872,9 @@ class Utile1(val context: Context) {
         }
     }
 
-    fun scaleSwing(selector: Int, arr: ArrayList<TextView?>):Boolean {
-        var itFinish=false
-        var talker1=pref.currentTalker()
+    fun scaleSwing(selector: Int, arr: ArrayList<TextView?>): Boolean {
+        var itFinish = false
+        var talker1 = pref.currentTalker()
         start = System.currentTimeMillis()
         with(talker1) {
             val linesNum = takingArray.size
@@ -813,7 +888,7 @@ class Utile1(val context: Context) {
                 for (index in 0 until linesNum) {
                     arr[index]?.let {
 
-                        item_scale_swing( it, dur, swingRepeat)
+                        item_scale_swing(it, dur, swingRepeat)
 
                         /*with(pref.currentTalker()){
    // val st="numTalking->$numTalker  taking=>$taking it->$it talkingArray->$takingArray"
@@ -829,10 +904,10 @@ class Utile1(val context: Context) {
                     arr[index - 1]?.let {
                         if (index == 1) {
                             // item_scale(index, it, dur)
-                            item_scale_swing( it, dur, 0)
+                            item_scale_swing(it, dur, 0)
 
                         } else {
-                            item_scale_swing( it, dur, swingRepeat)
+                            item_scale_swing(it, dur, swingRepeat)
 
                         }
                     }
@@ -843,9 +918,9 @@ class Utile1(val context: Context) {
                     arr[index - 1]?.let {
                         if (index <= 2) {
                             //item_scale(index, it, dur)
-                            item_scale_swing( it, dur, 0)
+                            item_scale_swing(it, dur, 0)
                         } else {
-                            item_scale_swing( it, dur, swingRepeat)
+                            item_scale_swing(it, dur, swingRepeat)
 
                         }
                     }
@@ -856,9 +931,9 @@ class Utile1(val context: Context) {
                     arr[index - 1]?.let {
                         if (index <= 3) {
                             //  item_scale(index, it, dur)
-                            item_scale_swing( it, dur, 0)
+                            item_scale_swing(it, dur, 0)
                         } else {
-                            item_scale_swing( it, dur, swingRepeat)
+                            item_scale_swing(it, dur, swingRepeat)
                         }
                     }
                 }
@@ -868,9 +943,9 @@ class Utile1(val context: Context) {
                     arr[index - 1]?.let {
                         if (index <= 4) {
                             // item_scale(index, it, dur)
-                            item_scale_swing( it, dur, 0)
+                            item_scale_swing(it, dur, 0)
                         } else {
-                            item_scale_swing( it, dur, swingRepeat)
+                            item_scale_swing(it, dur, swingRepeat)
 
                         }
                     }
@@ -881,9 +956,9 @@ class Utile1(val context: Context) {
                     arr[index - 1]?.let {
                         if (index <= 5) {
                             //  item_scale(index, it, dur)
-                            item_scale_swing( it, dur, 0)
+                            item_scale_swing(it, dur, 0)
                         } else {
-                            item_scale_swing( it, dur, swingRepeat)
+                            item_scale_swing(it, dur, swingRepeat)
 
                         }
                     }
@@ -892,6 +967,7 @@ class Utile1(val context: Context) {
         }
         return itFinish
     }
+
     fun move_scale(selector: Int, arr: ArrayList<TextView?>, dur: Long) {
         start = System.currentTimeMillis()
         if (selector == 30) {
@@ -1037,7 +1113,7 @@ class Utile1(val context: Context) {
                             item_move_scale_rotate(index, it, talker)
                         } else {
                             if (swingRepeat < 1) swingRepeat = 1
-                            item_scale_swing( it, dur, swingRepeat)
+                            item_scale_swing(it, dur, swingRepeat)
                         }
                     }
                 }

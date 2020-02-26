@@ -14,7 +14,9 @@ import android.view.animation.OvershootInterpolator
 import android.widget.TextView
 import com.github.florent37.viewanimator.ViewAnimator
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 //object Utile {
 class Utile1(val context: Context) {
@@ -40,25 +42,31 @@ class Utile1(val context: Context) {
     var pointX = true
 
 
-     fun activateAnimation20(textViewList: ArrayList<TextView>) {
+     suspend fun activateAnimation20(textViewList: ArrayList<TextView>) {
         var talker = pref.currentTalker()
         val startNum = textViewList.size - 1
-        if (talker.whoSpeake == "man") {
-            for (index in startNum downTo 0) {
-                itemScale(textViewList[index], talker.dur)
-                /*textViewList[index].let {
-                itemScale(it,talker.dur)
-            }*/
-            }
-        } else {
+         withContext(Main) {
+             if (talker.whoSpeake == "man") {
+                 for (index in startNum downTo 0) {
 
-            for (index in 0..startNum) {
-                itemScale(textViewList[index], talker.dur)
-                /*textViewList[index].let {
+                     itemScale(textViewList[index], talker.dur)
+                     delay(1000)
+                     /*textViewList[index].let {
                 itemScale(it,talker.dur)
             }*/
-            }
-        }
+                 }
+             } else {
+
+                 for (index in 0..startNum) {
+                     itemScale(textViewList[index], talker.dur)
+                     delay(1000)
+                     /*textViewList[index].let {
+                itemScale(it,talker.dur)
+            }*/
+                 }
+             }
+
+         }
     }
 
     /* suspend fun activateAnimation20(textViewList: ArrayList<TextView>) {

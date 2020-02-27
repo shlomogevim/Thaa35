@@ -14,11 +14,11 @@
         layout="@layout/helper_view_layout" />
 
     <include
-        android:id="@+id/godLayout"
+        android:id="@+id/includeGod"
         layout="@layout/god_layout" />
 
     <include
-        android:id="@+id/manLayout"
+        android:id="@+id/includeMan"
         layout="@layout/man_layout" />
 
     <ImageView

@@ -20,5 +20,8 @@ class Const {
         const val FONTS="fonts"
         const val MARGIM="margin"
 
+        const val OLDTEXTVIEW="oldtextview"
+        const val NEWTEXTVIEW="newtextview"
+
     }
 }

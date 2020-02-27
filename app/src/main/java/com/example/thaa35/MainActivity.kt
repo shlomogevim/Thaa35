@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
 
         initAll()
 
-        pref.saveCurrentPage(2)
+        pref.saveCurrentPage(1)
 
         animationInAction2.executeTalker2()
     }

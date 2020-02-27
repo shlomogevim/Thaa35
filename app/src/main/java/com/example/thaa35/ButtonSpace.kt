@@ -68,14 +68,8 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
     fun drawNewAnimation() {
         val page = pref.getCurrentPage()
         activity.tvPage.text = page.toString()
-       // pref.currentTalker().numTalker = page
-       /* activity.fab.isClickable = false
-        activity.fab1.isClickable = false
-        animationInActionSign(1, 500)*/
         animationInAction2.executeTalker2()
-      /*  CoroutineScope(Main).launch {
-            waitTillAnimationEnd()
-        }*/
+
     }
 
     private suspend fun waitTillAnimationEnd() {

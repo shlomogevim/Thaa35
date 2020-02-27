@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/manLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
 
-    >
+    android:layout_height="match_parent">
 
 
     <LinearLayout
@@ -37,8 +37,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="10dp"
-            android:includeFontPadding="false"
             android:gravity="center_horizontal"
+            android:includeFontPadding="false"
             tools:text="Man Speaking1" />
 
         <TextView
@@ -46,8 +46,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="10dp"
-            android:includeFontPadding="false"
             android:gravity="center_horizontal"
+            android:includeFontPadding="false"
             tools:text="Man Speaking2" />
 
         <TextView
@@ -55,8 +55,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="10dp"
-            android:includeFontPadding="false"
             android:gravity="center_horizontal"
+            android:includeFontPadding="false"
             android:typeface="normal"
             tools:text="Man Speaking3" />
 
@@ -65,8 +65,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="10dp"
-            android:includeFontPadding="false"
             android:gravity="center_horizontal"
+            android:includeFontPadding="false"
             android:typeface="normal"
             tools:text="Man Speaking4" />
 
@@ -76,8 +76,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="65dp"
             android:elevation="10dp"
-            android:includeFontPadding="false"
             android:gravity="center_horizontal"
+            android:includeFontPadding="false"
             android:typeface="normal"
             tools:text="Man Speaking5" />
 

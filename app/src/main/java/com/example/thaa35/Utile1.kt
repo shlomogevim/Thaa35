@@ -50,41 +50,21 @@ class Utile1(val context: Context) {
                  for (index in startNum downTo 0) {
 
                      itemScale(textViewList[index], talker.dur)
-                     delay(1000)
-                     /*textViewList[index].let {
-                itemScale(it,talker.dur)
-            }*/
+                     delay(500)
                  }
              } else {
 
                  for (index in 0..startNum) {
                      itemScale(textViewList[index], talker.dur)
-                     delay(1000)
-                     /*textViewList[index].let {
-                itemScale(it,talker.dur)
-            }*/
+                     delay(500)
                  }
              }
 
          }
     }
 
-    /* suspend fun activateAnimation20(textViewList: ArrayList<TextView>) {
-         var talker=pref.currentTalker()
-         for (index in 0 until textViewList.size){
-             delay(1000)
-             itemScale(textViewList[index],talker.dur)
-
-             *//*textViewList[index].let {
-
-                itemScale(it,talker.dur)
-            }*//*
-        }
-    }*/
-
     private fun itemScale(view: TextView, dur: Long) {
         view.visibility = View.VISIBLE
-
         ViewAnimator
             .animate(view)
             .alpha(0f, 1f)
@@ -92,6 +72,44 @@ class Utile1(val context: Context) {
             .duration(dur)
             .start()
     }
+
+    suspend fun activateAnimation20Remove(textViewList:ArrayList<TextView>) {
+
+        if (!textViewList.isNullOrEmpty()) {
+            var talker = pref.currentTalker()
+            val startNum = textViewList.size - 1
+            withContext(Main) {
+                if (talker.whoSpeake == "man") {
+                    for (index in startNum downTo 0) {
+
+                        itemScaleRemove(textViewList[index])
+                        delay(100)
+                    }
+                } else {
+
+                    for (index in 0..startNum) {
+                        itemScaleRemove(textViewList[index])
+                        delay(100)
+                    }
+                }
+
+            }
+        }
+    }
+
+    private fun itemScaleRemove(view: TextView) {
+        view.visibility = View.VISIBLE
+        ViewAnimator
+            .animate(view)
+            .alpha(1f, 0f)
+            .scale(1f, 0f)
+            .duration(100)
+            .start()
+    }
+
+
+
+
 
 
     fun individualLetter1200(index: Int, talker: Talker) {

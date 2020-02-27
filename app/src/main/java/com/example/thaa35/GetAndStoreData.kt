@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
 import android.util.Log
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.thaa35.Const.Companion.ANIM1
 import com.example.thaa35.Const.Companion.ANIM2
@@ -17,6 +18,8 @@ import com.example.thaa35.Const.Companion.FONTS
 import com.example.thaa35.Const.Companion.LASTTALKER
 import com.example.thaa35.Const.Companion.LAST_PAGE
 import com.example.thaa35.Const.Companion.MARGIM
+import com.example.thaa35.Const.Companion.NEWTEXTVIEW
+import com.example.thaa35.Const.Companion.OLDTEXTVIEW
 import com.example.thaa35.Const.Companion.PREFS_NAME
 import com.example.thaa35.Const.Companion.SHOWPOSITION
 import com.example.thaa35.Const.Companion.TALKLIST
@@ -28,19 +31,42 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
 
     var myPref = context.getSharedPreferences(PREFS_NAME, 0)
 
-    fun saveCurrentPage(index: Int) {myPref.edit().putInt(CURRENT_PAGE, index).apply()}
-    fun saveShowPosition(bo: Boolean) {myPref.edit().putBoolean(SHOWPOSITION, bo).apply()}
+    fun saveCurrentPage(index: Int) {
+        myPref.edit().putInt(CURRENT_PAGE, index).apply()
+    }
+
+    fun saveShowPosition(bo: Boolean) {
+        myPref.edit().putBoolean(SHOWPOSITION, bo).apply()
+    }
 
     fun getCurrentPage(): Int = myPref.getInt(CURRENT_PAGE, 1)
     fun getCurrentFile(): Int = myPref.getInt(FILE_NUM, 1)
     fun getShowPosition(): Boolean = myPref.getBoolean(SHOWPOSITION, true)
 
-    fun saveAnim1(index: Int) {myPref.edit().putInt(ANIM1, index).apply()}
-    fun saveAnim2(index: Int) {myPref.edit().putInt(ANIM2, index).apply()}
-    fun saveAnim3(index: Int) {myPref.edit().putInt(ANIM3, index).apply()}
-    fun saveAnim4(index: Int) {myPref.edit().putInt(ANIM4, index).apply()}
-    fun saveFonts(index: Int) {myPref.edit().putInt(FONTS, index).apply()}
-    fun saveMargin(index: Int) {myPref.edit().putInt(MARGIM, index).apply()}
+    fun saveAnim1(index: Int) {
+        myPref.edit().putInt(ANIM1, index).apply()
+    }
+
+    fun saveAnim2(index: Int) {
+        myPref.edit().putInt(ANIM2, index).apply()
+    }
+
+    fun saveAnim3(index: Int) {
+        myPref.edit().putInt(ANIM3, index).apply()
+    }
+
+    fun saveAnim4(index: Int) {
+        myPref.edit().putInt(ANIM4, index).apply()
+    }
+
+    fun saveFonts(index: Int) {
+        myPref.edit().putInt(FONTS, index).apply()
+    }
+
+    fun saveMargin(index: Int) {
+        myPref.edit().putInt(MARGIM, index).apply()
+    }
+
     fun getAnim1(): Int = myPref.getInt(ANIM1, 0)
     fun getAnim2(): Int = myPref.getInt(ANIM2, 0)
     fun getAnim3(): Int = myPref.getInt(ANIM3, 0)
@@ -48,32 +74,64 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
     fun getFonts(): Int = myPref.getInt(FONTS, 1)
     fun getMargin(): Int = myPref.getInt(MARGIM, 0)
 
-    fun currentTalker():Talker{
-        val list=getTalkingList(1)
-        var index=getCurrentPage()
-        if (list.size<=index) index=1
+    fun currentTalker(): Talker {
+        val list = getTalkingList(1)
+        var index = getCurrentPage()
+        if (list.size <= index) index = 1
         saveCurrentPage(index)
         return list[index]
     }
 
     fun saveTalkingList(talkingList: ArrayList<Talker>) {
         val gson = Gson()
-        val tagNum=getCurrentFile()
+        val tagNum = getCurrentFile()
         val jsonString = gson.toJson(talkingList)
-       // myPref.edit().putString(TALKLIST+tagNum.toString(), jsonString).apply()
+        // myPref.edit().putString(TALKLIST+tagNum.toString(), jsonString).apply()
         myPref.edit().putString(TALKLIST, jsonString).apply()
     }
+
+   /* fun saveOldTextView(textViewList: ArrayList<TextView>) {
+        val gson = Gson()
+        val jsonString = gson.toJson(textViewList)
+        myPref.edit().putString(OLDTEXTVIEW, jsonString).apply()
+    }
+
+    fun saveNewTextView(textViewList: ArrayList<TextView>) {
+        val gson = Gson()
+        val jsonString = gson.toJson(textViewList)
+        myPref.edit().putString(NEWTEXTVIEW, jsonString).apply()
+    }
+
+    fun getOldTextView(): ArrayList<TextView> {
+        var textViewList = ArrayList<TextView>()
+        val gson = Gson()
+        val jsonString = myPref.getString(OLDTEXTVIEW, null)
+        if (!jsonString.isNullOrEmpty() && jsonString.count()>5) {
+            val type = object : TypeToken<ArrayList<TextView>>() {}.type
+            textViewList = gson.fromJson(jsonString, type)
+        }
+        return textViewList
+    }
+    fun getNewTextView(): ArrayList<TextView> {
+        var textViewList = ArrayList<TextView>()
+        val gson = Gson()
+        val jsonString = myPref.getString(NEWTEXTVIEW, null)
+        val type = object : TypeToken<ArrayList<TextView>>() {}.type
+        textViewList = gson.fromJson(jsonString, type)
+        return textViewList
+    }*/
+
     fun saveLastTalker(lastTalker: Talker) {
         val gson = Gson()
         val jsonString = gson.toJson(lastTalker)
         myPref.edit().putString(LASTTALKER, jsonString).apply()
     }
 
-    fun getLastTalker():Talker{
-        var talker=Talker()
-        var jsonS=myPref.getString(LASTTALKER,null)
-        if (jsonS!=null){
-            val gson=Gson()
+    fun getLastTalker(): Talker {
+        var talker = Talker()
+        var jsonS = myPref.getString(LASTTALKER, null)
+        if (jsonS != null) {
+            val gson = Gson()
             val type = object : TypeToken<Talker>() {}.type
             talker = gson.fromJson(jsonS, type)
         }
@@ -152,17 +210,17 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
                             takingArray.add(item)
                         }
                     }
-                    backExist=true
-                    borderColor="#000000"
-                    borderWidth=0
-                    styleNum=51
-                    swingRepeat=0
+                    backExist = true
+                    borderColor = "#000000"
+                    borderWidth = 0
+                    styleNum = 51
+                    swingRepeat = 0
                     colorText = "#574339"
                     colorBack = "#fdd835"
-                    textSize=28f
+                    textSize = 28f
                     animNum = 100
-                    dur=3000
-                    radius=25f
+                    dur = 3000
+                    radius = 25f
                 }
                 talkList1.add(talker)
             }
@@ -173,11 +231,15 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
     private fun improveString(st: String) = st.substring(1, st.length - 1)
 
 
+    fun saveLastPage(index: Int) {
+        myPref.edit().putInt(LAST_PAGE, index).apply()
+    }
 
-
-    fun saveLastPage(index: Int) {myPref.edit().putInt(LAST_PAGE, index).apply()}
     fun getLastPage(): Int = myPref.getInt(LAST_PAGE, 1)
-    fun saveCurrentFile(index: Int) {myPref.edit().putInt(FILE_NUM, index).apply()}
+    fun saveCurrentFile(index: Int) {
+        myPref.edit().putInt(FILE_NUM, index).apply()
+    }
+
     private fun createTalkArray(jsonString: String?) {
         var talkList: ArrayList<Talker>
         //  Log.d("clima",jsonString)
@@ -189,10 +251,10 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
 
     fun createNewList(): ArrayList<Talker> {
         var talkList1 = ArrayList<Talker>()
-        val tagNum=getCurrentFile()
+        val tagNum = getCurrentFile()
 
         // var jsonS =  myPref.getString(TALKLIST+tagNum.toString(), null)
-        var jsonS =  myPref.getString(TALKLIST, null)
+        var jsonS = myPref.getString(TALKLIST, null)
         if (jsonS != null) {
             val gson = Gson()
             val type = object : TypeToken<ArrayList<Talker>>() {}.type
@@ -206,11 +268,11 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
         myPref.edit().putString(TALKLIST, jsonS).apply()
     }
 
-    fun getJsonArryFromPref( ): ArrayList<Talker> {
-        var list= ArrayList<Talker>()
+    fun getJsonArryFromPref(): ArrayList<Talker> {
+        var list = ArrayList<Talker>()
         var jsonS: String?
         jsonS = myPref.getString(TALKLIST, null)
-        if (!jsonS.isNullOrEmpty()){
+        if (!jsonS.isNullOrEmpty()) {
             val gson = Gson()
             val type = object : TypeToken<ArrayList<Talker>>() {}.type
             list = gson.fromJson(jsonS, type)
@@ -238,19 +300,19 @@ class GetAndStoreData(val context: Context) : AppCompatActivity() {
         return talkList
     }
 
-    private fun decodebase64(input:String):Bitmap{
-        val decodeByte=Base64.decode(input,0)
-        val bit=BitmapFactory.decodeByteArray(decodeByte,0,decodeByte.size)
+    private fun decodebase64(input: String): Bitmap {
+        val decodeByte = Base64.decode(input, 0)
+        val bit = BitmapFactory.decodeByteArray(decodeByte, 0, decodeByte.size)
         return bit
     }
 
-    private fun encodeToBase64(image:Bitmap):String{
-        val immage=image
-        val baos=ByteArrayOutputStream()
-        immage.compress(Bitmap.CompressFormat.PNG,100,baos)
-        val b=baos.toByteArray()
-        val imageEncoded=Base64.encodeToString(b,Base64.DEFAULT)
-        Log.d("clima","imageEncode->$imageEncoded")
+    private fun encodeToBase64(image: Bitmap): String {
+        val immage = image
+        val baos = ByteArrayOutputStream()
+        immage.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        val b = baos.toByteArray()
+        val imageEncoded = Base64.encodeToString(b, Base64.DEFAULT)
+        Log.d("clima", "imageEncode->$imageEncoded")
         return imageEncoded
     }
 }

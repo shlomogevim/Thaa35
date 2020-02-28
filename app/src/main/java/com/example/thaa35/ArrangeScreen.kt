@@ -548,7 +548,7 @@ class ArrangeScreen(val context: Context) {
     }
 
     private fun backGroundConfigaration() {
-        val imageV = activity.findViewById<ImageView>(R.id.imageView)
+        val imageV = activity.findViewById<ImageView>(R.id.backGroundImage)
         val animationDrawable = imageV.background as? AnimationDrawable
         animationDrawable?.setEnterFadeDuration(2000)
         animationDrawable?.setExitFadeDuration(4000)

@@ -50,13 +50,13 @@ class Utile1(val context: Context) {
                  for (index in startNum downTo 0) {
 
                      itemScale(textViewList[index], talker.dur)
-                     delay(500)
+                     delay(400)
                  }
              } else {
 
                  for (index in 0..startNum) {
                      itemScale(textViewList[index], talker.dur)
-                     delay(500)
+                     delay(400)
                  }
              }
 
@@ -73,7 +73,7 @@ class Utile1(val context: Context) {
             .start()
     }
 
-    suspend fun activateAnimation20Remove(textViewList:ArrayList<TextView>) {
+    /*suspend fun activateAnimation20Remove(textViewList:ArrayList<TextView>) {
 
         if (!textViewList.isNullOrEmpty()) {
             var talker = pref.currentTalker()
@@ -95,15 +95,15 @@ class Utile1(val context: Context) {
 
             }
         }
-    }
+    }*/
 
-    private fun itemScaleRemove(view: TextView) {
+    fun itemScaleRemove(view: View) {
         view.visibility = View.VISIBLE
         ViewAnimator
             .animate(view)
             .alpha(1f, 0f)
             .scale(1f, 0f)
-            .duration(100)
+            .duration(500)
             .start()
     }
 

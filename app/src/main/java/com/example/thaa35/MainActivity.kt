@@ -10,6 +10,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var pref: GetAndStoreData
     lateinit var arrangeScreen: ArrangeScreen
     lateinit var buttonSpace: ButtonSpace
+    var showPosition=true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,9 +18,7 @@ class MainActivity : AppCompatActivity() {
 
         initAll()
 
-        pref.saveCurrentPage(1)
-
-        animationInAction2.executeTalker2()
+        animationInAction2.executeTalker2(1)
     }
 
     private fun initAll() {
@@ -28,17 +27,19 @@ class MainActivity : AppCompatActivity() {
         arrangeScreen = ArrangeScreen(this)
         buttonSpace = ButtonSpace(this)
 
-        var showPosition = false
+        //  var showPosition = false
         pref.saveShowPosition(showPosition)
+        pref.saveCurrentPage(1)
 
-        if (showPosition) showPositionBtn.text = "toTest"
-        else showPositionBtn.text = "toShow"
+
 
         buttonSpace.initButton()
         arrangeScreen.setLayoutShowMode()
         arrangeScreen.operateListView()
+        if (showPosition) showPositionBtn.text = "toTest"
+        else showPositionBtn.text = "toShow"
 
-       //  var   talkList = pref.getTalkingList(1)
+        //  var   talkList = pref.getTalkingList(1)
         var talkList = pref.getTalkingList(0)  // to Init all data
 
     }

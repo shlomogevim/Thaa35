@@ -30,7 +30,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
             R.id.textRevBtn -> readAgainTextFile()
             R.id.newPageBtn -> enterNewPage()
             R.id.showPositionBtn -> changeShowPosition()
-            R.id.toShowModeBtn -> animationInAction2.executeTalker2()
+            R.id.toShowModeBtn -> animationInAction2.executeTalker2(0)
             R.id.plusAndMinusBtn -> changePlusMinusMode()
             R.id.saveButton -> saveIt()
             R.id.nextButton -> nextIt()
@@ -41,21 +41,22 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
             R.id.fab1 -> previousIt()
             else -> drawAnim()
         }
-        // oldVersion()
     }
 
     fun nextIt() {
+        pref.saveLastTalker(pref.currentTalker())
         var page = pref.getCurrentPage()
         page++
         chkPage(page)
-        drawNewAnimation()
+        animationInAction2.executeTalker2(0)
     }
 
     fun previousIt() {
+        pref.saveLastTalker(pref.currentTalker())
         var page = pref.getCurrentPage()
         page--
         chkPage(page)
-        drawNewAnimation()
+        animationInAction2.executeTalker2(0)
     }
 
     private fun chkPage(page: Int) {
@@ -65,12 +66,12 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
         pref.saveCurrentPage(cu)
     }
 
-    fun drawNewAnimation() {
+   /* fun drawNewAnimation() {
         val page = pref.getCurrentPage()
         activity.tvPage.text = page.toString()
         animationInAction2.executeTalker2()
 
-    }
+    }*/
 
     private suspend fun waitTillAnimationEnd() {
         val talker = pref.currentTalker()
@@ -115,7 +116,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
     fun drawAnim() {
         val cu = getCurrentPage()
         activity.tvPage.text = cu.toString()
-        animationInAction2.executeTalker2()
+        animationInAction2.executeTalker2(0)
     }
 
     private fun changeShowPosition() {
@@ -128,7 +129,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
         } else {
             activity.showPositionBtn.text = "toShow"
         }
-        animationInAction2.executeTalker2()
+        animationInAction2.executeTalker2(0)
     }
 
     fun setShowPositionMode() {
@@ -333,7 +334,7 @@ class ButtonSpace(val context: Context) : View.OnClickListener {
             R.id.textRevBtn -> readAgainTextFile()
             R.id.newPageBtn -> enterNewPage()
             R.id.showPositionBtn -> changeShowPosition()
-            R.id.toShowModeBtn -> animationInAction2.executeTalker2()
+            R.id.toShowModeBtn -> animationInAction2.executeTalker2(0)
             R.id.plusAndMinusBtn -> changePlusMinusMode()
             R.id.saveButton -> saveIt()
             R.id.nextButton -> nextIt()
